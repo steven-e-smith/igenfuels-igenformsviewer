@@ -10,7 +10,8 @@ namespace IGenForms
     {
 
         public static string[] logEntries = {
-                            "1.1.0.0    SES     Initial draft"
+                            "1.1.0.0    SES     Initial draft",
+                            "1.1.1.0    SES     Fixed paging in viewer. "
                         };
 
 

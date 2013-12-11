@@ -175,6 +175,9 @@ namespace IGenForms
 
                 tbrMainProgress.Visible = false;
 
+                displayIGenForms.progressBar = tbrMainProgress;
+                displayIGenForms.progressPercentage = tbrMainPercentage;
+
                 ResizeControls();
 
             }
@@ -600,8 +603,6 @@ namespace IGenForms
                 tbrMainStop.Visible = true;
                 displayIGenForms.cancelFlag = false;
 
-                displayIGenForms.progressBar = tbrMainProgress;
-
                 // now process the forms
 
                 if (displayIGenForms.compileFormsFlag)
@@ -666,6 +667,9 @@ namespace IGenForms
                             int Y = tabForms.Top + e.Y;
                             objRightClickMenu.Show(this, X, Y);  // (this, new Point(X, Y));
                         }
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -788,6 +792,8 @@ namespace IGenForms
                     // get the page_enabled flag for the form
                     string _currentForm = tabForms.TabPages[tabForms.SelectedIndex].Name;
                     IGenForm _form = displayIGenForms.GetForm(_currentForm);
+                    displayIGenForms.currentForm = _form;
+                    displayIGenForms.currentFormName = _form.name;
                     string _pageEnabled = _form.multiPageForm.ToUpper();
                     int _datasetOrdinal = _form.datasetOrdinal;
                     string _datasetName = _form.datasetName;
@@ -829,11 +835,8 @@ namespace IGenForms
 
                     if (_datasetOrdinal >= 0)
                     {
-                        _form.currentRow = displayIGenForms.datasets[_datasetOrdinal].currentPosition;
-                        tbrMainPageNo.Text = _form.currentRow.ToString();
-
-                        _form.totalRows = displayIGenForms.datasets[_datasetOrdinal].numRows;
-                        tbrMainTotalPages.Text = _form.totalRows.ToString();
+                        tbrMainPageNo.Text = _form.currentPage.ToString();
+                        tbrMainTotalPages.Text = _form.totalPages.ToString();
                     }
                 }
             }
@@ -975,7 +978,7 @@ namespace IGenForms
 
             try
             {
-                AdvanceRow(-99);
+                AdvancePage(-99);
             }
             catch (Exception ex)
             {
@@ -993,7 +996,7 @@ namespace IGenForms
 
             try
             {
-                AdvanceRow(-1);
+                AdvancePage(-1);
             }
             catch (Exception ex)
             {
@@ -1012,7 +1015,7 @@ namespace IGenForms
 
             try
             {
-                AdvanceRow(1);
+                AdvancePage(1);
             }
             catch (Exception ex)
             {
@@ -1029,7 +1032,7 @@ namespace IGenForms
 
             try
             {
-                AdvanceRow(99);
+                AdvancePage(99);
             }
             catch (Exception ex)
             {
@@ -1045,112 +1048,108 @@ namespace IGenForms
 
 
 
-        private void AdvanceRow(int numRows)
+        private void AdvancePage(int numPages)
         {
+            int _pageNo = 0;
 
             try
             {
                 string _currentForm = tabForms.TabPages[tabForms.SelectedIndex].Name;
 
-
                 IGenForm _form = displayIGenForms.GetForm(_currentForm);
 
-                // get the dataset defined
-                if (_form.datasetName != "")
+                if (_form.datasetOrdinal < 0)
                 {
-                    for (int n = 0; n < displayIGenForms.datasets.Count; n++)
+                    // determine the ordinal
+                    if (_form.datasetName != "")
                     {
-                        IGenDataset _ds = displayIGenForms.datasets[n];
-
-                        if (_ds.cursorName.ToUpper() == _form.datasetName.ToUpper())
+                        for (int n = 0; n < displayIGenForms.datasets.Count; n++)
                         {
+                            IGenDataset _ds = displayIGenForms.datasets[n];
 
-                            List<string[]> _results = _ds.results;
-
-                            if (_results != null && _results.Count > 0)
+                            if (_ds.cursorName.ToUpper() == _form.datasetName.ToUpper())
                             {
-                                // set the cursor
-                                Cursor _saveCursor = this.Cursor;
-
-                                this.Cursor = Cursors.WaitCursor;
-
-                                int _currentRow = _ds.currentPosition;
-                                int _currentPage = (_currentRow / _form.rowsPerPage) + 1;
-
-                                if (numRows == 99)
-                                {
-                                    // send to end
-                                    _currentRow = _results.Count - _form.rowsPerPage;
-                                    _currentPage = (_currentRow / _form.rowsPerPage) + 1;
-                                }
-                                else
-                                {
-                                    if (numRows == -99)
-                                    {
-                                        // send to beginning
-                                        _currentPage = 1;
-                                        _currentRow = 1;
-                                    }
-                                    else
-                                    {
-                                        _currentPage = _currentPage + numRows;
-                                        _currentRow = _currentRow + (numRows * _form.rowsPerPage);
-                                    }
-                                }
-
-                                if (_currentRow < 1)
-                                {
-                                    _currentPage = 1;
-                                    _currentRow = 1;
-                                }
-                                else
-                                {
-                                    //if (_currentRow > (_results.Count - _form.rowsPerPage - 1))
-                                    //{
-                                    //    _currentRow = _results.Count - _form.rowsPerPage;
-                                    //    _currentPage = _form.totalPages;
-                                    //}
-                                }
-
-
-                                //_currentRow = (_currentPage - 1) * _form.rowsPerPage + 1;
-                                _ds.currentPosition = _currentRow;
-                                _form.currentRow = _ds.currentPosition;
-                                _form.currentPage = _currentPage;
-                                tbrMainPageNo.Text = _currentRow.ToString();
-                                tbrMainTotalPages.Text = _form.totalRows.ToString();
-                                Application.DoEvents();
-
-                                // refresh the page
-                                // get the form
-                                if (tabForms.SelectedTab != null)
-                                {
-                                    string _formName = _form.name;
-                                    PictureBox _pallet = (PictureBox)tabForms.SelectedTab.Controls[0];
-                                    displayIGenForms.RedisplaySelectedForm(_pallet, _formName);
-                                }
-                                //DisplayForms();
-                                //LoadFormIntoTabs();
-
-                                _form.currentRow = _currentRow;
-                                _form.currentPage = _currentPage;
-                                tbrMainPageNo.Text = _currentRow.ToString();
-                                tbrMainTotalPages.Text = _ds.numRows.ToString();
-                                Application.DoEvents();
-
-                                //// set the tab index
-                                //tabForms.SelectedIndex = lastTabSelectedIndex;
-
-                                this.Cursor = _saveCursor;
+                                _form.datasetOrdinal = n;
+                                break;
                             }
                         }
+                    }
+                }
+
+                // get the dataset defined
+                if (_form.datasetOrdinal >= 0)
+                {
+                    _pageNo = _form.currentPage;
+
+                    IGenDataset _ds = displayIGenForms.datasets[_form.datasetOrdinal];
+
+                    // set the cursor
+                    Cursor _saveCursor = this.Cursor;
+
+                    this.Cursor = Cursors.WaitCursor;
+
+                    if (numPages == 99)
+                    {
+                        // send to end
+                        _pageNo = _form.totalPages;
+                    }
+                    else
+                    {
+                        if (numPages == -99)
+                        {
+                            // send to beginning
+                            _pageNo = 1;
+                        }
+                        else
+                        {
+                            // go forward or backward
+                            _pageNo = _pageNo + numPages;
+                            if (_pageNo < 1)
+                            {
+                                _pageNo = 1;
+                            }
+                            else
+                            {
+                                if (_pageNo > _form.totalPages)
+                                {
+                                    _pageNo = _form.totalPages;
+                                }
+                            }
+                        }
+                    }
+
+                    // figure out the row from the page number
+                    _ds.currentPosition = (_pageNo - 1) * _form.rowsPerPage + 1;
+
+                    // get the rows for this page
+                    List<string[]> _results = _ds.GetRows(_ds.currentPosition, _form.rowsPerPage);
+
+                    _ds.results = _results;
+
+                    if (_results != null && _results.Count > 0)
+                    {
+                        _form.currentRow = _ds.currentPosition;
+                        _form.currentPage = _pageNo;
+                        tbrMainPageNo.Text = _form.currentPage.ToString();
+                        tbrMainTotalPages.Text = _form.totalPages.ToString();
+                        Application.DoEvents();
+
+                            // refresh the page
+                        // get the form
+                        if (tabForms.SelectedTab != null)
+                        {
+                            string _formName = _form.name;
+                            PictureBox _pallet = (PictureBox)tabForms.SelectedTab.Controls[0];
+                            displayIGenForms.RedisplaySelectedForm(_pallet, _formName);
+                        }
+                        this.Cursor = _saveCursor;
                     }
                 }
 
             }
             catch (Exception ex)
             {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".AdvanceRow > " + ex.Message);
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".AdvancePage > " + ex.Message);
             }
 
             return;

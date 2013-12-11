@@ -76,6 +76,7 @@
             this.mnuMainToolsOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.tbrMainPercentage = new System.Windows.Forms.ToolStripLabel();
             this.tabForms.SuspendLayout();
             this.tbrMain.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -109,7 +110,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1098, 453);
+            this.tabPage2.Size = new System.Drawing.Size(1098, 429);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -131,21 +132,22 @@
             this.tbrMainClose,
             this.toolStripLabel3,
             this.tbrMainNavSep4,
-            this.tbrMainNextPage,
-            this.tbrMainNavSep3,
-            this.tbrMainPreviousPage,
-            this.tbrMainNavSep2,
             this.tbrMainFirstPage,
+            this.tbrMainNavSep2,
+            this.tbrMainPreviousPage,
+            this.tbrMainNavSep3,
+            this.tbrMainNextPage,
             this.tbrMainNavSep1,
             this.tbrMainLastPage,
             this.tbrMainNavSep5,
-            this.tbrMainTotalPages,
-            this.tbrMainOfLabel,
             this.tbrMainPageNo,
+            this.tbrMainOfLabel,
+            this.tbrMainTotalPages,
             this.toolStripLabel1,
             this.tbrMainLastDatePrepared,
             this.toolStripLabel2,
             this.tbrMainProgress,
+            this.tbrMainPercentage,
             this.tbrMainStatus});
             this.tbrMain.Location = new System.Drawing.Point(0, 24);
             this.tbrMain.Name = "tbrMain";
@@ -498,6 +500,12 @@
             this.mnuMainHelpAbout.Size = new System.Drawing.Size(107, 22);
             this.mnuMainHelpAbout.Text = "&About";
             // 
+            // tbrMainPercentage
+            // 
+            this.tbrMainPercentage.AutoSize = false;
+            this.tbrMainPercentage.Name = "tbrMainPercentage";
+            this.tbrMainPercentage.Size = new System.Drawing.Size(30, 35);
+            // 
             // frmViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -572,6 +580,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuMainToolsOptions;
         private System.Windows.Forms.ToolStripMenuItem mnuMainHelp;
         private System.Windows.Forms.ToolStripMenuItem mnuMainHelpAbout;
+        private System.Windows.Forms.ToolStripLabel tbrMainPercentage;
     }
 }
 

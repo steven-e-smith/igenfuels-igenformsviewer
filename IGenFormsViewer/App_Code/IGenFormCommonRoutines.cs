@@ -638,9 +638,9 @@ namespace IGenForms
 
                                                 if (_parts.Length > 2)
                                                 {
-                                                    _rowIndex = CommonRoutines.ConvertToInt(_parts[2]);
+                                                    _rowIndex = CommonRoutines.ConvertToInt(_parts[2]) - 1;
                                                     // now add the current offset in the dataset
-                                                    _rowIndex = _rowIndex + (igenForms.datasets[_dsOrdinal].currentPosition - 1);
+                                                    //_rowIndex = _rowIndex + (igenForms.datasets[_dsOrdinal].currentPosition - 1);
                                                 }
                                             }
                                             else
@@ -1246,7 +1246,7 @@ namespace IGenForms
                             break;
 
                         case "%TOTALPAGES%":
-                            _newValue =  CommonRoutines.ConvertToInt((currentIGenForm.dataset.Count / currentIGenForm.rowsPerPage + 1).ToString()).ToString();
+                            _newValue = currentIGenForm.totalPages.ToString(); 
                             break;
 
                         default:

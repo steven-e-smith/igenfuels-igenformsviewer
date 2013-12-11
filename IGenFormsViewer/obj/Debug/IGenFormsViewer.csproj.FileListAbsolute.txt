@@ -35,7 +35,6 @@ C:\Development\IGenFuels\IGenFormsViewer\IGenFormsViewer\bin\Debug\FormFiles\TN_
 C:\Development\IGenFuels\IGenFormsViewer\IGenFormsViewer\bin\Debug\FormFiles\TN_PET 377.frm
 C:\Development\IGenFuels\IGenFormsViewer\IGenFormsViewer\bin\Debug\stevensmith_IGenFormsViewer.config
 C:\Development\IGenFuels\IGenFormsViewer\IGenFormsViewer\obj\Debug\IGenForms.IGenFormSetValue.resources
-C:\Development\IGenFuels\IGenFormsViewer\IGenFormsViewer\obj\Debug\IGenFormsViewer.csprojResolveAssemblyReference.cache
 C:\Development\IGenFuels\IGenFormsViewer\IGenFormsViewer\bin\Debug\FormFiles\r0009801.png
 C:\Development\IGenFuels\IGenFormsViewer\IGenFormsViewer\bin\Debug\FormFiles\PET_377.frm
 C:\Development\IGenFuels\IGenFormsViewer\IGenFormsViewer\obj\Debug\IGenForms.frmDisplayDatasets.resources

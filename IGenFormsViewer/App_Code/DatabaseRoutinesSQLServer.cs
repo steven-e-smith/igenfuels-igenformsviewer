@@ -575,23 +575,25 @@ namespace IGenForms
 
                             if (loadCollection)
                             {
-                                for (int n = 0; n < _dt.Rows.Count; n++)
+                                for (int n = 0; n < maxRowsInCollection; n++)
                                 {
                                     // see if the max rows have been reached
-                                    if (n >= maxRowsInCollection)
+                                    if (n < _numRows)
+                                    {
+                                        List<string> _fieldValues = new List<string>();
+                                        for (int m = 0; m < _dt.Columns.Count; m++)
+                                        {
+                                            _fieldValues.Add(_dt.Rows[n][m].ToString());
+                                        }
+                                        _cursor.results.Add(_fieldValues.ToArray());
+                                    }
+                                    else
                                     {
                                         break;
                                     }
-
-                                    List<string> _fieldValues = new List<string>();
-                                    for (int m = 0; m < _dt.Columns.Count; m++)
-                                    {
-                                        _fieldValues.Add(_dt.Rows[n][m].ToString());
-                                    }
-                                    _cursor.results.Add(_fieldValues.ToArray());
                                 }
 
-                                _cursor.numRows = _cursor.results.Count;
+                                //_cursor.numRows = _cursor.results.Count;
                             }
                         }
                         

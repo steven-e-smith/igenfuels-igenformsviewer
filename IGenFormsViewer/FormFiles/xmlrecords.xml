@@ -1,0 +1,707 @@
+Pallet
+    Id=66
+    Category=AUTOMATED\AARONS TEST PROCESSES
+    Name=ADD TEST
+    Title=Add test
+    FirstWidget=Display Message_1
+/Pallet
+Widgets
+Widget
+    Id=1
+    Name=Display Message_1
+    Text=Display Message
+    LastValues=Text=DISPLAY^Message=1^WidgetName=Display Message_1^ID=1^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=Cleanse.jpg
+    Top=31
+    Left=437
+    Width=101
+    Height=108
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=1
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1
+        /Property
+        Property
+            Name=ID
+            Value=13
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1-DISPLAY MESSAGE_1_COPY_2_COPY_8
+            Value=T;LINK_DISPLAY MESSAGE_1-DISPLAY MESSAGE_1_COPY_2_COPY_8;Display Message_1_copy_2_copy_8;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=2
+    Name=Display Message_1_copy_2
+    Text=Display Message
+    LastValues=Text=DISPLAY^Message=3^WidgetName=Display Message_1_copy_2^ID=2^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=Data Maint.jpg
+    Top=120
+    Left=719
+    Width=128
+    Height=101
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=3
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2
+        /Property
+        Property
+            Name=ID
+            Value=12
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2-DISPLAY MESSAGE_1_COPY_2_COPY_7
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2-DISPLAY MESSAGE_1_COPY_2_COPY_7;Display Message_1_copy_2_copy_7;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=3
+    Name=Display Message_1_copy_2_copy_2
+    Text=Display Message
+    LastValues=Text=DISPLAY^Message=6^WidgetName=Display Message_1_copy_2_copy_2^ID=3^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=display.png
+    Top=512
+    Left=635
+    Width=88
+    Height=88
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=6
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_2
+        /Property
+        Property
+            Name=ID
+            Value=11
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2_COPY_2-DISPLAY MESSAGE_1_COPY_2_COPY_3
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2_COPY_2-DISPLAY MESSAGE_1_COPY_2_COPY_3;Display Message_1_copy_2_copy_3;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=4
+    Name=Display Message_1_copy_2_copy_3
+    Text=Display Message
+    LastValues=Text=DISPLAY^Message=7^WidgetName=Display Message_1_copy_2_copy_3^ID=4^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=EDI.PNG
+    Top=518
+    Left=483
+    Width=88
+    Height=88
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=7
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_3
+        /Property
+        Property
+            Name=ID
+            Value=10
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2_COPY_3-DISPLAY MESSAGE_1_COPY_2_COPY_4
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2_COPY_3-DISPLAY MESSAGE_1_COPY_2_COPY_4;Display Message_1_copy_2_copy_4;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=5
+    Name=Display Message_1_copy_2_copy_4
+    Text=Display Message
+    LastValues=Text=DISPLAY^Message=8^WidgetName=Display Message_1_copy_2_copy_4^ID=5^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=File Export.jpg
+    Top=507
+    Left=286
+    Width=88
+    Height=88
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=8
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_4
+        /Property
+        Property
+            Name=ID
+            Value=9
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2_COPY_4-DISPLAY MESSAGE_1_COPY_2_COPY_5
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2_COPY_4-DISPLAY MESSAGE_1_COPY_2_COPY_5;Display Message_1_copy_2_copy_5;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=6
+    Name=Display Message_1_copy_2_copy_5
+    Text=Display Message
+    LastValues=Text=DISPLAY^Message=9^WidgetName=Display Message_1_copy_2_copy_5^ID=6^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=File Import.jpg
+    Top=485
+    Left=146
+    Width=88
+    Height=88
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=9
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_5
+        /Property
+        Property
+            Name=ID
+            Value=8
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2_COPY_5-DISPLAY MESSAGE_1_COPY_2_COPY_9
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2_COPY_5-DISPLAY MESSAGE_1_COPY_2_COPY_9;Display Message_1_copy_2_copy_9;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=7
+    Name=Display Message_1_copy_2_copy_6
+    Text=Display Message
+    LastValues=Text=DISPLAY^Message=5^WidgetName=Display Message_1_copy_2_copy_6^ID=7^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=Display.jpg
+    Top=436
+    Left=762
+    Width=88
+    Height=88
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=5
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_6
+        /Property
+        Property
+            Name=ID
+            Value=7
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2_COPY_6-DISPLAY MESSAGE_1_COPY_2_COPY_2
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2_COPY_6-DISPLAY MESSAGE_1_COPY_2_COPY_2;Display Message_1_copy_2_copy_2;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=8
+    Name=Display Message_1_copy_2_copy_7
+    Text=Display Message
+    LastValues=Text=DISPLAY^Message=4^WidgetName=Display Message_1_copy_2_copy_7^ID=8^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=Decision.png
+    Top=271
+    Left=750
+    Width=88
+    Height=88
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=4
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_7
+        /Property
+        Property
+            Name=ID
+            Value=6
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2_COPY_7-DISPLAY MESSAGE_1_COPY_2_COPY_6
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2_COPY_7-DISPLAY MESSAGE_1_COPY_2_COPY_6;Display Message_1_copy_2_copy_6;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=9
+    Name=Display Message_1_copy_2_copy_8
+    Text=Display Message
+    LastValues=Text=DISPLAY^Message=2^WidgetName=Display Message_1_copy_2_copy_8^ID=9^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=Conditional_TF.jpg
+    Top=39
+    Left=603
+    Width=88
+    Height=88
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=2
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_8
+        /Property
+        Property
+            Name=ID
+            Value=5
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2_COPY_8-DISPLAY MESSAGE_1_COPY_2
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2_COPY_8-DISPLAY MESSAGE_1_COPY_2;Display Message_1_copy_2;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=10
+    Name=Display Message_1_copy_2_copy_9
+    Text=Display Message
+    LastValues=Text=DISPLAY^Message=10^WidgetName=Display Message_1_copy_2_copy_9^ID=10^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=Harmonize.jpg
+    Top=367
+    Left=30
+    Width=98
+    Height=104
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=10
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_9
+        /Property
+        Property
+            Name=ID
+            Value=4
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2_COPY_9-DISPLAY MESSAGE_1_COPY_2_COPY_2_COPY_6
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2_COPY_9-DISPLAY MESSAGE_1_COPY_2_COPY_2_COPY_6;Display Message_1_copy_2_copy_2_copy_6;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=11
+    Name=Display Message_1_copy_2_copy_2_copy_6
+    Text=DISPLAY
+    LastValues=Text=DISPLAY^Message=11^WidgetName=Display Message_1_copy_2_copy_2_copy_6^ID=11^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=Process.jpg
+    Top=250
+    Left=72
+    Width=88
+    Height=88
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=11
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_2_copy_6
+        /Property
+        Property
+            Name=ID
+            Value=3
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2_COPY_2_COPY_6-DISPLAY MESSAGE_1_COPY_2_COPY_3_COPY_7
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2_COPY_2_COPY_6-DISPLAY MESSAGE_1_COPY_2_COPY_3_COPY_7;Display Message_1_copy_2_copy_3_copy_7;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=12
+    Name=Display Message_1_copy_2_copy_3_copy_7
+    Text=
+    LastValues=Text=DISPLAY^Message=12^WidgetName=Display Message_1_copy_2_copy_3_copy_7^ID=12^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=Workflow.jpg
+    Top=173
+    Left=352
+    Width=161
+    Height=281
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=12
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_3_copy_7
+        /Property
+        Property
+            Name=ID
+            Value=2
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+        Link
+            Name=LINK_DISPLAY MESSAGE_1_COPY_2_COPY_3_COPY_7-DISPLAY MESSAGE_1_COPY_2_COPY_4_COPY_8
+            Value=T;LINK_DISPLAY MESSAGE_1_COPY_2_COPY_3_COPY_7-DISPLAY MESSAGE_1_COPY_2_COPY_4_COPY_8;Display Message_1_copy_2_copy_4_copy_8;; ;A;
+        /Link
+    /Links
+/Widget
+Widget
+    Id=13
+    Name=Display Message_1_copy_2_copy_4_copy_8
+    Text=DISPLAY
+    LastValues=Text=DISPLAY^Message=13^WidgetName=Display Message_1_copy_2_copy_4_copy_8^ID=13^Rows=0^Status=3^StatusMessage=^StatusResult=False^
+    LastStatus=SUCCESS
+    Type=DISPLAY
+    SourceType=WIDGET
+    Image=SSW1.jpg
+    Top=43
+    Left=292
+    Width=88
+    Height=88
+    Properties
+        Property
+            Name=Text
+            Value=DISPLAY
+        /Property
+        Property
+            Name=Message
+            Value=13
+        /Property
+        Property
+            Name=WidgetName
+            Value=Display Message_1_copy_2_copy_4_copy_8
+        /Property
+        Property
+            Name=ID
+            Value=1
+        /Property
+        Property
+            Name=Rows
+            Value=0
+        /Property
+        Property
+            Name=Status
+            Value=3
+        /Property
+        Property
+            Name=StatusMessage
+            Value=
+        /Property
+        Property
+            Name=StatusResult
+            Value=False
+        /Property
+    /Properties
+    Links
+    /Links
+/Widget
+/Widgets

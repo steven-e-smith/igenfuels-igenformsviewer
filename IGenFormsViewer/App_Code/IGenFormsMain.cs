@@ -93,7 +93,8 @@ namespace IGenForms
 
         // datasaet collection
         public List<IGenDataset> datasets = new List<IGenDataset>();
-        public ToolStripProgressBar progressBar = null; 
+        public ToolStripProgressBar progressBar = null;
+        public ToolStripLabel progressPercentage = null;
 
 
         public IGenFormsMain()
@@ -2007,6 +2008,11 @@ namespace IGenForms
                         progressBar.Minimum = 0;
                         progressBar.Maximum = 100;
                         progressBar.Visible = !progressBar.Visible;
+                        if (progressPercentage != null)
+                        {
+                            progressPercentage.Text = "";
+                            progressPercentage.Visible = progressBar.Visible;
+                        }
                     }
                     else
                     {
@@ -2014,8 +2020,13 @@ namespace IGenForms
                         double _percent = (entity * 100 / totalEntities);
                         progressBar.Value = CommonRoutines.ConvertToInt(_percent.ToString());
                         Application.DoEvents();
+                        if (progressPercentage != null)
+                        {
+                            progressPercentage.Text = progressBar.Value.ToString() + "%";
+                        }
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -2306,6 +2317,22 @@ namespace IGenForms
                             if (_form.datasetName.ToUpper() == datasets[m].cursorName.ToUpper())
                             {
                                 _form.datasetOrdinal = m;
+                                // if a multi-row form, then calc the total pages and such
+                                if (_form.multiPageForm.ToUpper().IndexOf("T") == 0)
+                                {
+                                    _form.currentPage = 1;
+                                    _form.currentRow = 1;
+                                    _form.totalRows = datasets[m].numRows;
+                                    double _numPages = CommonRoutines.ConvertToDouble(datasets[m].numRows.ToString()) / CommonRoutines.ConvertToDouble(_form.rowsPerPage.ToString());
+                                    _form.totalPages = CommonRoutines.ConvertToInt(_numPages.ToString());
+                                    if (_numPages > _form.totalPages)
+                                    {
+                                        _form.totalPages = _form.totalPages + 1;
+                                    }
+                                }
+                                else
+                                {
+                                }
                                 break; 
                             }
                         }
@@ -2508,11 +2535,17 @@ namespace IGenForms
 
                 // get the current form
                 IGenForm _form = this.GetForm(formName);
+                IGenFormCommonRoutines.currentIGenForm = _form;
                 PictureBox _pallet = pallet;
+
+                DisplayStatus("Loading page data....");
+                DisplayProgress(0, 0);
 
                 for (int m = 0; m < _form.formFields.fields.Count; m++)
                 {
                     IGenField _field = _form.formFields.fields[m];
+
+                    DisplayProgress((m + 1), _form.formFields.fields.Count);
 
                     _field.text = _field.compiledValue;
 
@@ -2556,6 +2589,10 @@ namespace IGenForms
                 CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".RedisplaySelectedForm(p,s) > " + ex.Message);
                 _result = ex.Message;
             }
+
+            DisplayStatus("Ready");
+
+            DisplayProgress(0, 0);
 
             return _result;
 
@@ -3330,7 +3367,7 @@ namespace IGenForms
         {
             string _value = "";
             string _fieldName = fieldName.ToUpper();
-            int _rowIndex = (rowIndex > 0) ? rowIndex : 1;
+            int _rowIndex = (rowIndex >= 0) ? rowIndex : 1;
             int _datasetOrdinal = datasetOrdinal;
 
             try
@@ -4180,10 +4217,12 @@ namespace IGenForms
         public string imageName = "";
         public int imageHeight = 900;
         public int imageWidth = 900;
+
         public int currentRow = 0;
         public int totalRows = 0;
         public int currentPage = 0;
         public int totalPages = 0;
+
         public string printOrientation = "P";
         public IGenFields formFields = new IGenFields();
         public int processingOrder = 0;
@@ -5545,8 +5584,9 @@ namespace IGenForms
         public SqlDataAdapter dataAdapter;
         public DataTable dataTable;
         public List<string[]> results;
-        public int numRows;
-        public int currentPosition;
+        public int numRows = 0;
+        public int currentPosition = 0;
+
         public bool eof = false;
         public bool bof = false;
 
@@ -5582,10 +5622,15 @@ namespace IGenForms
         public List<string[]> GetRows(int position, int numRows)
         {
             List<string[]> _rows = new List<string[]>();
-            int _position = position;
+            int _position = position - 1;
 
             try
             {
+                if (_position < 0)
+                {
+                    _position = 0;
+                }
+
                 currentPosition = position;
 
                 //for (int n = 0; n < numRows; n++)
@@ -5593,20 +5638,40 @@ namespace IGenForms
                 //    _rows.Add(GetRow());
                 //    currentPosition++;
                 //}
-                string[] _foundRows = (string[])dataTable.Rows[_position].ItemArray;
+                // load the _foundrows array
 
-                if (_foundRows.Length > 0)
+                for (int n = 0; n < numRows; n++)
                 {
-                    for (int n = 0; n < numRows; n++)
+                    List<string> _foundRows = new List<string>();
+
+                    object[] _dtRows = dataTable.Rows[_position].ItemArray;
+                    // add it to the dtrows
+                    for (int m = 0; m < _dtRows.Length; m++)
                     {
-                        for (int m = 0; m < _foundRows.Length; m++)
-                        {
-                            _rows.Add(_foundRows);
-                            _position = _position + 1;
-                            _foundRows = (string[])dataTable.Rows[_position].ItemArray;
-                        }
+                        _foundRows.Add(_dtRows[m].ToString());
                     }
+                    _rows.Add(_foundRows.ToArray());
+
+                    _position = _position + 1;
+                    if (_position >= this.numRows)
+                    {
+                        break;
+                    }
+
                 }
+
+                //if (_foundRows.Length > 0)
+                //{
+                //    for (int n = 0; n < numRows; n++)
+                //    {
+                //        for (int m = 0; m < _foundRows.Length; m++)
+                //        {
+                //            _rows.Add(_foundRows);
+                //            _position = _position + 1;
+                //            _foundRows = (string[])dataTable.Rows[_position].ItemArray;
+                //        }
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -5869,7 +5934,7 @@ namespace IGenForms
                     this.dataTable = _dataset.dataTable;
                     this.results = _dataset.results;
                     this.numRows = _dataset.numRows;
-                    this.currentPosition = 1;
+                    this.currentPosition = _dataset.currentPosition;
                 }
             }
             catch (Exception ex)

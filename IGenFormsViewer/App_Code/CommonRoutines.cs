@@ -400,11 +400,25 @@ namespace IGenForms
         /// <returns></returns>
         public static int ConvertToInt(String value)
         {
+            string _passedValue = value;
             int _value;
 
             try
             {
-                _value = Convert.ToInt32(value);
+                // does it have a period?
+                if (_passedValue.IndexOf('.') == 0)
+                {
+                    _passedValue = "0";
+                }
+                else
+                {
+                    if (_passedValue.IndexOf('.') > 0)
+                    {
+                        _passedValue = _passedValue.Substring(0, _passedValue.IndexOf('.'));
+                    }
+                }
+
+                _value = Convert.ToInt32(_passedValue);
             }
             catch (Exception ex)
             {

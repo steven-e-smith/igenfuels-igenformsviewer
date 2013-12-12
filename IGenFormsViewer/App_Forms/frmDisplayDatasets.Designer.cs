@@ -1,4 +1,4 @@
-﻿namespace IGenForms
+﻿namespace IGenFormsViewer
 {
     partial class frmDisplayDatasets
     {
@@ -65,7 +65,7 @@
             // 
             // tbrMainExit
             // 
-            this.tbrMainExit.Image = global::IGenForms.Properties.Resources.exit2;
+            this.tbrMainExit.Image = global::IGenFormsViewer.Properties.Resources.exit2;
             this.tbrMainExit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbrMainExit.Name = "tbrMainExit";
             this.tbrMainExit.Size = new System.Drawing.Size(29, 35);

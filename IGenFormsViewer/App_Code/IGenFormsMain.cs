@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using Topaz;
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
     [Serializable]
     public class IGenFormsMain

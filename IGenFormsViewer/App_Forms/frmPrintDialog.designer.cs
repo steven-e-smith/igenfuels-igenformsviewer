@@ -1,4 +1,4 @@
-﻿namespace IGenForms
+﻿namespace IGenFormsViewer
 {
     partial class frmPrintDialog
     {
@@ -114,7 +114,7 @@
             // 
             // tbrMainPrint
             // 
-            this.tbrMainPrint.Image = global::IGenForms.Properties.Resources.PRINT;
+            this.tbrMainPrint.Image = global::IGenFormsViewer.Properties.Resources.PRINT;
             this.tbrMainPrint.ImageTransparentColor = System.Drawing.Color.White;
             this.tbrMainPrint.Name = "tbrMainPrint";
             this.tbrMainPrint.Size = new System.Drawing.Size(36, 35);
@@ -163,7 +163,7 @@
             // 
             // tbrMainSave
             // 
-            this.tbrMainSave.Image = global::IGenForms.Properties.Resources.SAVE;
+            this.tbrMainSave.Image = global::IGenFormsViewer.Properties.Resources.SAVE;
             this.tbrMainSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbrMainSave.Name = "tbrMainSave";
             this.tbrMainSave.Size = new System.Drawing.Size(35, 35);

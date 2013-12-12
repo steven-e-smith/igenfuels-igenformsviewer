@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
-    public class IGenFormsInterface
+    public class IGenFormsViewerInterface
     {
         string moduleName = "IGenFormsInterface";
 
@@ -46,6 +46,14 @@ namespace IGenForms
         {
             get { return formGroup; }
             set { formGroup = value; }
+        }
+
+
+        private string formFileName = "";
+        public string FormFileName
+        {
+            get { return formFileName; }
+            set { formFileName = value; }
         }
 
 
@@ -129,7 +137,7 @@ namespace IGenForms
 
 
 
-        public IGenFormsInterface()
+        public IGenFormsViewerInterface()
         {
 
             // load the config file
@@ -173,10 +181,10 @@ namespace IGenForms
                 CommonRoutines.currentFormsPath = formFilesFolder;
                 CommonRoutines.currentFormImagesPath = formImagesFolder;
                 _igenForms.dataSource = connectionString;
-                formGroup = formFilesFolder + "\\" + formGroup;
+                string _formFileName = formFilesFolder + "\\" + formFileName;
                 _igenForms.formGroupName = formGroup;
 
-                IGenFormCommonRoutines.currentIGenForms.fileName = formGroup;
+                IGenFormCommonRoutines.currentIGenForms.fileName = formFilesFolder + "\\" + formFileName;
                 IGenFormCommonRoutines.currentIGenForm = null;
 
                 _igenForms.sql = formSQL;

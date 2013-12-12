@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 
 
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
     /// <summary>
     /// Summary description for clsCommonRoutines

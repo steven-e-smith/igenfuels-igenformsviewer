@@ -8,7 +8,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
     public class PlexMail
     {

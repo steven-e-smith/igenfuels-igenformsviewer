@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
     public class ConfigRoutines
     {

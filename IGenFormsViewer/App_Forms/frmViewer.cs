@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
     public partial class frmViewer : Form
     {

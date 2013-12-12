@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
     public partial class Form1 : Form
     {
-        string moduleName = "frmIGenForm";
+        string moduleName = "Form1";
 
-        IGenFormsInterface _interface = new IGenFormsInterface();
+        IGenFormsViewerInterface _interface = new IGenFormsViewerInterface();
 
 
         public Form1()
@@ -59,7 +59,8 @@ namespace IGenForms
             _interface.ConnectionDBMS = ConfigRoutines.GetSetting("MainDBMS");
             _interface.FormFilesFolder = CommonRoutines.currentFormsPath;
             _interface.FormImagesFolder = CommonRoutines.currentFormImagesPath;
-            _interface.FormGroup = "Tennesse_PET350.FRM";
+            _interface.FormGroup = "TN_PET_350";
+            _interface.FormFileName = "Tennesse_PET350.frm";
 
             _interface.GenerateForms();
 

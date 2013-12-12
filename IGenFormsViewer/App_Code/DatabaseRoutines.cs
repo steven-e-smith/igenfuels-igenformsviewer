@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Windows.Forms;
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
     public class DatabaseRoutines
     {

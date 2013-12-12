@@ -5,7 +5,7 @@ using System.Text;
 using Jint;
 
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
     public class Expressions
     {

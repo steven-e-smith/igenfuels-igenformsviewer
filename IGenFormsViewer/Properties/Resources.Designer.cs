@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace IGenForms.Properties {
+namespace IGenFormsViewer.Properties {
     using System;
     
     

@@ -1,4 +1,4 @@
-﻿namespace IGenForms
+﻿namespace IGenFormsViewer
 {
     partial class Form1
     {

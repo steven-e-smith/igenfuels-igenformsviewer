@@ -1,4 +1,4 @@
-﻿namespace IGenForms
+﻿namespace IGenFormsViewer
 {
     partial class frmMessageBox
     {
@@ -93,7 +93,7 @@
             // picImage
             // 
             this.picImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.picImage.Image = global::IGenForms.Properties.Resources.oops;
+            this.picImage.Image = global::IGenFormsViewer.Properties.Resources.oops;
             this.picImage.Location = new System.Drawing.Point(12, 1);
             this.picImage.Name = "picImage";
             this.picImage.Size = new System.Drawing.Size(242, 245);

@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using Microsoft.SqlServer.Server;
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
     public class DatabaseRoutinesSQLServer
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Text;
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
 
     // each form/function will call this security class for it to set fields invisible, disabled or to restrict functionality.

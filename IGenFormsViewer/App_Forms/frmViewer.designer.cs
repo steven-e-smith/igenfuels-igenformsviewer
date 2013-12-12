@@ -1,4 +1,4 @@
-﻿namespace IGenForms
+﻿namespace IGenFormsViewer
 {
     partial class frmViewer
     {
@@ -172,7 +172,7 @@
             // 
             // tbrMainRun
             // 
-            this.tbrMainRun.Image = global::IGenForms.Properties.Resources.Execute;
+            this.tbrMainRun.Image = global::IGenFormsViewer.Properties.Resources.Execute;
             this.tbrMainRun.ImageTransparentColor = System.Drawing.Color.White;
             this.tbrMainRun.Name = "tbrMainRun";
             this.tbrMainRun.Size = new System.Drawing.Size(51, 35);
@@ -197,7 +197,7 @@
             // 
             // tbrMainOptions
             // 
-            this.tbrMainOptions.Image = global::IGenForms.Properties.Resources.Options;
+            this.tbrMainOptions.Image = global::IGenFormsViewer.Properties.Resources.Options;
             this.tbrMainOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbrMainOptions.Name = "tbrMainOptions";
             this.tbrMainOptions.Size = new System.Drawing.Size(53, 35);
@@ -212,7 +212,7 @@
             // 
             // tbrMainPrint
             // 
-            this.tbrMainPrint.Image = global::IGenForms.Properties.Resources.PRINT;
+            this.tbrMainPrint.Image = global::IGenFormsViewer.Properties.Resources.PRINT;
             this.tbrMainPrint.ImageTransparentColor = System.Drawing.Color.White;
             this.tbrMainPrint.Name = "tbrMainPrint";
             this.tbrMainPrint.Size = new System.Drawing.Size(36, 35);
@@ -251,7 +251,7 @@
             // 
             this.tbrMainNextPage.AutoSize = false;
             this.tbrMainNextPage.BackColor = System.Drawing.Color.Transparent;
-            this.tbrMainNextPage.Image = global::IGenForms.Properties.Resources.ARW08RT;
+            this.tbrMainNextPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08RT;
             this.tbrMainNextPage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbrMainNextPage.Name = "tbrMainNextPage";
             this.tbrMainNextPage.Size = new System.Drawing.Size(60, 35);
@@ -268,7 +268,7 @@
             // 
             this.tbrMainPreviousPage.AutoSize = false;
             this.tbrMainPreviousPage.BackColor = System.Drawing.Color.Transparent;
-            this.tbrMainPreviousPage.Image = global::IGenForms.Properties.Resources.ARW08LT;
+            this.tbrMainPreviousPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08LT;
             this.tbrMainPreviousPage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbrMainPreviousPage.Name = "tbrMainPreviousPage";
             this.tbrMainPreviousPage.Size = new System.Drawing.Size(60, 35);
@@ -285,7 +285,7 @@
             // 
             this.tbrMainFirstPage.AutoSize = false;
             this.tbrMainFirstPage.BackColor = System.Drawing.Color.Transparent;
-            this.tbrMainFirstPage.Image = global::IGenForms.Properties.Resources.ARW08UP;
+            this.tbrMainFirstPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08UP;
             this.tbrMainFirstPage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbrMainFirstPage.Name = "tbrMainFirstPage";
             this.tbrMainFirstPage.Size = new System.Drawing.Size(60, 35);
@@ -302,7 +302,7 @@
             // 
             this.tbrMainLastPage.AutoSize = false;
             this.tbrMainLastPage.BackColor = System.Drawing.Color.Transparent;
-            this.tbrMainLastPage.Image = global::IGenForms.Properties.Resources.ARW08DN;
+            this.tbrMainLastPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08DN;
             this.tbrMainLastPage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbrMainLastPage.Name = "tbrMainLastPage";
             this.tbrMainLastPage.Size = new System.Drawing.Size(60, 35);

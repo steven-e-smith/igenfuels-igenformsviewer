@@ -5,7 +5,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
 
     /// <summary>

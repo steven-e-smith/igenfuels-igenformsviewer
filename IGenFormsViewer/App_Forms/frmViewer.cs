@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 
+
+
 namespace IGenFormsViewer
 {
     public partial class frmViewer : Form
@@ -177,6 +179,8 @@ namespace IGenFormsViewer
 
                 displayIGenForms.progressBar = tbrMainProgress;
                 displayIGenForms.progressPercentage = tbrMainPercentage;
+
+                tbrMainLastDatePrepared.Visible = false;
 
                 ResizeControls();
 
@@ -368,16 +372,25 @@ namespace IGenFormsViewer
             {
                 //DisplayStatus("Loading form definitions...");
 
-                // get the file name from the global one
-                if (displayIGenForms.forms.Count == 0)
-                {
-                    string _formGroupFileName = IGenFormCommonRoutines.currentIGenForms.fileName;
-                    displayIGenForms.LoadFormGroup(_formGroupFileName, tabForms, true);
-                    displayIGenForms.compileFormsFlag = true;
-                }
-
                 if (initialDisplay)
                 {
+                    // get the file name from the global one
+                    //if (displayIGenForms.forms.Count == 0)
+                    if (displayIGenForms.xmlRecs.Count == 0)
+                    {
+                        CommonRoutines.Log("Loading form file " + IGenFormCommonRoutines.currentIGenForms.fileName);
+                        string _formGroupFileName = IGenFormCommonRoutines.currentIGenForms.fileName;
+                        displayIGenForms.LoadFormGroup(_formGroupFileName, tabForms, true);
+                        displayIGenForms.compileFormsFlag = true;
+                    }
+                    else
+                    {
+                        CommonRoutines.Log("Loading form from XML records ");
+                        string _formGroupFileName = IGenFormCommonRoutines.currentIGenForms.fileName;
+                        displayIGenForms.LoadFormGroup(displayIGenForms.xmlRecs, tabForms, true);
+                        displayIGenForms.compileFormsFlag = true;
+                    }
+
                     // use the values from the current igenforms
                     string _persistFlag = ConfigRoutines.GetSetting("FormsPersistValues");
 
@@ -1083,69 +1096,76 @@ namespace IGenFormsViewer
 
                     IGenDataset _ds = displayIGenForms.datasets[_form.datasetOrdinal];
 
-                    // set the cursor
-                    Cursor _saveCursor = this.Cursor;
+                    tbrMainPageNo.Text = _form.currentPage.ToString();
+                    tbrMainTotalPages.Text = _form.totalPages.ToString();
+                    Application.DoEvents();
 
-                    this.Cursor = Cursors.WaitCursor;
+                    // see if there are any rows...
+                    if (_ds.numRows > 0)
+                    {
+                        // set the cursor
+                        Cursor _saveCursor = this.Cursor;
 
-                    if (numPages == 99)
-                    {
-                        // send to end
-                        _pageNo = _form.totalPages;
-                    }
-                    else
-                    {
-                        if (numPages == -99)
+                        this.Cursor = Cursors.WaitCursor;
+
+                        if (numPages == 99)
                         {
-                            // send to beginning
-                            _pageNo = 1;
+                            // send to end
+                            _pageNo = _form.totalPages;
                         }
                         else
                         {
-                            // go forward or backward
-                            _pageNo = _pageNo + numPages;
-                            if (_pageNo < 1)
+                            if (numPages == -99)
                             {
+                                // send to beginning
                                 _pageNo = 1;
                             }
                             else
                             {
-                                if (_pageNo > _form.totalPages)
+                                // go forward or backward
+                                _pageNo = _pageNo + numPages;
+                                if (_pageNo < 1)
                                 {
-                                    _pageNo = _form.totalPages;
+                                    _pageNo = 1;
+                                }
+                                else
+                                {
+                                    if (_pageNo > _form.totalPages)
+                                    {
+                                        _pageNo = _form.totalPages;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    // figure out the row from the page number
-                    _ds.currentPosition = (_pageNo - 1) * _form.rowsPerPage + 1;
+                        // figure out the row from the page number
+                        _ds.currentPosition = (_pageNo - 1) * _form.rowsPerPage + 1;
 
-                    // get the rows for this page
-                    List<string[]> _results = _ds.GetRows(_ds.currentPosition, _form.rowsPerPage);
+                        // get the rows for this page
+                        List<string[]> _results = _ds.GetRows(_ds.currentPosition, _form.rowsPerPage);
 
-                    _ds.results = _results;
+                        _ds.results = _results;
 
-                    if (_results != null && _results.Count > 0)
-                    {
-                        _form.currentRow = _ds.currentPosition;
-                        _form.currentPage = _pageNo;
-                        tbrMainPageNo.Text = _form.currentPage.ToString();
-                        tbrMainTotalPages.Text = _form.totalPages.ToString();
-                        Application.DoEvents();
+                        if (_results != null && _results.Count > 0)
+                        {
+                            _form.currentRow = _ds.currentPosition;
+                            _form.currentPage = _pageNo;
+                            tbrMainPageNo.Text = _form.currentPage.ToString();
+                            tbrMainTotalPages.Text = _form.totalPages.ToString();
+                            Application.DoEvents();
 
                             // refresh the page
-                        // get the form
-                        if (tabForms.SelectedTab != null)
-                        {
-                            string _formName = _form.name;
-                            PictureBox _pallet = (PictureBox)tabForms.SelectedTab.Controls[0];
-                            displayIGenForms.RedisplaySelectedForm(_pallet, _formName);
+                            // get the form
+                            if (tabForms.SelectedTab != null)
+                            {
+                                string _formName = _form.name;
+                                PictureBox _pallet = (PictureBox)tabForms.SelectedTab.Controls[0];
+                                displayIGenForms.RedisplaySelectedForm(_pallet, _formName);
+                            }
+                            this.Cursor = _saveCursor;
                         }
-                        this.Cursor = _saveCursor;
                     }
                 }
-
             }
             catch (Exception ex)
             {

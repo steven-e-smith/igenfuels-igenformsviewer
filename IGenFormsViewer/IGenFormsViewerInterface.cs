@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
+
+
 namespace IGenFormsViewer
 {
     public class IGenFormsViewerInterface
@@ -78,6 +81,22 @@ namespace IGenFormsViewer
         {
             get { return formImagesFolder; }
             set { formImagesFolder = value; }
+        }
+
+
+        private object[] forms = {};
+        public object[] Forms
+        {
+            get { return forms; }
+            set { forms = value; }
+        }
+
+
+        private List<string> xmlRecs = new List<string>();
+        public List<string> XmlRecs
+        {
+            get { return xmlRecs; }
+            set { xmlRecs = value; }
         }
 
 
@@ -187,6 +206,7 @@ namespace IGenFormsViewer
                 IGenFormCommonRoutines.currentIGenForms.fileName = formFilesFolder + "\\" + formFileName;
                 IGenFormCommonRoutines.currentIGenForm = null;
 
+                _igenForms.xmlRecs = XmlRecs;
                 _igenForms.sql = formSQL;
 
                 // load the form group

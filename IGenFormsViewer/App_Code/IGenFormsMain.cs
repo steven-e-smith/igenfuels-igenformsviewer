@@ -11,6 +11,8 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using Topaz;
 
+
+
 namespace IGenFormsViewer
 {
     [Serializable]
@@ -73,6 +75,7 @@ namespace IGenFormsViewer
 
         public bool showGrid = false;
 
+        public List<string> xmlRecs = new List<string>();
         public List<IGenForm> forms = new List<IGenForm>();
         public IGenForm currentForm = null;
 
@@ -250,7 +253,7 @@ namespace IGenFormsViewer
             }
             catch (Exception ex)
             {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".LoadFormGroup(s,t) > " + ex.Message);
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".LoadFormGroup(s, tab) > " + ex.Message);
             }
 
             return _formGroupName;
@@ -293,7 +296,47 @@ namespace IGenFormsViewer
             }
             catch (Exception ex)
             {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".LoadFormGroup > " + ex.Message);
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".LoadFormGroup(s, tab, b) > " + ex.Message);
+            }
+
+            return _formGroupName;
+
+        }
+
+
+
+        /// <summary>
+        /// string LoadFormGroup(string formFile)
+        /// Load the form group
+        /// </summary>
+        /// <returns></returns>
+        public string LoadFormGroup(List<string> xmlRecs, TabControl tabForms, bool runMode)
+        {
+            string _formGroupName = "";
+
+            try
+            {
+                // load the form into the class
+                if (xmlRecs.Count > 0)
+                {
+                    List<string> _recs = xmlRecs;
+                    if (_recs.Count > 0)
+                    {
+                        List<string> _xmlRecords = CommonRoutines.ConvertXMLToNameValuePairs(_recs);
+                        if (_xmlRecords.Count > 0)
+                        {
+                            // add the formgrouppath tag
+                            _xmlRecords.Insert(0, "FormGroupPath=" + formGroupPath);
+                            // fill in the form object with its fields
+                            CreatePalletForms(_xmlRecords, tabForms); // this needs to be broken out
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".LoadFormGroup(l<s>, tab, b) > " + ex.Message);
             }
 
             return _formGroupName;

@@ -2070,9 +2070,16 @@ namespace IGenFormsViewer
                         // were there any rows?
                         if (_rows.Count > 0)
                         {
-                            // the value is the first column of the second row
-                            string[] _row = _rows[1];
-                            _result = _row[0];
+                            if (_rows[1].Length > 0)
+                            {
+                                // the value is the first column of the second row
+                                string[] _row = _rows[1];
+                                _result = _row[0];
+                            }
+                            else
+                            {
+                                _result = "";
+                            }
                         }
                         else
                         {

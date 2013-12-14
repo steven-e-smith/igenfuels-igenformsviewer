@@ -576,7 +576,7 @@ namespace IGenFormsViewer
                                 _cursor.results.Add(_fieldNames.ToArray());
                             }
 
-                            if (loadCollection)
+                            if (loadCollection && _numRows > 0)
                             {
                                 for (int n = 0; n < maxRowsInCollection; n++)
                                 {

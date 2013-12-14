@@ -639,7 +639,7 @@ namespace IGenFormsViewer
 
                                                 if (_parts.Length > 2)
                                                 {
-                                                    _rowIndex = CommonRoutines.ConvertToInt(_parts[2]) - 1;
+                                                    _rowIndex = CommonRoutines.ConvertToInt(_parts[2]);  // -1;
                                                     // now add the current offset in the dataset
                                                     //_rowIndex = _rowIndex + (igenForms.datasets[_dsOrdinal].currentPosition - 1);
                                                 }

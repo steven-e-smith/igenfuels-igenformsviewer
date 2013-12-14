@@ -2493,6 +2493,12 @@ namespace IGenFormsViewer
 
                                     CommonRoutines.DisplayStatus("Processing field " + _field.name + " on form " + _form.name + "...");
 
+                                    // for a test, ignore
+                                    if (_field.name.ToUpper() == "Point_Of_Origin_Terminal_1".ToUpper())
+                                    {
+                                        int y = 0;
+                                    }
+
                                     _value = _field.text;
 
                                     IGenFormCommonRoutines.currentIGenForm = _form;
@@ -4120,7 +4126,10 @@ namespace IGenFormsViewer
 
                 if (_rows.Count > 0)
                 {
-                    _lastDatePrepared = DatabaseRoutines.GetRowValue(_rows[0], _rows[1], "LastDateRun");
+                    if (_rows[0].Length > 1)
+                    {
+                        _lastDatePrepared = DatabaseRoutines.GetRowValue(_rows[0], _rows[1], "LastDateRun");
+                    }
                 }
 
             }
@@ -5669,52 +5678,57 @@ namespace IGenFormsViewer
 
             try
             {
-                if (_position < 0)
+                if (dataTable.Rows.Count > 0)
                 {
-                    _position = 0;
-                }
-
-                currentPosition = position;
-
-                //for (int n = 0; n < numRows; n++)
-                //{
-                //    _rows.Add(GetRow());
-                //    currentPosition++;
-                //}
-                // load the _foundrows array
-
-                for (int n = 0; n < numRows; n++)
-                {
-                    List<string> _foundRows = new List<string>();
-
-                    object[] _dtRows = dataTable.Rows[_position].ItemArray;
-                    // add it to the dtrows
-                    for (int m = 0; m < _dtRows.Length; m++)
+                    if (_position < 0)
                     {
-                        _foundRows.Add(_dtRows[m].ToString());
-                    }
-                    _rows.Add(_foundRows.ToArray());
-
-                    _position = _position + 1;
-                    if (_position >= this.numRows)
-                    {
-                        break;
+                        _position = 0;
                     }
 
-                }
+                    currentPosition = position;
 
-                //if (_foundRows.Length > 0)
-                //{
-                //    for (int n = 0; n < numRows; n++)
-                //    {
-                //        for (int m = 0; m < _foundRows.Length; m++)
-                //        {
-                //            _rows.Add(_foundRows);
-                //            _position = _position + 1;
-                //            _foundRows = (string[])dataTable.Rows[_position].ItemArray;
-                //        }
-                //    }
-                //}
+                    //for (int n = 0; n < numRows; n++)
+                    //{
+                    //    _rows.Add(GetRow());
+                    //    currentPosition++;
+                    //}
+                    // load the _foundrows array
+
+                    _rows.Add(fieldNames);
+
+                    for (int n = 0; n < numRows; n++)
+                    {
+                        List<string> _foundRows = new List<string>();
+
+                        object[] _dtRows = dataTable.Rows[_position].ItemArray;
+                        // add it to the dtrows
+                        for (int m = 0; m < _dtRows.Length; m++)
+                        {
+                            _foundRows.Add(_dtRows[m].ToString());
+                        }
+                        _rows.Add(_foundRows.ToArray());
+
+                        _position = _position + 1;
+                        if (_position >= this.numRows)
+                        {
+                            break;
+                        }
+
+                    }
+
+                    //if (_foundRows.Length > 0)
+                    //{
+                    //    for (int n = 0; n < numRows; n++)
+                    //    {
+                    //        for (int m = 0; m < _foundRows.Length; m++)
+                    //        {
+                    //            _rows.Add(_foundRows);
+                    //            _position = _position + 1;
+                    //            _foundRows = (string[])dataTable.Rows[_position].ItemArray;
+                    //        }
+                    //    }
+                    //}
+                }
             }
             catch (Exception ex)
             {
@@ -5978,6 +5992,9 @@ namespace IGenFormsViewer
                     this.results = _dataset.results;
                     this.numRows = _dataset.numRows;
                     this.currentPosition = _dataset.currentPosition;
+
+                    //// get the first 100 rows
+                    GetRows(1, 100);
                 }
             }
             catch (Exception ex)

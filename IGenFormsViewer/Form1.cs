@@ -59,8 +59,8 @@ namespace IGenFormsViewer
             _interface.ConnectionDBMS = ConfigRoutines.GetSetting("MainDBMS");
             _interface.FormFilesFolder = CommonRoutines.currentFormsPath;
             _interface.FormImagesFolder = CommonRoutines.currentFormImagesPath;
-            _interface.FormGroup = "TN_PET_350";
-            _interface.FormFileName = "Tennesse_PET350.frm";
+            _interface.FormGroup = "Minnesota_PDA-49";
+            _interface.FormFileName = "IGen\\MN\\Minnesota_PDA-49.frm";
 
             _interface.GenerateForms();
 

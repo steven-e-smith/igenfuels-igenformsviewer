@@ -387,6 +387,12 @@ namespace IGenFormsViewer
                     {
                         CommonRoutines.Log("Loading form from XML records ");
                         string _formGroupFileName = IGenFormCommonRoutines.currentIGenForms.fileName;
+                        // get the form group path
+                        int _offset = _formGroupFileName.LastIndexOf('\\');
+                        if (_offset > 0)
+                        {
+                            CommonRoutines.currentFormGroupPath = _formGroupFileName.Substring(0, _offset);
+                        }
                         displayIGenForms.LoadFormGroup(displayIGenForms.xmlRecs, tabForms, true);
                         displayIGenForms.compileFormsFlag = true;
                     }
@@ -440,6 +446,7 @@ namespace IGenFormsViewer
                             }
                         }
 
+                        _control.MouseHover += _control_MouseHover;
 
                     }
                 }
@@ -460,6 +467,43 @@ namespace IGenFormsViewer
             DisplayStatus("Ready");
 
             return;
+
+        }
+
+
+
+
+
+
+        void _control_MouseHover(object sender, EventArgs e)
+        {
+            Control _control = (Control)sender;
+            String _text = "Name=" + _control.Name;
+
+            // display the control text
+            try
+            {
+                if (_control.Tag != null && _control.Tag.GetType().Name.ToUpper() == "IGENFIELD")
+                {
+                    IGenField _field = (IGenField)_control.Tag;
+                    _text = _text + "\r" + "Value=" + _field.value + "\rCompiled Value=" + _field.compiledValue + "\rComments=" + _field.comments;
+                }
+                System.Windows.Forms.ToolTip _tooltip = new System.Windows.Forms.ToolTip();
+                _tooltip.AutomaticDelay = 0;
+                _tooltip.AutoPopDelay = 0;
+                _tooltip.InitialDelay = 0;
+                _tooltip.IsBalloon = true;
+                _tooltip.ToolTipTitle = "Control Properties";
+                _tooltip.UseAnimation = true;
+                _tooltip.SetToolTip(_control, _text);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + "._control_MouseHover > " + ex.Message);
+            }
+
+            return;
+
 
         }
 
@@ -1391,11 +1435,15 @@ namespace IGenFormsViewer
             try
             {
                 // get the last calced date
-                string _lastDatePrepared = displayIGenForms.GetLastPreparedDate();
+                string dateLastPrepared = displayIGenForms.GetLastPreparedDate();
+                IGenFormCommonRoutines.dateLastPrepared = dateLastPrepared;
+
                 string _version = displayIGenForms.formGroupVersion;
-                if (_lastDatePrepared != "")
+                IGenFormCommonRoutines.formGroupVersion = _version;
+
+                if (dateLastPrepared != "")
                 {
-                    tbrMainLastDatePrepared.Text = "Ver: " + _version + ", Last Prepared: " + _lastDatePrepared;
+                    tbrMainLastDatePrepared.Text = "Ver: " + _version + ", Last Prepared: " + dateLastPrepared;
                 }
                 else
                 {
@@ -1533,6 +1581,48 @@ namespace IGenFormsViewer
             catch (Exception ex)
             {
                 CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".DisplayDatasets > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+        private void mnuMainHelpAbout_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                frmAbout _aboutForm = new frmAbout();
+                _aboutForm.ShowDialog(this);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainHelpAbout_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+        private void mnuMainExportToExcel_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                displayIGenForms.ExportForms();
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainExportToExcel_Click > " + ex.Message);
             }
 
             return;

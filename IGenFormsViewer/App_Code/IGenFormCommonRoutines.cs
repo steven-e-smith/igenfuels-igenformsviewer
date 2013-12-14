@@ -19,6 +19,9 @@ namespace IGenFormsViewer
         public static IGenFormsMain currentIGenForms = null;
         public static IGenForm currentIGenForm = null;
 
+        public static string dateLastPrepared = "";
+        public static string formGroupVersion = "";
+
         public static string connectionString = "";
         public static string connectionDBMS = "";
 

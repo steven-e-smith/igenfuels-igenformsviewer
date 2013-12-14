@@ -45,6 +45,7 @@ namespace IGenFormsViewer
         public static string lastPath = "";
         public static string currentPath = AppDomain.CurrentDomain.BaseDirectory;
         public static string currentFormsPath = CommonRoutines.currentPath + "formfiles";
+        public static string currentFormGroupPath = currentFormsPath;
         public static string currentFormImagesPath = CommonRoutines.currentPath + "formimages";
         public static string tempPath = currentPath + "temp\\";
 

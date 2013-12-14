@@ -319,6 +319,7 @@ namespace IGenFormsViewer
                 // load the form into the class
                 if (xmlRecs.Count > 0)
                 {
+                    formGroupPath = CommonRoutines.currentFormGroupPath;
                     List<string> _recs = xmlRecs;
                     if (_recs.Count > 0)
                     {
@@ -2104,6 +2105,124 @@ namespace IGenFormsViewer
             return;
 
         }
+
+
+
+
+
+
+
+
+
+        public void ExportForms()
+        {
+
+            try
+            {
+                // create a new excel workbook
+                ExcelRoutines _excel = new ExcelRoutines();
+                bool _workbookCreated = _excel.CreateNewExcelWorkbook();
+
+                // walk the forms collection and export it to excel, a new tab for each form
+                // for non-multipage forms, output each field as a row with the field name/comments and value
+                for (int n = 0; n < forms.Count; n++)
+                {
+                    IGenForm _form = forms[n];
+
+                    // create a worksheet for this form
+                    if (_excel.CreateNewExcelWorksheet(_form.name))
+                    {
+                        List<string[]> _fieldValues = new List<string[]>();
+
+                        List<IGenField> _fields = _form.formFields.fields;
+
+                        // fill in the worksheet
+                        // for a multipage form, reconfigure
+                        if (_form.multiPageForm.ToUpper().IndexOf('T') == 0)
+                        {
+                            List<string> _columnNames = new List<string>();
+
+                            // multipage, the rows to export will have a DS( and rowindex on them...
+                            for (int m = 0; m < _fields.Count; m++)
+                            {
+                                string _fieldValue = _fields[m].originalValue;
+                                int _offset = _fieldValue.IndexOf("DS(");
+                                if (_offset >= 0)
+                                {
+                                    string _columnName = _fieldValue.Substring(_offset + 3);
+                                    int _rowIndex = -1;
+                                    // find the first ): and then the number
+                                    _offset = _columnName.IndexOf("):");
+                                    if (_offset > 0)
+                                    {
+                                        // get the row referenced
+                                        string _rowSpec = _columnName.Substring(_offset + 2);
+                                        _columnName = _columnName.Substring(0, _offset);
+                                        // go till the first space or the end of the field
+                                        _offset = _rowSpec.IndexOf(" ");
+                                        if (_offset > 0)
+                                        {
+                                            _rowSpec = _rowSpec.Substring(_offset);
+                                        }
+                                        _rowIndex = CommonRoutines.ConvertToInt(_rowSpec);
+                                    }
+
+                                    if (_rowIndex == 1)
+                                    {
+                                        // add to the columns list
+                                        _columnNames.Add(_columnName);
+                                    }
+                                }
+
+                            }
+
+                            // first row of the worksheet is the column names
+                            _fieldValues.Add(_columnNames.ToArray());
+
+                            // now fill in the fieldvalues from the dataset of the form
+
+                            // get the ds name from the form
+                            if (_form.datasetOrdinal >= 0)
+                            {
+                                int _pageNo = 0;
+                                IGenDataset _ds = datasets[_form.datasetOrdinal];
+
+                                // read the recordset
+                            }
+
+                        }
+                        else
+                        {
+                            for (int m = 0; m < _fields.Count; m++)
+                            {
+                                _fieldValues.Add(new string[] { _fields[m].name, _fields[m].text });
+                            }
+                        }
+
+                        _excel.WriteToWorksheet(_fieldValues, 1);
+                    }
+                }
+
+                // get the name of the workbook to save
+                string _workbookName = CommonRoutines.SaveDialog("xlsx", "");
+
+                if (_workbookName != "")
+                {
+                    _excel.SaveWorksheet(_workbookName);
+                }
+
+                _excel.CloseWorkbook();
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".ExportForms(Tab, b) > " + ex.Message);
+            }
+
+            return;
+
+        }
+
 
 
 
@@ -5678,56 +5797,59 @@ namespace IGenFormsViewer
 
             try
             {
-                if (dataTable.Rows.Count > 0)
+                if (dataTable != null)
                 {
-                    if (_position < 0)
+                    if (dataTable.Rows.Count > 0)
                     {
-                        _position = 0;
-                    }
-
-                    currentPosition = position;
-
-                    //for (int n = 0; n < numRows; n++)
-                    //{
-                    //    _rows.Add(GetRow());
-                    //    currentPosition++;
-                    //}
-                    // load the _foundrows array
-
-                    _rows.Add(fieldNames);
-
-                    for (int n = 0; n < numRows; n++)
-                    {
-                        List<string> _foundRows = new List<string>();
-
-                        object[] _dtRows = dataTable.Rows[_position].ItemArray;
-                        // add it to the dtrows
-                        for (int m = 0; m < _dtRows.Length; m++)
+                        if (_position < 0)
                         {
-                            _foundRows.Add(_dtRows[m].ToString());
-                        }
-                        _rows.Add(_foundRows.ToArray());
-
-                        _position = _position + 1;
-                        if (_position >= this.numRows)
-                        {
-                            break;
+                            _position = 0;
                         }
 
-                    }
+                        currentPosition = position;
 
-                    //if (_foundRows.Length > 0)
-                    //{
-                    //    for (int n = 0; n < numRows; n++)
-                    //    {
-                    //        for (int m = 0; m < _foundRows.Length; m++)
-                    //        {
-                    //            _rows.Add(_foundRows);
-                    //            _position = _position + 1;
-                    //            _foundRows = (string[])dataTable.Rows[_position].ItemArray;
-                    //        }
-                    //    }
-                    //}
+                        //for (int n = 0; n < numRows; n++)
+                        //{
+                        //    _rows.Add(GetRow());
+                        //    currentPosition++;
+                        //}
+                        // load the _foundrows array
+
+                        _rows.Add(fieldNames);
+
+                        for (int n = 0; n < numRows; n++)
+                        {
+                            List<string> _foundRows = new List<string>();
+
+                            object[] _dtRows = dataTable.Rows[_position].ItemArray;
+                            // add it to the dtrows
+                            for (int m = 0; m < _dtRows.Length; m++)
+                            {
+                                _foundRows.Add(_dtRows[m].ToString());
+                            }
+                            _rows.Add(_foundRows.ToArray());
+
+                            _position = _position + 1;
+                            if (_position >= this.numRows)
+                            {
+                                break;
+                            }
+
+                        }
+
+                        //if (_foundRows.Length > 0)
+                        //{
+                        //    for (int n = 0; n < numRows; n++)
+                        //    {
+                        //        for (int m = 0; m < _foundRows.Length; m++)
+                        //        {
+                        //            _rows.Add(_foundRows);
+                        //            _position = _position + 1;
+                        //            _foundRows = (string[])dataTable.Rows[_position].ItemArray;
+                        //        }
+                        //    }
+                        //}
+                    }
                 }
             }
             catch (Exception ex)

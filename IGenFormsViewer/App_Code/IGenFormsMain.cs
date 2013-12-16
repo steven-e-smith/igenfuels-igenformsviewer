@@ -2132,64 +2132,123 @@ namespace IGenFormsViewer
                     // create a worksheet for this form
                     if (_excel.CreateNewExcelWorksheet(_form.name))
                     {
-                        List<string[]> _fieldValues = new List<string[]>();
-
                         List<IGenField> _fields = _form.formFields.fields;
 
-                        // fill in the worksheet
-                        // for a multipage form, reconfigure
-                        if (_form.multiPageForm.ToUpper().IndexOf('T') == 0)
+                        List<string[]> _fieldValues = new List<string[]>();
+
+                        if (_form.datasetOrdinal >= 0)
                         {
-                            List<string> _columnNames = new List<string>();
+                            IGenDataset _ds = datasets[_form.datasetOrdinal];
+                            int _pageNo = 1;
 
-                            // multipage, the rows to export will have a DS( and rowindex on them...
-                            for (int m = 0; m < _fields.Count; m++)
+                            DisplayStatus("Processing page " + _pageNo + "...");
+
+                            // fill in the worksheet
+                            // for a multipage form, reconfigure
+                            if (_form.multiPageForm.ToUpper().IndexOf('T') == 0)
                             {
-                                string _fieldValue = _fields[m].originalValue;
-                                int _offset = _fieldValue.IndexOf("DS(");
-                                if (_offset >= 0)
+                                int _numRows = _ds.numRows;
+                                if (_form.rowsPerPage < 1)
                                 {
-                                    string _columnName = _fieldValue.Substring(_offset + 3);
-                                    int _rowIndex = -1;
-                                    // find the first ): and then the number
-                                    _offset = _columnName.IndexOf("):");
-                                    if (_offset > 0)
-                                    {
-                                        // get the row referenced
-                                        string _rowSpec = _columnName.Substring(_offset + 2);
-                                        _columnName = _columnName.Substring(0, _offset);
-                                        // go till the first space or the end of the field
-                                        _offset = _rowSpec.IndexOf(" ");
-                                        if (_offset > 0)
-                                        {
-                                            _rowSpec = _rowSpec.Substring(_offset);
-                                        }
-                                        _rowIndex = CommonRoutines.ConvertToInt(_rowSpec);
-                                    }
-
-                                    if (_rowIndex == 1)
-                                    {
-                                        // add to the columns list
-                                        _columnNames.Add(_columnName);
-                                    }
+                                    _form.rowsPerPage = 1;
                                 }
 
+                                int _numPages = (_numRows / _form.rowsPerPage);
+                                string _columnNames = "";
+                                string _rowValue = "";
+                                List<string> _rowValues = new List<string>();
+
+                                // create a bunch of rows
+                                for (int m = 0; m < 100; m++)
+                                {
+                                    _rowValues.Add("");
+                                }
+
+                                // get the next page of data 
+                                int _position = (_pageNo - 1) * _form.rowsPerPage + 1;
+                                _ds.results = _ds.GetRows(_position, _form.rowsPerPage);
+
+                                _fieldValues.Clear();
+
+                                while (_pageNo < _numPages)
+                                {
+                                    DisplayStatus("Processing page " + _pageNo + "...");
+                                    DisplayProgress(0, 0);
+
+                                    // multipage, the rows to export will have a DS( and rowindex on them...
+                                    for (int m = 0; m < _fields.Count; m++)
+                                    {
+                                        DisplayProgress(m + 1, _fields.Count);
+
+                                        IGenField _field = _fields[m];
+                                        string _columnName = _field.name;
+                                        int _rowIndex = -1;
+                                        // find the first ): and then the number
+                                        int _offset = _columnName.LastIndexOf("_");
+                                        if (_offset > 0)
+                                        {
+                                            // get the row referenced
+                                            string _rowSpec = _columnName.Substring(_offset + 1).Trim();
+                                            _columnName = _columnName.Substring(0, _offset);
+                                            // go till the first space or the end of the field
+                                            _offset = _rowSpec.IndexOf(" ");
+                                            if (_offset > 0)
+                                            {
+                                                _rowSpec = _rowSpec.Substring(_offset);
+                                            }
+                                            _rowIndex = CommonRoutines.ConvertToInt(_rowSpec);
+
+                                            if (_rowIndex == 1)
+                                            {
+                                                // add to the columns list
+                                                _columnNames = _columnNames + _columnName + ";";
+                                            }
+
+                                            _field.text = _field.compiledValue;
+
+                                            // if the value is blank, then give it a few chars to allow to select it
+                                            string _value = _field.compiledValue.Trim();
+
+                                            _value = IGenFormCommonRoutines.ResolveValue(this, _form.name, _field.name, _value);
+
+                                            if (_rowIndex > 0 && _rowIndex <= _rowValues.Count)
+                                            {
+                                                _rowValues[_rowIndex] = _rowValues[_rowIndex] + _value + ";";
+                                            }
+                                        }
+
+                                    }
+
+                                    // add the column names
+                                    if (_pageNo == 1 && _rowValues.Count > 0)
+                                    {
+                                        _rowValues[0] = _columnNames;
+                                    }
+
+                                    // walk the rows
+                                    for (int k = 0; k < _rowValues.Count; k++)
+                                    {
+                                        if (_rowValues[k].Trim() != "")
+                                        {
+                                            _fieldValues.Add(_rowValues[k].Split(';'));
+                                        }
+                                    }
+
+                                    int _startRow = ((_pageNo - 1) * _form.rowsPerPage) + 1;
+                                    _excel.WriteToWorksheet(_fieldValues, _startRow);
+                                    _pageNo = _pageNo + 1;
+
+                                    if (_pageNo > 5)
+                                    {
+                                        break;
+                                    }
+
+                                    // get the next page of data 
+                                    _position = (_pageNo - 1) * _form.rowsPerPage + 1;
+                                    _ds.results = _ds.GetRows(_position, _form.rowsPerPage);
+
+                                }
                             }
-
-                            // first row of the worksheet is the column names
-                            _fieldValues.Add(_columnNames.ToArray());
-
-                            // now fill in the fieldvalues from the dataset of the form
-
-                            // get the ds name from the form
-                            if (_form.datasetOrdinal >= 0)
-                            {
-                                int _pageNo = 0;
-                                IGenDataset _ds = datasets[_form.datasetOrdinal];
-
-                                // read the recordset
-                            }
-
                         }
                         else
                         {
@@ -2197,9 +2256,9 @@ namespace IGenFormsViewer
                             {
                                 _fieldValues.Add(new string[] { _fields[m].name, _fields[m].text });
                             }
+                            _excel.WriteToWorksheet(_fieldValues, 1);
                         }
 
-                        _excel.WriteToWorksheet(_fieldValues, 1);
                     }
                 }
 
@@ -5878,6 +5937,61 @@ namespace IGenFormsViewer
             }
 
             return _row;
+
+        }
+
+
+
+
+
+        public string GetColumnValue(string columnName, int rowIndex)
+        {
+            string _columnValue = "";
+
+            try
+            {
+                // find the column
+                for (int n = 0; n < fieldNames.Length; n++)
+                {
+                    if (fieldNames[n].ToUpper() == columnName.ToUpper())
+                    {
+                        // get the value
+                        _columnValue = GetColumnValue(n, rowIndex);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".GetColumnValue(s,i) > " + ex.Message);
+            }
+
+            return _columnValue;
+
+        }
+
+
+
+
+
+        public string GetColumnValue(int columnIndex, int rowIndex)
+        {
+            string _columnValue = "";
+
+            try
+            {
+                if (columnIndex >= 0 && columnIndex <= numRows)
+                {
+                    string[] _row = GetRow(rowIndex);
+
+                    _columnValue = _row[columnIndex];
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".GetColumnValue(i,i) > " + ex.Message);
+            }
+
+            return _columnValue;
 
         }
 

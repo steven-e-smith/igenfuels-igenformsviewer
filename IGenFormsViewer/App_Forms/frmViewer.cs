@@ -147,6 +147,9 @@ namespace IGenFormsViewer
 
             try
             {
+                // set the viewer version
+                this.Text = "IGenForms Viewer Version " + CommonRoutines.strVersion;
+
                 // set events for the form
                 this.Resize += new EventHandler(frmViewer_Resize);
                 this.FormClosing += frmViewer_FormClosing;
@@ -1529,7 +1532,7 @@ namespace IGenFormsViewer
 
 
 
-        private void mnuMainFileClose_Click(object sender, EventArgs e)
+        private void mnuMainFileExit_Click(object sender, EventArgs e)
         {
 
             try
@@ -1538,7 +1541,7 @@ namespace IGenFormsViewer
             }
             catch (Exception ex)
             {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainFileClose_Click > " + ex.Message);
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainFileExit_Click > " + ex.Message);
             }
 
             return;

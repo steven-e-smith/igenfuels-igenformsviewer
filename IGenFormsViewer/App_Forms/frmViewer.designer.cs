@@ -70,15 +70,15 @@
             this.clockStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.mnuMainFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMainFileClose = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainExportToExcel = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuMainFileExit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainView = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainViewDatasets = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainTools = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainToolsOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnuMainExportToExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.tabForms.SuspendLayout();
             this.tbrMain.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -455,17 +455,29 @@
             this.mnuMainFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuMainExportToExcel,
             this.toolStripMenuItem1,
-            this.mnuMainFileClose});
+            this.mnuMainFileExit});
             this.mnuMainFile.Name = "mnuMainFile";
             this.mnuMainFile.Size = new System.Drawing.Size(37, 20);
             this.mnuMainFile.Text = "&File";
             // 
-            // mnuMainFileClose
+            // mnuMainExportToExcel
             // 
-            this.mnuMainFileClose.Name = "mnuMainFileClose";
-            this.mnuMainFileClose.Size = new System.Drawing.Size(153, 22);
-            this.mnuMainFileClose.Text = "&Close";
-            this.mnuMainFileClose.Click += new System.EventHandler(this.mnuMainFileClose_Click);
+            this.mnuMainExportToExcel.Name = "mnuMainExportToExcel";
+            this.mnuMainExportToExcel.Size = new System.Drawing.Size(153, 22);
+            this.mnuMainExportToExcel.Text = "Export To Excel";
+            this.mnuMainExportToExcel.Click += new System.EventHandler(this.mnuMainExportToExcel_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(150, 6);
+            // 
+            // mnuMainFileExit
+            // 
+            this.mnuMainFileExit.Name = "mnuMainFileExit";
+            this.mnuMainFileExit.Size = new System.Drawing.Size(153, 22);
+            this.mnuMainFileExit.Text = "E&xit";
+            this.mnuMainFileExit.Click += new System.EventHandler(this.mnuMainFileExit_Click);
             // 
             // mnuMainView
             // 
@@ -510,18 +522,6 @@
             this.mnuMainHelpAbout.Size = new System.Drawing.Size(107, 22);
             this.mnuMainHelpAbout.Text = "&About";
             this.mnuMainHelpAbout.Click += new System.EventHandler(this.mnuMainHelpAbout_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(150, 6);
-            // 
-            // mnuMainExportToExcel
-            // 
-            this.mnuMainExportToExcel.Name = "mnuMainExportToExcel";
-            this.mnuMainExportToExcel.Size = new System.Drawing.Size(153, 22);
-            this.mnuMainExportToExcel.Text = "Export To Excel";
-            this.mnuMainExportToExcel.Click += new System.EventHandler(this.mnuMainExportToExcel_Click);
             // 
             // frmViewer
             // 
@@ -590,7 +590,7 @@
         private System.Windows.Forms.ToolStripProgressBar tbrMainProgress;
         private System.Windows.Forms.MenuStrip mnuMain;
         private System.Windows.Forms.ToolStripMenuItem mnuMainFile;
-        private System.Windows.Forms.ToolStripMenuItem mnuMainFileClose;
+        private System.Windows.Forms.ToolStripMenuItem mnuMainFileExit;
         private System.Windows.Forms.ToolStripMenuItem mnuMainView;
         private System.Windows.Forms.ToolStripMenuItem mnuMainViewDatasets;
         private System.Windows.Forms.ToolStripMenuItem mnuMainTools;

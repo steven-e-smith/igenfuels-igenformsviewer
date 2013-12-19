@@ -2141,7 +2141,7 @@ namespace IGenFormsViewer
                             IGenDataset _ds = datasets[_form.datasetOrdinal];
                             int _pageNo = 1;
 
-                            DisplayStatus("Processing page " + _pageNo + "...");
+                            DisplayStatus("Processing form " + _form.name + " page " + _pageNo + "...");
 
                             // fill in the worksheet
                             // for a multipage form, reconfigure
@@ -2168,12 +2168,17 @@ namespace IGenFormsViewer
                                 int _position = (_pageNo - 1) * _form.rowsPerPage + 1;
                                 _ds.results = _ds.GetRows(_position, _form.rowsPerPage);
 
-                                _fieldValues.Clear();
-
                                 while (_pageNo < _numPages)
                                 {
-                                    DisplayStatus("Processing page " + _pageNo + "...");
+                                    DisplayStatus("Processing form " + _form.name + " page " + _pageNo + "...");
+
                                     DisplayProgress(0, 0);
+
+                                    _fieldValues.Clear();
+
+                                    // get the next page of data 
+                                    _position = (_pageNo - 1) * _form.rowsPerPage + 1;
+                                    _ds.results = _ds.GetRows(_position, _form.rowsPerPage);
 
                                     // multipage, the rows to export will have a DS( and rowindex on them...
                                     for (int m = 0; m < _fields.Count; m++)
@@ -2238,14 +2243,10 @@ namespace IGenFormsViewer
                                     _excel.WriteToWorksheet(_fieldValues, _startRow);
                                     _pageNo = _pageNo + 1;
 
-                                    if (_pageNo > 5)
+                                    if (_pageNo > 3)
                                     {
                                         break;
                                     }
-
-                                    // get the next page of data 
-                                    _position = (_pageNo - 1) * _form.rowsPerPage + 1;
-                                    _ds.results = _ds.GetRows(_position, _form.rowsPerPage);
 
                                 }
                             }
@@ -2271,6 +2272,8 @@ namespace IGenFormsViewer
                 }
 
                 _excel.CloseWorkbook();
+
+                DisplayStatus("Ready");
 
             }
             catch (Exception ex)

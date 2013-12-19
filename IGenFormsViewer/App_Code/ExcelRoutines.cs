@@ -235,7 +235,7 @@ namespace IGenFormsViewer
 
                     for (int m = 0; m < _rec.Length; m++)
                     {
-                        ws.Cells[n + 1, m + 1].value = _rec[m];
+                        ws.Cells[(startAtRow + n), m + 1].value = _rec[m];
                     }
 
                     _numWritten++;

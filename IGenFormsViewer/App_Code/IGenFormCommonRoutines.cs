@@ -1092,6 +1092,7 @@ namespace IGenFormsViewer
         public static string FormatValue(string value, string dataType, int numDecimalPlaces, string formatMask)
         {
             string _newValue = value;
+            bool _fieldIsNumeric = false;
 
             try
             {
@@ -1129,31 +1130,35 @@ namespace IGenFormsViewer
                     }
                 }
 
-                if (_suppressZeroFields && _decimal == 0)
+                switch (dataType.ToUpper())
                 {
-                    // don't reformat it
-                    _newValue = "";
+                    case "INTEGER":
+                        _integerString = (formatMask != "") ? formatMask : _integerString;
+                        _newValue = _decimal.ToString(_integerString, CultureInfo.InvariantCulture);
+                        _fieldIsNumeric = true;
+                        break;
+
+                    case "NUMERIC":
+                    case "DECIMAL":
+                        _formatString = (formatMask != "") ? formatMask : _formatString;
+                        _newValue = _decimal.ToString(_formatString, CultureInfo.InvariantCulture);
+                        _fieldIsNumeric = true;
+                        break;
+
+                    case "CURRENCY":
+                        _currencyString = (formatMask != "") ? formatMask : "$#,##0.00";
+                        _newValue = _decimal.ToString(_currencyString, CultureInfo.InvariantCulture);
+                        _fieldIsNumeric = true;
+                        break;
+
                 }
-                else
+
+                if (_fieldIsNumeric)
                 {
-                    switch (dataType.ToUpper())
+                    if (_suppressZeroFields && _decimal == 0)
                     {
-                        case "INTEGER":
-                            _integerString = (formatMask != "") ? formatMask : _integerString;
-                            _newValue = _decimal.ToString(_integerString, CultureInfo.InvariantCulture);
-                            break;
-
-                        case "NUMERIC":
-                        case "DECIMAL":
-                            _formatString = (formatMask != "") ? formatMask : _formatString;
-                            _newValue = _decimal.ToString(_formatString, CultureInfo.InvariantCulture);
-                            break;
-
-                        case "CURRENCY":
-                            _currencyString = (formatMask != "") ? formatMask : "$#,##0.00";
-                            _newValue = _decimal.ToString(_currencyString, CultureInfo.InvariantCulture);
-                            break;
-
+                        // don't reformat it
+                        _newValue = "";
                     }
 
                     if (_showSpaceInsteadOfPeriod)
@@ -1169,6 +1174,7 @@ namespace IGenFormsViewer
                         }
                     }
                 }
+
             }
             catch (Exception ex)
             {

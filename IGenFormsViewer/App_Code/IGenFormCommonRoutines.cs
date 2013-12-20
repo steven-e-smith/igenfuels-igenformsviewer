@@ -693,12 +693,12 @@ namespace IGenFormsViewer
 
                     #endregion 
 
-                    #region [Process DSFIND requests]
+                    #region [Process DSLOOKUP requests]
 
                     // Form dataset find field?
-                    if (_value.ToUpper().IndexOf("DSFIND(") >= 0)
+                    if (_value.ToUpper().IndexOf("DSLOOKUP(") >= 0)
                     {
-                        // syntax is DSFIND(ds:column,criteria)
+                        // syntax is DSLOOKUP(ds:column,criteria)
                         // will return the first row found that matches the criteria and set the current position of the ds
                         _form = currentIGenForm;
                         if (_form != null)
@@ -713,14 +713,14 @@ namespace IGenFormsViewer
                             _rowIndex = 0;
 
                             // get the function
-                            _startIndex = _value.ToUpper().IndexOf("DSFIND(");
+                            _startIndex = _value.ToUpper().IndexOf("DSLOOKUP(");
                             _endIndex = _value.ToUpper().IndexOf(")", _startIndex);
                             if (_endIndex > _startIndex)
                             {
-                                int _length = _endIndex - _startIndex - "DSFIND(".Length;
+                                int _length = _endIndex - _startIndex - "DSLOOKUP(".Length;
 
                                 // get the part between the DSFIND( and )
-                                string _parms = _value.Substring(_startIndex + 7, _length);
+                                string _parms = _value.Substring(_startIndex + "DSLOOKUP(".Length, _length);
 
                                 string[] _parts = _parms.Split(',');
                                 _column = _parts[0];

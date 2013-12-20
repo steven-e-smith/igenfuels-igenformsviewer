@@ -1411,19 +1411,20 @@ namespace IGenFormsViewer
 
                                         else
                                         {
-                                            #region [Check for DSFIND(]
+                                            #region [Check for DSLOOKUP(]
 
-                                            if (_value.ToUpper().IndexOf("DSFIND(") >= 0)
+                                            if (_value.ToUpper().IndexOf("DSLOOKUP(") >= 0)
                                             {
+                                                // syntax:  DSLOOKUP(<dsname|dsordinal!>columnname, filter>
                                                 // replace the compiled value
                                                 _field = _form.formFields.fields[m];
                                                 _value = _field.value;
-                                                _value = ResolveDS(_form.datasetName, _field, _value, "DSFIND(");
+                                                _value = ResolveDS(_form.datasetName, _field, _value, "DSLOOKUP(");
                                                 _field.compiledValue = _value;
                                                 _field.text = "";
                                                 _form.formFields.fields[m] = _field;
                                             }
-                                            #endregion [Check for DSFIND(]
+                                            #endregion [Check for DSLOOKUP(]
                                             else
                                             {
                                                 // regular
@@ -1587,6 +1588,7 @@ namespace IGenFormsViewer
                 //      DS(field):row 
                 //      DS(cursorOrdinal!field):row
                 //      DS(cursorName!field):row
+                //      DSLOOKUP(cursorName!field, filter)
                 
                 // get the field(s)
                 int _openBracket = _value.IndexOf(prefix.ToUpper());

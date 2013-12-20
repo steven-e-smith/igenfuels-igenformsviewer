@@ -12,7 +12,8 @@ namespace IGenFormsViewer
         public static string[] logEntries = {
                             "1.1.0.0    SES     Initial draft",
                             "1.1.1.0    SES     Fixed paging in viewer. ",
-                            "1.1.2.0    SES     FB-13623 - IGenFormsViewer showing column names instead of values on first row"
+                            "1.1.2.0    SES     FB-13623 - IGenFormsViewer showing column names instead of values on first row",
+                            "1.1.3.0    SES     FB-11399 - Add DSLOOKUP and DS methods to datasets in IGenForms"
                         };
 
 

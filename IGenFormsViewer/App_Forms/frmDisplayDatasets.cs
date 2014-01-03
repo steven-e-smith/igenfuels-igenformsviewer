@@ -157,11 +157,13 @@ namespace IGenFormsViewer
                     _previewButton.Name = "Preview";
                     _previewButton.HeaderText = "Preview";
                     _previewButton.Text = "Preview";
-                    _previewButton.Width = 100;
+                    _previewButton.Width = 75;
                     _previewButton.Visible = true;
                     dgvDatasets.Columns.Add(_previewButton);
                     dgvDatasets.Columns.Add("Name", "Name");
                     dgvDatasets.Columns["Name"].Width = 100;
+                    dgvDatasets.Columns.Add("Rows", "Rows");
+                    dgvDatasets.Columns["Rows"].Width = 75;
                     dgvDatasets.Columns.Add("Form", "Form");
                     dgvDatasets.Columns["Form"].Width = 100;
                     dgvDatasets.Columns.Add("SQL", "SQL");
@@ -178,6 +180,7 @@ namespace IGenFormsViewer
                         {
                             dgvDatasets.Rows[n].Cells["Preview"].Value = "Preview";
                             dgvDatasets.Rows[n].Cells["Name"].Value = igenForms.datasets[n].cursorName;
+                            dgvDatasets.Rows[n].Cells["Rows"].Value = igenForms.datasets[n].numRows;
                             dgvDatasets.Rows[n].Cells["Form"].Value = "None";
                             dgvDatasets.Rows[n].Cells["SQL"].Value = igenForms.datasets[n].sql;
                         }
@@ -187,6 +190,7 @@ namespace IGenFormsViewer
                         dgvDatasets.Rows.Add(1);
                         dgvDatasets.Rows[0].Cells["Preview"].Value = "";
                         dgvDatasets.Rows[0].Cells["Name"].Value = "";
+                        dgvDatasets.Rows[0].Cells["Rows"].Value = 0;
                         dgvDatasets.Rows[0].Cells["Form"].Value = "";
                         dgvDatasets.Rows[0].Cells["SQL"].Value = "";
                     }                    

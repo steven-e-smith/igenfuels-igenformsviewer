@@ -79,6 +79,7 @@
             this.mnuMainToolsOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.tbrMainGotoPage = new System.Windows.Forms.ToolStripButton();
             this.tabForms.SuspendLayout();
             this.tbrMain.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -142,6 +143,7 @@
             this.tbrMainNavSep1,
             this.tbrMainLastPage,
             this.tbrMainNavSep5,
+            this.tbrMainGotoPage,
             this.tbrMainPageNo,
             this.tbrMainOfLabel,
             this.tbrMainTotalPages,
@@ -490,7 +492,7 @@
             // mnuMainViewDatasets
             // 
             this.mnuMainViewDatasets.Name = "mnuMainViewDatasets";
-            this.mnuMainViewDatasets.Size = new System.Drawing.Size(118, 22);
+            this.mnuMainViewDatasets.Size = new System.Drawing.Size(152, 22);
             this.mnuMainViewDatasets.Text = "&Datasets";
             this.mnuMainViewDatasets.Click += new System.EventHandler(this.mnuMainViewDatasets_Click);
             // 
@@ -522,6 +524,19 @@
             this.mnuMainHelpAbout.Size = new System.Drawing.Size(107, 22);
             this.mnuMainHelpAbout.Text = "&About";
             this.mnuMainHelpAbout.Click += new System.EventHandler(this.mnuMainHelpAbout_Click);
+            // 
+            // tbrMainGotoPage
+            // 
+            this.tbrMainGotoPage.AutoSize = false;
+            this.tbrMainGotoPage.BackColor = System.Drawing.Color.Transparent;
+            this.tbrMainGotoPage.Image = global::IGenFormsViewer.Properties.Resources.pointer;
+            this.tbrMainGotoPage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbrMainGotoPage.Name = "tbrMainGotoPage";
+            this.tbrMainGotoPage.Size = new System.Drawing.Size(60, 35);
+            this.tbrMainGotoPage.Text = "GoTo";
+            this.tbrMainGotoPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainGotoPage.ToolTipText = "First Page";
+            this.tbrMainGotoPage.Click += new System.EventHandler(this.tbrMainGotoPage_Click);
             // 
             // frmViewer
             // 
@@ -600,6 +615,7 @@
         private System.Windows.Forms.ToolStripLabel tbrMainPercentage;
         private System.Windows.Forms.ToolStripMenuItem mnuMainExportToExcel;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripButton tbrMainGotoPage;
     }
 }
 

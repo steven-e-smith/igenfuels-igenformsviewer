@@ -718,6 +718,22 @@ namespace IGenFormsViewer
                                 if (_formFlag)
                                 {
                                     _form.rowsPerPage = CommonRoutines.ConvertToInt(_tagValue);
+                                    // check to see if this is a multipage form
+                                    if (_form.multiPageForm.ToUpper() == "TRUE")
+                                    {
+                                        if (_form.rowsPerPage < 1)
+                                        {
+                                            // give an error!
+                                            CommonRoutines.DisplayErrorMessage(_form.name + " - Rows per page must be greater than 0 if a multipage form");
+                                        }
+                                    }
+                                }
+                                break;
+
+                            case "PAGEBREAKS":
+                                if (_formFlag)
+                                {
+                                    _form.pageBreaks = _tagValue;
                                 }
                                 break;
 
@@ -1073,6 +1089,7 @@ namespace IGenFormsViewer
             int _endIndex = 0;
             string _sql = "";
             string _tableName = "";
+            string _schema = "";
             IGenForm _form = new IGenForm();
             IGenField _field = new IGenField();
             string _useSchema = useSchema.Trim();
@@ -1096,37 +1113,6 @@ namespace IGenFormsViewer
                 CommonRoutines.compileErrors.Items.Add("Compiling...");
 
                 sql = "";
-
-                DisplayStatus("Compiling forms...");
-
-                // reset the forms with the original values
-                for (int n = 0; n < forms.Count; n++)
-                {
-                    _form = forms[n];
-                    _totalFieldsToCompile = _totalFieldsToCompile + _form.formFields.fields.Count;
-
-                    for (int m = 0; m < _form.formFields.fields.Count; m++)
-                    {
-                        // put here to fix the first textbox not retaining entered values
-                        _field = _form.formFields.fields[m];
-
-                        switch (_field.type.ToUpper())
-                        {
-                            case "TEXTBOX":
-                            case "COMBOBOX":
-                            case "CHECKBOX":
-                                break;
-
-                            default:
-                                _field.compiledValue = _field.originalValue;
-                                _field.value = _field.originalValue;
-                                _field.text = "";
-                                _form.formFields.fields[m] = _field;
-                                break;
-
-                        }
-                    }
-                }
 
                 #region [Resolve Datasets]
 
@@ -1161,9 +1147,32 @@ namespace IGenFormsViewer
                             int _lastPeriod = _tableName.LastIndexOf('.');
                             if (_lastPeriod > 0)
                             {
-                                _tableName = _tableName.Substring(_lastPeriod).Trim();
+                                _schema = _tableName.Substring(0, _lastPeriod);
+                                if (_schema.ToUpper() == "DBO")
+                                {
+                                    _tableName = _tableName.Substring(_lastPeriod + 1);
+                                    _schema = _useSchema;
+                                }
+                                else
+                                {
+                                    _schema = "";
+                                }
                             }
-                            _tableName = "[" + _useSchema + "]." + _tableName;
+                            else
+                            {
+                                if (_tableName.ToUpper().IndexOf("WSTF") >= 0)
+                                {
+                                    _schema = _useSchema;
+                                }
+                            }
+
+                            if (_schema != "")
+                            {
+                                if (_tableName.ToUpper().IndexOf("WSTF") >= 0)
+                                {
+                                    _tableName = "[" + _useSchema + "]." + _tableName;
+                                }
+                            }
 
                             // replace the table
                             _sql = _sql.Replace("^", _tableName).Replace("..",".");
@@ -1173,10 +1182,77 @@ namespace IGenFormsViewer
                         // get the fields from the sql
                         string[] _fieldNames = DatabaseRoutines.GetSQLFields(_ds.sql);
                         _ds.fieldNames = _fieldNames;
+
+                        // get a count of the rows this will find
+                        _ds.numRows = _ds.GetRowCount();
                     }
                 }
 
                 #endregion
+
+                #region [Compiling forms]
+
+                DisplayStatus("Compiling forms...");
+
+                // reset the forms with the original values
+                for (int n = 0; n < forms.Count; n++)
+                {
+                    _form = forms[n];
+                    _totalFieldsToCompile = _totalFieldsToCompile + _form.formFields.fields.Count;
+
+                    // resolve dataset
+                    if (_form.datasetOrdinal >= 0)
+                    {
+                        _form.dataset = datasets[_form.datasetOrdinal];
+                    }
+                    else
+                    {
+                        if (_form.datasetName != "")
+                        {
+                            // find the ordinal
+                            for (int m=0;m<datasets.Count;m++)
+                            {
+                                if (_form.datasetName.ToUpper() == datasets[m].cursorName.ToUpper())
+                                {
+                                    _form.datasetOrdinal = m;
+                                    _form.dataset = datasets[m];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    // set the page collection
+                    if (_form.datasetOrdinal >= 0)
+                    {
+                        _form.DeterminePages();
+                    }
+
+                    for (int m = 0; m < _form.formFields.fields.Count; m++)
+                    {
+                        // put here to fix the first textbox not retaining entered values
+                        _field = _form.formFields.fields[m];
+
+                        switch (_field.type.ToUpper())
+                        {
+                            case "TEXTBOX":
+                            case "COMBOBOX":
+                            case "CHECKBOX":
+                                break;
+
+                            default:
+                                _field.compiledValue = _field.originalValue;
+                                _field.value = _field.originalValue;
+                                _field.text = "";
+                                _form.formFields.fields[m] = _field;
+                                break;
+
+                        }
+                    }
+                }
+
+                #endregion
+
 
                 bool _needsResolving = true;
 
@@ -1418,7 +1494,7 @@ namespace IGenFormsViewer
                                                 // syntax:  DSLOOKUP(<dsname|dsordinal!>columnname, filter>
                                                 // replace the compiled value
                                                 _field = _form.formFields.fields[m];
-                                                _value = _field.value;
+                                                //_value = _field.value;
                                                 _value = ResolveDS(_form.datasetName, _field, _value, "DSLOOKUP(");
                                                 _field.compiledValue = _value;
                                                 _field.text = "";
@@ -1601,7 +1677,8 @@ namespace IGenFormsViewer
 
                         if (_closeBracket > _openBracket)
                         {
-                            string _fieldReference = _value.Substring(_openBracket + prefix.Length, (_closeBracket - _openBracket - prefix.Length)).ToUpper();
+                            int _lenReference =  _closeBracket - _openBracket - prefix.Length;
+                            string _fieldReference = _value.Substring(_openBracket + prefix.Length, _lenReference).ToUpper();
                             string _dsName = "";
                             string _fieldName = _fieldReference;
                             string _fieldOrdinal = "-1";
@@ -1616,81 +1693,102 @@ namespace IGenFormsViewer
                                 // now, the first part should be the ds!column spec.
                                 _fieldName = _parts[0];
 
-                                string[] _dsParts = _fieldName.Split('!');
-
-                                if (_dsParts.Length > 1)
+                                // check to see if the fieldname is already resolved to dsordinal:fieldordinal
+                                if (_fieldName.IndexOf(':') < 0)
                                 {
-                                    // a dsname or ordinal was specified
-                                    _datasetName = _dsParts[0];
-                                    _fieldName = _dsParts[1];
-                                }
+                                    string[] _dsParts = _fieldName.Split('!');
 
-                                // get the cursor associated with this form
-                                if (_datasetName != "")
-                                {
-                                    // may be one of the ordinal, field or name,field formats
-                                    if (CommonRoutines.IsNumeric(_datasetName))
+                                    if (_dsParts.Length > 1)
                                     {
-                                        _dsOrdinal = CommonRoutines.ConvertToInt(_datasetName);
-                                        if (_dsOrdinal < 1 || _dsOrdinal > datasets.Count)
-                                        {
-                                            _fieldNames = datasets[_dsOrdinal].results[0];
-                                        }
+                                        // a dsname or ordinal was specified
+                                        _datasetName = _dsParts[0];
+                                        _fieldName = _dsParts[1];
                                     }
-                                    else
+
+                                    // get the cursor associated with this form
+                                    if (_datasetName != "")
                                     {
-                                        for (int m = 0; m < datasets.Count; m++)
+                                        _dsOrdinal = -1;
+
+                                        // may be one of the ordinal, field or name,field formats
+                                        if (CommonRoutines.IsNumeric(_datasetName))
                                         {
-                                            if (datasets[m].cursorName.ToUpper() == _datasetName.ToUpper())
+                                            _dsOrdinal = CommonRoutines.ConvertToInt(_datasetName);
+                                            if (_dsOrdinal < 0 || _dsOrdinal >= datasets.Count)
                                             {
-                                                _fieldNames = datasets[m].fieldNames;
-                                                _dsOrdinal = m;
+                                                // not a valid one.  see if the dataset can be found from the name
+                                                _dsOrdinal = -1;
+                                            }
+                                            else
+                                            {
+                                                _fieldNames = datasets[_dsOrdinal].results[0];
+                                                if (_fieldNames.Length < 1)
+                                                {
+                                                    _dsOrdinal = -1;
+                                                }
+                                            }
+                                        }
+
+                                        if (_dsOrdinal < 0)
+                                        {
+                                            // not found, see if it is there by name...
+                                            for (int m = 0; m < datasets.Count; m++)
+                                            {
+                                                if (datasets[m].cursorName.ToUpper() == _datasetName.ToUpper())
+                                                {
+                                                    _fieldNames = datasets[m].fieldNames;
+                                                    _dsOrdinal = m;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                    }
+
+                                    if (_dsOrdinal >= 0)
+                                    {
+                                        _fieldFound = false;
+
+                                        // find the ordinal in the current forms dataset
+                                        // trim and upper each one to resolve correctly
+                                        for (int j = 0; j < _fieldNames.Length; j++)
+                                        {
+                                            if (_fieldNames[j].Trim().ToUpper() == _fieldName.Trim().ToUpper())
+                                            {
+                                                _fieldOrdinal = j.ToString();
+                                                _fieldFound = true;
                                                 break;
                                             }
                                         }
+
+                                        // did it find it?
+                                        if (!_fieldFound)
+                                        {
+                                            // add to compile error messages
+                                            string _msg = "Form:" + _field.parentFormName + "  Dataset:" + _datasetName + "  Field:" + _fieldReference + " not found or misspelled";
+                                            compileErrors = true;
+                                            compileErrorsMessages.Add(_msg);
+                                        }
+
+                                        string _tempValue = "";
+
+                                        if (_openBracket > 0)
+                                        {
+                                            _tempValue = _value.Substring(0, _openBracket);
+                                        }
+
+                                        _tempValue = _tempValue + prefix + _dsOrdinal + ":" + _fieldOrdinal;
+
+                                        for (int m = 1; m < _parts.Length; m++)
+                                        {
+                                            _tempValue = _tempValue + "," + _parts[m];
+                                        }
+
+                                        _tempValue = _tempValue + _value.Substring(_closeBracket);
+
+                                        _value = _tempValue;
                                     }
                                 }
-
-                                _fieldFound = false;
-
-                                // find the ordinal in the current forms dataset
-                                // trim and upper each one to resolve correctly
-                                for (int j = 0; j < _fieldNames.Length; j++)
-                                {
-                                    if (_fieldNames[j].Trim().ToUpper() == _fieldName.Trim().ToUpper())
-                                    {
-                                        _fieldOrdinal = j.ToString();
-                                        _fieldFound = true;
-                                        break;
-                                    }
-                                }
-
-                                // did it find it?
-                                if (!_fieldFound)
-                                {
-                                    // add to compile error messages
-                                    string _msg = "Form:" + _field.parentFormName + "  Dataset:" + _datasetName + "  Field:" + _fieldReference + " not found or misspelled";
-                                    compileErrors = true;
-                                    compileErrorsMessages.Add(_msg);
-                                }
-
-                                string _tempValue = "";
-
-                                if (_openBracket > 0)
-                                {
-                                    _tempValue = _value.Substring(0, _openBracket);
-                                }
-
-                                _tempValue = _tempValue + prefix + _dsOrdinal + ":" + _fieldOrdinal;
-
-                                for (int m = 1; m < _parts.Length; m++)
-                                {
-                                    _tempValue = _tempValue + "," + _parts[m];
-                                }
-
-                                _tempValue = _tempValue + _value.Substring(_closeBracket);
-
-                                _value = _tempValue;
                             }
                         }
 
@@ -2533,36 +2631,42 @@ namespace IGenFormsViewer
 
                     IGenForm _form = forms[_index];
 
-                    _form.datasetOrdinal = -1;
-
-                    if (_form.datasetName != "")
+                    if (_form.datasetOrdinal < 0)
                     {
-                        // set the dataset ordinal
-                        for (int m = 0; m < datasets.Count; m++)
+                        _form.datasetOrdinal = -1;
+
+                        if (_form.datasetName != "")
                         {
-                            if (_form.datasetName.ToUpper() == datasets[m].cursorName.ToUpper())
+                            // set the dataset ordinal
+                            for (int m = 0; m < datasets.Count; m++)
                             {
-                                _form.datasetOrdinal = m;
-                                // if a multi-row form, then calc the total pages and such
-                                if (_form.multiPageForm.ToUpper().IndexOf("T") == 0)
+                                if (_form.datasetName.ToUpper() == datasets[m].cursorName.ToUpper())
                                 {
-                                    _form.currentPage = 1;
-                                    _form.currentRow = 1;
-                                    _form.totalRows = datasets[m].numRows;
-                                    double _numPages = CommonRoutines.ConvertToDouble(datasets[m].numRows.ToString()) / CommonRoutines.ConvertToDouble(_form.rowsPerPage.ToString());
-                                    _form.totalPages = CommonRoutines.ConvertToInt(_numPages.ToString());
-                                    if (_numPages > _form.totalPages)
+                                    _form.datasetOrdinal = m;
+                                    // if a multi-row form, then calc the total pages and such
+                                    if (_form.multiPageForm.ToUpper().IndexOf("T") == 0)
                                     {
-                                        _form.totalPages = _form.totalPages + 1;
+                                        _form.currentPage = 1;
+                                        _form.currentRow = 1;
+                                        _form.totalRows = datasets[m].numRows;
+                                        double _numPages = CommonRoutines.ConvertToDouble(datasets[m].numRows.ToString()) / CommonRoutines.ConvertToDouble(_form.rowsPerPage.ToString());
+                                        _form.totalPages = CommonRoutines.ConvertToInt(_numPages.ToString());
+                                        if (_numPages > _form.totalPages)
+                                        {
+                                            _form.totalPages = _form.totalPages + 1;
+                                        }
                                     }
+                                    else
+                                    {
+                                    }
+                                    break;
                                 }
-                                else
-                                {
-                                }
-                                break; 
                             }
                         }
                     }
+
+                    // determine the pages, if any, for this form
+                    _form.DeterminePages();
 
                     for (int m = 0; m < _form.formFields.fields.Count; m++)
                     {
@@ -3562,14 +3666,14 @@ namespace IGenFormsViewer
             {
                 IGenForm _form = GetForm(formName);
 
-                if (_form.dataset.Count > 0)
+                if (_form.datasetRows.Count > 0)
                 {
                     // get the value
-                    if (_rowIndex > 0 && _rowIndex <= _form.dataset.Count)
+                    if (_rowIndex > 0 && _rowIndex <= _form.datasetRows.Count)
                     {
                         // get the column name
-                        string[] _fieldNames = _form.dataset[0];
-                        string[] _row = _form.dataset[_rowIndex];
+                        string[] _fieldNames = _form.datasetRows[0];
+                        string[] _row = _form.datasetRows[_rowIndex];
                         // get the value
                         for (int n = 0; n < _fieldNames.Length; n++)
                         {
@@ -4442,9 +4546,13 @@ namespace IGenFormsViewer
         public string datasetName = "";
         public string comments = "";
         public int datasetOrdinal = -1;
+        public IGenDataset dataset = new IGenDataset();
+        public List<IGenPage> pages = new List<IGenPage>();
+
         public string multiPageForm = "False";
         public int rowsPerPage = 0;
-        public List<string[]> dataset = new List<string[]>();
+        public string pageBreaks = "";
+        public List<string[]> datasetRows = new List<string[]>();
         public List<int> cursorOrdinals = new List<int>();
         public string instructions = "";
         public string title = "";
@@ -4570,6 +4678,138 @@ namespace IGenFormsViewer
             return;
 
         }
+
+
+
+
+
+        public int DeterminePages()
+        {
+            int _numberPages = 0;
+
+            try
+            {
+                pages.Clear();
+
+                // walk the rows and set the pages
+                if (datasetOrdinal >= 0)
+                {
+                    // get the rows in the dataset
+                    if (dataset.dataTable != null)
+                    {
+                        int _dsRows = dataset.numRows;
+
+                        // split the fields to check
+                        string[] _pageBreakFields = {};
+                        string[] _prevBreakFieldValues = {};
+                        string[] _currentBreakFieldValues = {};
+
+                        if (pageBreaks.Trim() != "")
+                        {
+                            _pageBreakFields = pageBreaks.Split(',');
+                        }
+
+                        _prevBreakFieldValues = (string[])_pageBreakFields.Clone();
+                        _currentBreakFieldValues = (string[])_pageBreakFields.Clone();
+
+                        // change them to ordinals
+                        for (int n = 0; n < dataset.fieldNames.Length; n++)
+                        {
+                            for (int m=0;m<_pageBreakFields.Length;m++)
+                            {
+                                if (_pageBreakFields[m].ToUpper() == dataset.fieldNames[n].ToUpper())
+                                {
+                                    _pageBreakFields[m] = n.ToString();
+                                }
+                            }
+                        }
+
+                        int _startingRow = 1;
+                        int _pageNo = 1;
+
+                        while (_startingRow < dataset.dataTable.Rows.Count)
+                        {
+                            int _endingRow = _startingRow + rowsPerPage - 1;
+
+                            if (_endingRow > dataset.dataTable.Rows.Count)
+                            {
+                                _endingRow = dataset.dataTable.Rows.Count;
+                            }
+
+                            // see if there are any page breaks defined
+                            if (_pageBreakFields.Length > 0)
+                            {
+                                // see if there is a page break in the block defined 
+                                List<string[]> _rows = dataset.GetRows(_startingRow, rowsPerPage);
+                                if (_rows.Count > 0)
+                                {
+                                    // init prev values for first time thru
+                                    for (int n = 0; n < _pageBreakFields.Length; n++)
+                                    {
+                                        int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFields[n]);
+                                        _prevBreakFieldValues[n] = _rows[1][_colIndex];
+                                    }
+
+                                    bool _failed = false;
+
+                                    for (int n = 1; n < _rows.Count; n++)
+                                    {
+                                        if (_failed)
+                                        {
+                                            break;
+                                        }
+
+                                        for (int m = 0; m < _pageBreakFields.Length; m++)
+                                        {
+                                            // get the field value
+                                            int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFields[m]);
+                                            string _currentValue = _rows[n][_colIndex];
+                                            if (_currentValue.ToUpper() != _prevBreakFieldValues[m].ToUpper())
+                                            {
+                                                // failed, exit
+                                                _endingRow = _startingRow + n - 1;
+                                                _failed = true;
+                                                break;
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+
+                            IGenPage _page = new IGenPage(_pageNo, _startingRow, _endingRow);
+
+                            pages.Add(_page);
+
+                            _startingRow = _endingRow + 1;
+                            _pageNo = _pageNo + 1;
+
+                        }
+                    }
+
+                    // load the first page
+                    int _initialRows = pages[0].endingRow - pages[0].startingRow + 1;
+                    dataset.results = dataset.GetRows(1, _initialRows);
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".DeterminePages > " + ex.Message);
+            }
+
+            _numberPages = pages.Count;
+
+            totalPages = _numberPages;
+
+            currentPage = (totalPages > 0) ? 1 : 0;
+
+            return _numberPages;
+
+        }
+
+
 
 
 
@@ -4795,6 +5035,10 @@ namespace IGenFormsViewer
 
             return _stream;
         }
+
+
+
+
 
 
     }
@@ -5825,6 +6069,9 @@ namespace IGenFormsViewer
         public bool eof = false;
         public bool bof = false;
 
+
+
+
         public IGenDataset()
         {
 
@@ -6029,6 +6276,43 @@ namespace IGenFormsViewer
 
 
 
+        public int GetRowCount()
+        {
+            int _numRows = 0;
+
+            try
+            {
+                // take the sql and strip the field list
+                int _fromOffset = sql.ToUpper().IndexOf(" FROM ");
+                if (_fromOffset > 0)
+                {
+                    string _sql = "Select count(*) " + sql.Substring(_fromOffset);
+
+                    List<string[]> _rows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
+                    if (_rows.Count > 0)
+                    {
+                        // first row, first field should be the number of rows
+                        if (_rows[1][0] != "")
+                        {
+                            _numRows = CommonRoutines.ConvertToInt(_rows[1][0]);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".GetRowCount > " + ex.Message);
+            }
+
+            return _numRows;
+
+        }
+
+
+
+
+
         public int MoveFirst()
         {
 
@@ -6221,6 +6505,8 @@ namespace IGenFormsViewer
 
             try
             {
+                // see if there are page breaks specified and if so create the Order By 
+                
                 IGenDataset _dataset = DatabaseRoutines.SelectCursor(DatabaseRoutines.MainConnection, 
                                 DatabaseRoutines.MainDBMS, 
                                 cursorName, 
@@ -6233,6 +6519,8 @@ namespace IGenFormsViewer
                     this.results = _dataset.results;
                     this.numRows = _dataset.numRows;
                     this.currentPosition = _dataset.currentPosition;
+
+                    // determine the page entries for the recordset
 
                     //// get the first 100 rows
                     GetRows(1, 100);
@@ -6253,7 +6541,60 @@ namespace IGenFormsViewer
 
 
 
+
+
+
     }
+
+    public class IGenPage
+    {
+        private static string moduleName = "IGenPage";
+
+        public int pageNo = 0;
+        public int startingRow = 0;
+        public int endingRow = 0;
+
+        public IGenPage()
+        {
+
+            try
+            {
+                pageNo = 0;
+                startingRow = 0;
+                endingRow = 0;
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".IGenPage() > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+        public IGenPage(int pno, int srow, int erow)
+        {
+
+            try
+            {
+                pageNo = pno;
+                startingRow = srow;
+                endingRow = erow;
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".IGenPage(i,i,i) > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+    }
+
 
 
 }

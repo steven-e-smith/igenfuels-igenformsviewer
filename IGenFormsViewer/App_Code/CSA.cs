@@ -13,7 +13,12 @@ namespace IGenFormsViewer
                             "1.1.0.0    SES     Initial draft",
                             "1.1.1.0    SES     Fixed paging in viewer. ",
                             "1.1.2.0    SES     FB-13623 - IGenFormsViewer showing column names instead of values on first row",
-                            "1.1.3.0    SES     FB-11399 - Add DSLOOKUP and DS methods to datasets in IGenForms"
+                            "1.1.3.0    SES     FB-11399 - Add DSLOOKUP and DS methods to datasets in IGenForms",
+                            "1.1.4.0    SES     FB-13765 - NJ SMF 10 issues",
+                            "1.1.5.0    SES     Only replace the schema for those WSTF references that don’t have a schema specified.",
+                            "                   FB-13796 - Compile Errors on DSLOOKUP",
+                            "1.1.6.0    SES     FB-13625 - Add page break logic to multi-page forms",
+                            "                   FB-13932 - Add check in IGenForms to ensure rows per page entered"
                         };
 
 

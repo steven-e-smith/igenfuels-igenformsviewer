@@ -6,7 +6,6 @@ using System.Data;
 using System.Net;
 using System.Net.Mail;
 using System.IO;
-using System.Drawing;
 using System.Drawing.Printing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;

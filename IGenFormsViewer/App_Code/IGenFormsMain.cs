@@ -1477,7 +1477,7 @@ namespace IGenFormsViewer
                                         {
                                             // replace the compiled value
                                             _field = _form.formFields.fields[m];
-                                            _value = _field.value;
+                                            //_value = _field.value;
                                             _value = ResolveDS(_form.datasetName, _field, _value, "DS(");
                                             _field.compiledValue = _value;
                                             _field.text = "";
@@ -4699,6 +4699,8 @@ namespace IGenFormsViewer
                     {
                         int _dsRows = dataset.numRows;
 
+                        string _breakValues = "";
+
                         // split the fields to check
                         string[] _pageBreakFields = {};
                         string[] _prevBreakFieldValues = {};
@@ -4752,6 +4754,8 @@ namespace IGenFormsViewer
 
                                     bool _failed = false;
 
+                                    int _breakRow = 0;
+
                                     for (int n = 1; n < _rows.Count; n++)
                                     {
                                         if (_failed)
@@ -4759,25 +4763,34 @@ namespace IGenFormsViewer
                                             break;
                                         }
 
+                                        _breakValues = "";
+
                                         for (int m = 0; m < _pageBreakFields.Length; m++)
                                         {
                                             // get the field value
                                             int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFields[m]);
                                             string _currentValue = _rows[n][_colIndex];
+                                            _breakValues = _breakValues + _currentValue + ";";
                                             if (_currentValue.ToUpper() != _prevBreakFieldValues[m].ToUpper())
                                             {
                                                 // failed, exit
-                                                _endingRow = _startingRow + n - 1;
+                                                _endingRow = _startingRow + _breakRow - 1;
                                                 _failed = true;
                                                 break;
                                             }
 
                                         }
+
+                                        _breakRow = _breakRow + 1;
+
                                     }
+
                                 }
                             }
 
                             IGenPage _page = new IGenPage(_pageNo, _startingRow, _endingRow);
+
+                            _page.breakValues = _breakValues;
 
                             pages.Add(_page);
 
@@ -4785,11 +4798,14 @@ namespace IGenFormsViewer
                             _pageNo = _pageNo + 1;
 
                         }
-                    }
 
-                    // load the first page
-                    int _initialRows = pages[0].endingRow - pages[0].startingRow + 1;
-                    dataset.results = dataset.GetRows(1, _initialRows);
+                        if (pages.Count > 0)
+                        {
+                            // load the first page
+                            int _initialRows = pages[0].endingRow - pages[0].startingRow + 1;
+                            dataset.results = dataset.GetRows(1, _initialRows);
+                        }
+                    }
 
                 }
 
@@ -6288,6 +6304,13 @@ namespace IGenFormsViewer
                 {
                     string _sql = "Select count(*) " + sql.Substring(_fromOffset);
 
+                    // check for an order by
+                    int _orderOffset = _sql.ToUpper().IndexOf(" ORDER BY ");
+                    if (_orderOffset > 0)
+                    {
+                        _sql = _sql.Substring(0, _orderOffset);
+                    }
+
                     List<string[]> _rows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
                     if (_rows.Count > 0)
                     {
@@ -6553,6 +6576,7 @@ namespace IGenFormsViewer
         public int pageNo = 0;
         public int startingRow = 0;
         public int endingRow = 0;
+        public string breakValues = "";
 
         public IGenPage()
         {

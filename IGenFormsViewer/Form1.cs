@@ -59,8 +59,8 @@ namespace IGenFormsViewer
             _interface.ConnectionDBMS = ConfigRoutines.GetSetting("MainDBMS");
             _interface.FormFilesFolder = CommonRoutines.currentFormsPath;
             _interface.FormImagesFolder = CommonRoutines.currentFormImagesPath;
-            _interface.FormGroup = "South_Carolina_Tax";
-            _interface.FormFileName = "USOil\\SC\\SC Supplier.frm";
+            _interface.FormGroup = "OR_735-138X";
+            _interface.FormFileName = "IGen/OR/735-1382/OR_735-1382.frm";
 
             _interface.GenerateForms();
 

@@ -865,7 +865,7 @@ namespace IGenFormsViewer
                         
                     }
 
-                    if (_pageEnabled == "TRUE")
+                    if (_pageEnabled == "TRUE" && _form.totalPages > 0)
                     {
                         // show the buttons
                         tbrMainFirstPage.Visible = true;
@@ -886,6 +886,8 @@ namespace IGenFormsViewer
                     tbrMainNextPage.Visible = tbrMainFirstPage.Visible;
 
                     tbrMainLastPage.Visible = tbrMainFirstPage.Visible;
+
+                    tbrMainGotoPage.Visible = tbrMainFirstPage.Visible;
 
                     // set the separators
                     tbrMainNavSep1.Visible = tbrMainFirstPage.Visible;
@@ -1113,7 +1115,23 @@ namespace IGenFormsViewer
 
             try
             {
-                GotoPage(1);
+                string _currentForm = tabForms.TabPages[tabForms.SelectedIndex].Name;
+
+                IGenForm _form = displayIGenForms.GetForm(_currentForm);
+
+                if (_form.totalPages > 0)
+                {
+                    // get the page to go to
+                    string _gotoPage = "";
+                    if (CommonRoutines.InputBox("Goto Page", "What page do you want to go to?", ref _gotoPage) == System.Windows.Forms.DialogResult.OK)
+                    {
+                        int _gotoPageNo = CommonRoutines.ConvertToInt(_gotoPage);
+                        if (_gotoPageNo > 0 && _gotoPageNo <= _form.totalPages)
+                        {
+                            GotoPage(_gotoPageNo);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1243,7 +1261,7 @@ namespace IGenFormsViewer
                             _ds.currentPosition = _startingRow - 1;
 
                             // get the rows for this page
-                            List<string[]> _results = _ds.GetRows(_ds.currentPosition, _numRows);
+                            List<string[]> _results = _ds.GetRows(_startingRow, _numRows);
 
                             _ds.results = _results;
 
@@ -1265,6 +1283,8 @@ namespace IGenFormsViewer
                                 this.Cursor = _saveCursor;
                             }
                         }
+
+                        DisplayStatus("S=" + _startingRow + ", E=" + _endingRow + ", N=" + _numRows);
                     }
                 }
             }
@@ -1687,24 +1707,6 @@ namespace IGenFormsViewer
 
 
 
-
-
-
-        private void tbrMainGotoPage_Click(object sender, EventArgs e)
-        {
-
-            try
-            {
-                displayIGenForms.ExportForms();
-            }
-            catch (Exception ex)
-            {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainExportToExcel_Click > " + ex.Message);
-            }
-
-            return;
-
-        }
 
 
 

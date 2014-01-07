@@ -37,6 +37,9 @@
       <HintPath>Libs\Jint.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="PdfSharp">
+      <HintPath>..\..\..\Software\PDFSharp\PDFSharp-MigraDocFoundation-1_32\PDFsharp\code\PdfSharp\bin\Debug\PdfSharp.dll</HintPath>
+    </Reference>
     <Reference Include="SigPlusNET, Version=2.0.0.36, Culture=neutral, PublicKeyToken=6aef07010bb0624f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\SigPlusNET.dll</HintPath>
@@ -53,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\Base.cs" />
     <Compile Include="App_Code\CommonRoutines.cs" />
     <Compile Include="App_Code\ConfigRoutines.cs" />
     <Compile Include="App_Code\CSA.cs" />
@@ -60,6 +64,9 @@
     <Compile Include="App_Code\DatabaseRoutinesSQLServer.cs" />
     <Compile Include="App_Code\ExcelRoutines.cs" />
     <Compile Include="App_Code\Expressions.cs" />
+    <Compile Include="App_Code\IGenPDF.cs" />
+    <Compile Include="App_Code\Images.cs" />
+    <Compile Include="App_Code\Text.cs" />
     <Compile Include="App_Forms\frmDisplayDatasets.cs">
       <SubType>Form</SubType>
     </Compile>

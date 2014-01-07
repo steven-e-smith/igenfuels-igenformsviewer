@@ -18,7 +18,7 @@ namespace IGenForms
     {
 
         private static Bitmap objBitmap = null;
-        private static Graphics objGraphic = null;
+        private static System.Drawing.Graphics objGraphic = null;
         private static Size objPortraitSizeFull = new Size((int)(8.5 * 96), (int)(11 * 96));
         private static Size objPortraitSizeForm = new Size(790, 800);
         private static string strDefaultPrinter = "HP Photosmart C4700 series";

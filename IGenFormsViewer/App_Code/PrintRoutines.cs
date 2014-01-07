@@ -12,7 +12,7 @@ using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
     public class PrintRoutines
     {

@@ -5,7 +5,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 
 
-namespace IGenForms
+namespace IGenFormsViewer
 {
 
     /// <summary>
@@ -157,12 +157,17 @@ namespace IGenForms
                 {
                     app.Worksheets.Add();
                     ws = (Microsoft.Office.Interop.Excel.Worksheet)app.ActiveSheet;
-                    for (int n = 1; n <= app.Worksheets.Count; n++)
+                    if (ws != null)
                     {
-                        _workSheets = _workSheets + app.Worksheets[n] + ";";
+                        ws.Name = worksheet;
+
+                        // refresh the worksheets 
+                        for (int n = 1; n <= app.Worksheets.Count; n++)
+                        {
+                            _workSheets = _workSheets + app.Worksheets[n].Name + ";";
+                        }
+                        _status = true;
                     }
-                    ws.Name = worksheet;
-                    _status = true;
                 }
             }
             catch (Exception ex)
@@ -178,10 +183,84 @@ namespace IGenForms
 
 
 
+        /// <summary>
+        /// bool CreateNewExcelWorkbook()
+        /// Create a new workbook
+        /// </summary>
+        /// <returns>bool</returns>
+        public bool CreateNewExcelWorkbook()
+        {
+            bool _status = false;
+
+            try
+            {
+                if (app == null)
+                {
+                    app = new Microsoft.Office.Interop.Excel.Application();
+                }
+
+                if (app != null)
+                {
+                    wb = app.Workbooks.Add();
+                    _status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("$E:" + moduleName + ".CreateNewExcelWorkbook >" + ex.Message);
+            }
+
+            return _status;
+
+        }
+
+
+
 
         /// <summary>
-        /// int WriteToWorksheet(List<string[]> _recs)
-        /// Write the records to the open worksheet
+        /// int WriteToWorksheet(List<string[]> _recs, int startAtRow)
+        /// Write the records to the current worksheet
+        /// </summary>
+        /// <param name="_recs"></param>
+        /// <returns></returns>
+        public int WriteToWorksheet(List<string[]> recs, int startAtRow)
+        {
+            int _numWritten = 0;
+
+            try
+            {
+                for (int n = 0; n < recs.Count; n++)
+                {
+                    string[] _rec = recs[n];
+
+                    for (int m = 0; m < _rec.Length; m++)
+                    {
+                        ws.Cells[(startAtRow + n), m + 1].value = _rec[m];
+                    }
+
+                    _numWritten++;
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("$E:" + moduleName + ".WriteToWorksheet(L<s[]>,i) >" + ex.Message);
+            }
+
+            return _numWritten;
+
+        }
+
+
+
+
+
+
+
+        /// <summary>
+        /// int WriteToWorksheet(string workbookFileName, List<string[]> _recs)
+        /// open a workbook and write to a worksheet
         /// </summary>
         /// <param name="_recs"></param>
         /// <returns></returns>
@@ -225,7 +304,7 @@ namespace IGenForms
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("$E:" + moduleName + ".WriteToWorksheet >" + ex.Message);
+                System.Windows.Forms.MessageBox.Show("$E:" + moduleName + ".WriteToWorksheet(s, L<s>, c) >" + ex.Message);
             }
 
 

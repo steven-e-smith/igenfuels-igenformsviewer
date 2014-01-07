@@ -34,51 +34,91 @@ using System.Windows.Forms;
 using System.Drawing;
 using PdfGraphics;
 
-namespace IGenForms.App_Code
+namespace IGenFormsViewer
 {
     class IGenPDF
     {
+        private string moduleName = "CommonRoutines";
 
-        public void PrintPDFPage(Image image)
+        public PdfDocument pdfDoc = null;
+        private PdfGraphics.Images pdfImages = null;
+
+
+
+        public IGenPDF()
         {
-            string pdfFileName = "";
 
             try
             {
-                #region [PDF]
+                bool _status = OpenPDF();
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".IGenPDF > " + ex.Message);
+            }
 
-                // get all the pngs in the folder
-                string[] _pngFiles = Directory.GetFiles(".", "*.png");
+            return;
 
-                // init the pdf stuff
-                // Create a temporary file
-                pdfFileName = String.Format("{0}_tempfile.pdf", Guid.NewGuid().ToString("D").ToUpper());
-                PdfDocument pdfDoc = new PdfDocument();
-                PdfGraphics.Images _pdfImages = new Images();
-                pdfDoc.Info.Title = "PDFsharp XGraphic Sample";
+        }
+
+
+
+
+
+        public bool OpenPDF()
+        {
+            bool _status = true;
+
+            try
+            {
+                pdfDoc = new PdfDocument();
+                pdfImages = new Images();
+                pdfDoc.Info.Title = "IGenFuels PDF Creator";
                 pdfDoc.Info.Author = "IGenFuels";
-                pdfDoc.Info.Subject = "Created with code snippets that show the use of graphical functions";
-                pdfDoc.Info.Keywords = "PDFsharp, XGraphics";
+                pdfDoc.Info.Subject = "Create a PDF file";
+                pdfDoc.Info.Keywords = "IGenFuels, PDFsharp, XGraphics";
 
-                for (int n = 0; n < _pngFiles.Length; n++)
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".OpenPDF > " + ex.Message);
+            }
+
+            return _status;
+
+        }
+
+
+
+        public void PrintPDFPage(Image[] images, string orientation)
+        {
+
+            try
+            {
+
+                if (pdfDoc != null)
                 {
-                    string _imageFileName = _pngFiles[n];
-                    PdfPage _pdfImagesPage = pdfDoc.AddPage();
-                    XGraphics _pdfGraphics = XGraphics.FromPdfPage(_pdfImagesPage);
-                    _pdfImages.DrawPng(_pdfGraphics, 1, _imageFileName);
+                    for (int n = 0; n < images.Length; n++)
+                    {
+                        XImage _image = (XImage) images[n];
+                        PdfPage _pdfImagesPage = pdfDoc.AddPage();
+                        if (orientation.ToUpper().IndexOf('L') == 0)
+                        {
+                            _pdfImagesPage.Orientation = PdfSharp.PageOrientation.Landscape;
+                        }
+                        else
+                        {
+                            _pdfImagesPage.Orientation = PdfSharp.PageOrientation.Portrait;
+                        }
+                        XGraphics _pdfGraphics = XGraphics.FromPdfPage(_pdfImagesPage);
+                        pdfImages.DrawPng(_pdfGraphics, 1, _image);
+                    }
                 }
 
-                //PdfPage _textPage = pdfDoc.AddPage();
-                //new Graphics.Text().DrawPage(_textPage);
-
-                // now save to the pdf
-                pdfDoc.Save(pdfFileName);
-                // ...and start a viewer
-                Process.Start(pdfFileName);
-                #endregion
             }
-            catch (Exception ex1)
+            catch (Exception ex)
             {
+                CommonRoutines.Log("$E:" + moduleName + ".ClosePDF > " + ex.Message);
             }
             finally
             {
@@ -87,6 +127,112 @@ namespace IGenForms.App_Code
             return;
 
         }
+
+
+
+
+
+
+        public void PrintPDFPage(string[] imageFiles, string orientation)
+        {
+
+            try
+            {
+
+                if (pdfDoc != null)
+                {
+                    // get all the pngs in the folder
+                    string[] _pngFiles = Directory.GetFiles(".", "*.png");
+
+
+                    for (int n = 0; n < _pngFiles.Length; n++)
+                    {
+                        string _imageFileName = _pngFiles[n];
+                        PdfPage _pdfImagesPage = pdfDoc.AddPage();
+                        XGraphics _pdfGraphics = XGraphics.FromPdfPage(_pdfImagesPage);
+                        pdfImages.DrawPng(_pdfGraphics, 1, _imageFileName);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".ClosePDF > " + ex.Message);
+            }
+            finally
+            {
+            }
+
+            return;
+
+        }
+
+
+
+
+        
+        public string SavePDF(string pdfFileName, bool display)
+        {
+            string _pdfFileName = pdfFileName;
+
+            try
+            {
+                if (pdfDoc != null)
+                {
+
+                    if (_pdfFileName == "")
+                    {
+                        // Create a temporary file
+                        pdfFileName = String.Format("{0}_tempfile.pdf", Guid.NewGuid().ToString("D").ToUpper());
+                    }
+
+                    // now save to the pdf
+                    pdfDoc.Save(pdfFileName);
+
+                    if (display)
+                    {
+                        // start a viewer
+                        Process.Start(pdfFileName);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".SavePDF > " + ex.Message);
+            }
+
+            return _pdfFileName;
+
+        }
+
+
+
+
+
+        public bool ClosePDF()
+        {
+            bool _status = true;
+
+            try
+            {
+                if (pdfDoc != null)
+                {
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".ClosePDF > " + ex.Message);
+            }
+
+            return _status;
+
+        }
+
+
+
 
     }
 

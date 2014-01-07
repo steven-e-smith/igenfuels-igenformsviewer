@@ -15,7 +15,8 @@ using System.Runtime.InteropServices;
 
 
 
-namespace IGenForms
+
+namespace IGenFormsViewer
 {
     /// <summary>
     /// Summary description for clsCommonRoutines
@@ -44,6 +45,7 @@ namespace IGenForms
         public static string lastPath = "";
         public static string currentPath = AppDomain.CurrentDomain.BaseDirectory;
         public static string currentFormsPath = CommonRoutines.currentPath + "formfiles";
+        public static string currentFormGroupPath = currentFormsPath;
         public static string currentFormImagesPath = CommonRoutines.currentPath + "formimages";
         public static string tempPath = currentPath + "temp\\";
 
@@ -400,11 +402,25 @@ namespace IGenForms
         /// <returns></returns>
         public static int ConvertToInt(String value)
         {
+            string _passedValue = value;
             int _value;
 
             try
             {
-                _value = Convert.ToInt32(value);
+                // does it have a period?
+                if (_passedValue.IndexOf('.') == 0)
+                {
+                    _passedValue = "0";
+                }
+                else
+                {
+                    if (_passedValue.IndexOf('.') > 0)
+                    {
+                        _passedValue = _passedValue.Substring(0, _passedValue.IndexOf('.'));
+                    }
+                }
+
+                _value = Convert.ToInt32(_passedValue);
             }
             catch (Exception ex)
             {
@@ -3690,6 +3706,87 @@ namespace IGenForms
 
             try
             {
+                _bitmap = GenerateBitmapFromPallet(pallet, title);
+
+                if (_bitmap != null)
+                {
+                    // now write it out to the image folder
+                    // convert the bitmap to a jpg
+                    if (_imageFileName == "")
+                    {
+                        string strTime = DateTime.Now.Hour.ToString() + "_" +
+                                            DateTime.Now.Minute.ToString() + "_" +
+                                            DateTime.Now.Second.ToString() + "_" +
+                                            DateTime.Now.Millisecond.ToString();
+                        _imageFileName = CommonRoutines.currentPath + "\\temp\\print_" + strTime + ".png";
+                    }
+
+                    _bitmap.Save(_imageFileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".CreateBitmapFromPallet > " + ex.Message);
+                _imageFileName = "";
+            }
+
+            return _imageFileName;
+        }
+
+
+
+
+
+        public static Bitmap GenerateBitmapFromPallet(PictureBox pallet, string title)
+        {
+            Bitmap _bitmap = null;
+
+            try 
+            {
+                _bitmap = GenerateBitmapFromPallet(pallet, title, false);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".GenerateBitmapFromPallet > " + ex.Message);
+                _bitmap = null;
+            }
+
+            return _bitmap;
+        }
+
+
+
+
+
+        /// <summary>
+        /// string GenerateBitmapFromPallet(PictureBox pallet, string title)
+        /// Create a bitmap from the pallet and all of its controls 
+        /// </summary>
+        /// <param name="pallet"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public static Bitmap GenerateBitmapFromPallet(PictureBox pallet, string title, bool labelsOpaque)
+        {
+            // get the image for the current form
+            Bitmap _bitmap = null;
+            float _fieldTop = 0;
+            float _fieldLeft = 0;
+            float _fieldWidth = 0;
+            float _fieldHeight = 0;
+            string _value = "";
+            string _font = "";
+            float _fontSize = 0;
+            float _factorX = 1.35F;
+            float _factorY = 1.20F;
+            Pen _pen = new Pen(Brushes.Black);
+            int _index = 0;
+            bool _createImage = false;
+            string _defaultFont = "Microsoft Sans Serif";
+            int _printLeftOffset = 0;
+            int _printTopOffset = 0;
+
+            try
+            {
                 int _maxWidth = 0;
                 int _maxHeight = 0;
                 int _minWidth = pallet.Width;
@@ -3766,7 +3863,7 @@ namespace IGenForms
                     {
                         case "PICTUREBOX":
                             // draw the image at the location
-                            PictureBox _pic = (PictureBox) _control;
+                            PictureBox _pic = (PictureBox)_control;
                             _fieldLeft = _pic.Left + _printLeftOffset;
                             _fieldTop = _pic.Top + _printTopOffset;
                             _fieldHeight = _pic.Height;
@@ -3811,12 +3908,21 @@ namespace IGenForms
                                             break;
                                     }
 
+                                    // make sure it is on the bottom of the field
+                                    objFormat.LineAlignment = StringAlignment.Far;
                                     // clear the rectangle where it will be printed
-                                    Pen _opaquePen = new Pen(Color.White);
+                                    Pen _opaquePen = new Pen(Color.Transparent);
+                                    if (labelsOpaque)
+                                    {
+                                       _opaquePen = new Pen(Color.White);
+                                    }
                                     _graphic.DrawRectangle(_opaquePen, objRect);
                                 }
 
-                                _graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                                //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                                //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
+                                _graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                                _graphic.TextContrast = 0;
                                 _graphic.DrawString(_value, new Font(_font, _fontSize), Brushes.Black, objRect, objFormat);
                             }
                             break;
@@ -3839,39 +3945,14 @@ namespace IGenForms
 
                 _createImage = true;
             }
-            catch (Exception ex2)
+            catch (Exception ex)
             {
-                _createImage = false;
+                CommonRoutines.Log("$E:" + moduleName + ".GenerateBitmapFromPallet > " + ex.Message);
+                _bitmap = null;
             }
 
-
-            if (_createImage)
-            {
-                try
-                {
-                    // now write it out to the image folder
-                    // convert the bitmap to a jpg
-                    if (_imageFileName == "")
-                    {
-                        string strTime = DateTime.Now.Hour.ToString() + "_" +
-                                         DateTime.Now.Minute.ToString() + "_" +
-                                         DateTime.Now.Second.ToString() + "_" +
-                                         DateTime.Now.Millisecond.ToString();
-                        _imageFileName = CommonRoutines.currentPath + "\\temp\\print_" + strTime + ".png";
-                    }
-                    _bitmap.Save(_imageFileName);
-                }
-                catch (Exception ex)
-                {
-                    CommonRoutines.Log("$E:" + moduleName + ".CreateBitmapFromPallet > " + ex.Message);
-                    _imageFileName = "";
-                }
-
-            }
-
-            return _imageFileName;
+            return _bitmap;
         }
-
 
 
 

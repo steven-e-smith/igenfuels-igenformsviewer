@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace IGenForms
+
+
+namespace IGenFormsViewer
 {
     public partial class frmPrintDialog : Form
     {
@@ -48,7 +50,7 @@ namespace IGenForms
                 string _defaultPrinter = PlexPrint.GetDefaultPrinter();
 
                 cboPrinterSelected.Items.Clear();
-                cboPrinterSelected.Items.Add("File");
+                cboPrinterSelected.Items.Add("PDF");
                 cboPrinterSelected.Items.Add(_defaultPrinter);
 
                 cboPrinterSelected.Text = _defaultPrinter;
@@ -85,6 +87,10 @@ namespace IGenForms
                 dgvFormsToPrint.Columns.Add("FormTitle","Form");
                 dgvFormsToPrint.Columns["FormTitle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
+                dgvFormsToPrint.Columns.Add("Pages", "#Pages");
+                dgvFormsToPrint.Columns["Pages"].Width = 50;
+                dgvFormsToPrint.Columns["Pages"].Visible = true;
+
                 dgvFormsToPrint.Columns.Add("FormName", "Form Name");
                 dgvFormsToPrint.Columns["FormName"].Width = 10;
                 dgvFormsToPrint.Columns["FormName"].Visible = false;
@@ -93,9 +99,12 @@ namespace IGenForms
                 dgvFormsToPrint.Rows.Add(tabFormsToPrint.TabCount);
                 for (int n=0;n<tabFormsToPrint.TabCount;n++)
                 {
+                    PictureBox _pallet = (PictureBox)tabFormsToPrint.TabPages[n].Controls[0];
+                    IGenForm _form = (IGenForm)_pallet.Tag;
                     dgvFormsToPrint.Rows[n].Cells["PrintForm"].Value = false;
-                    dgvFormsToPrint.Rows[n].Cells["FormName"].Value = tabFormsToPrint.TabPages[n].Name;
-                    dgvFormsToPrint.Rows[n].Cells["FormTitle"].Value = tabFormsToPrint.TabPages[n].Text;
+                    dgvFormsToPrint.Rows[n].Cells["FormName"].Value = _form.name;
+                    dgvFormsToPrint.Rows[n].Cells["Pages"].Value = (_form.pages.Count == 0?1:_form.pages.Count);
+                    dgvFormsToPrint.Rows[n].Cells["FormTitle"].Value = _form.title;
                 }
 
             }
@@ -114,13 +123,16 @@ namespace IGenForms
         {
             bool _printForm = printForm;
             bool _saveForm = saveForm;
+            IGenPDF _pdfPrinter = new IGenPDF();
 
             try
             {
+                tbrMainPrintStatus.Text = "Printing forms...";
+
                 // do they want to save to a file?
                 string _printerSelected = cboPrinterSelected.Text;
 
-                if (_printerSelected.ToUpper() == "FILE")
+                if (optPrintToPDF.Checked)
                 {
                     _saveForm = true;
                     _printForm = false;
@@ -147,11 +159,72 @@ namespace IGenForms
                                     IGenForm _form = (IGenForm)_pallet.Tag;
                                     string _printOrientation = _form.printOrientation;
 
-                                    bool _continue = PrintRoutines.Print(_pallet, "", chkPreview.Checked, _printOrientation, _saveForm, _printerSelected);
-                                    if (!_continue)
+                                    bool _keepPrinting = true;
+                                    List<IGenPage> _pages = _form.pages;
+                                    int _pageNo = 1;
+
+                                    while (_keepPrinting)
                                     {
-                                        CommonRoutines.DisplayInformationalMessage("Printing cancelled by user");
-                                        break;
+                                        tbrMainPrintStatus.Text = "Printing form " + _formName + " page " + _pageNo + " of " +
+                                            (_pages.Count == 0?1:_pages.Count);
+
+                                        if (_printForm)
+                                        {
+                                            bool _continue = PrintRoutines.Print(_pallet, "", false, _printOrientation, _saveForm, _printerSelected);
+                                            if (!_continue)
+                                            {
+                                                CommonRoutines.DisplayInformationalMessage("Printing cancelled by user");
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // create the image
+                                            Image _image = CommonRoutines.GenerateBitmapFromPallet(_pallet, "");
+                                            // save the image
+                                            //_image.Save(_form.name + "_image.png");
+                                            _pdfPrinter.PrintPDFPage(new Image[] { _image }, _printOrientation);
+                                        }
+
+                                        _pageNo = _pageNo + 1;
+
+                                        if (_pageNo < _pages.Count)
+                                        {
+                                            // reload the page with the next page of data
+                                            // get the starting and ending values 
+                                            int _startingRow = _form.pages[_pageNo].startingRow;
+                                            int _endingRow = _form.pages[_pageNo].endingRow;
+                                            int _numRows = _endingRow - _startingRow + 1;
+
+                                            IGenDataset _ds = _form.dataset;
+
+                                            // see if there are any rows...
+                                            if (_ds.numRows > 0)
+                                            {
+                                                _ds.currentPosition = _startingRow - 1;
+
+                                                // get the rows for this page
+                                                List<string[]> _results = _ds.GetRows(_startingRow, _numRows);
+
+                                                _ds.results = _results;
+
+                                                if (_results != null && _results.Count > 0)
+                                                {
+                                                    _form.currentRow = _startingRow;
+
+                                                    // refresh the page
+                                                    // get the form
+                                                    IGenFormCommonRoutines.currentIGenForms.RedisplaySelectedForm(_pallet, _formName);
+                                                }
+                                            }
+                                            
+                                        }
+                                        else
+                                        {
+                                            // exit
+                                            break;
+                                        }
+
                                     }
                                 }
                             }
@@ -159,11 +232,18 @@ namespace IGenForms
                     }
                 }
 
+                if (!_printForm)
+                {
+                    _pdfPrinter.SavePDF("", true);
+                }
+
             }
             catch (Exception ex)
             {
                 CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".PrintForms > " + ex.Message);
             }
+
+            tbrMainPrintStatus.Text = "Done";
 
             return;
 

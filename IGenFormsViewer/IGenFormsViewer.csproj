@@ -7,13 +7,14 @@
     <ProjectGuid>{03AA62C7-879E-4652-9D0B-D08F00F903A1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IGenForms</RootNamespace>
+    <RootNamespace>IGenFormsViewer</RootNamespace>
     <AssemblyName>IGenFormsViewer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -30,6 +31,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>IGenFormsViewer.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Jint, Version=0.9.2.0, Culture=neutral, PublicKeyToken=973cde3f1cafed03, processorArchitecture=MSIL">
@@ -67,6 +71,12 @@
     <Compile Include="App_Code\IGenPDF.cs" />
     <Compile Include="App_Code\Images.cs" />
     <Compile Include="App_Code\Text.cs" />
+    <Compile Include="App_Forms\frmAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App_Forms\frmAbout.designer.cs">
+      <DependentUpon>frmAbout.cs</DependentUpon>
+    </Compile>
     <Compile Include="App_Forms\frmDisplayDatasets.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +106,12 @@
     </Compile>
     <Compile Include="App_Forms\frmGrid.designer.cs">
       <DependentUpon>frmGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="App_Forms\frmLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App_Forms\frmLog.designer.cs">
+      <DependentUpon>frmLog.cs</DependentUpon>
     </Compile>
     <Compile Include="App_Forms\frmMessageBox.cs">
       <SubType>Form</SubType>
@@ -133,9 +149,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="IGenToolsInterface.cs" />
+    <Compile Include="IGenFormsViewerInterface.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="App_Forms\frmAbout.resx">
+      <DependentUpon>frmAbout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="App_Forms\frmDisplayDatasets.resx">
       <DependentUpon>frmDisplayDatasets.cs</DependentUpon>
     </EmbeddedResource>
@@ -147,6 +166,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="App_Forms\frmGrid.resx">
       <DependentUpon>frmGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_Forms\frmLog.resx">
+      <DependentUpon>frmLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="App_Forms\frmMessageBox.resx">
       <DependentUpon>frmMessageBox.cs</DependentUpon>
@@ -292,6 +314,7 @@
     <Content Include="Resources\compile.ico" />
     <Content Include="Resources\Excel2.ico" />
     <Content Include="Resources\Execute.png" />
+    <None Include="Resources\goto.bmp" />
     <Content Include="Resources\link.ICO" />
     <Content Include="Resources\OpenLock.ico" />
     <Content Include="Resources\pallet.png" />

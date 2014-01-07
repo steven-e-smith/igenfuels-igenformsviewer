@@ -9,7 +9,8 @@ using System.Drawing;
 using System.Globalization;
 
 
-namespace IGenForms
+
+namespace IGenFormsViewer
 {
     public class IGenFormCommonRoutines
     {
@@ -17,6 +18,9 @@ namespace IGenForms
 
         public static IGenFormsMain currentIGenForms = null;
         public static IGenForm currentIGenForm = null;
+
+        public static string dateLastPrepared = "";
+        public static string formGroupVersion = "";
 
         public static string connectionString = "";
         public static string connectionDBMS = "";
@@ -638,9 +642,9 @@ namespace IGenForms
 
                                                 if (_parts.Length > 2)
                                                 {
-                                                    _rowIndex = CommonRoutines.ConvertToInt(_parts[2]);
+                                                    _rowIndex = CommonRoutines.ConvertToInt(_parts[2]);  // -1;
                                                     // now add the current offset in the dataset
-                                                    _rowIndex = _rowIndex + (igenForms.datasets[_dsOrdinal].currentPosition - 1);
+                                                    //_rowIndex = _rowIndex + (igenForms.datasets[_dsOrdinal].currentPosition - 1);
                                                 }
                                             }
                                             else
@@ -689,12 +693,12 @@ namespace IGenForms
 
                     #endregion 
 
-                    #region [Process DSFIND requests]
+                    #region [Process DSLOOKUP requests]
 
                     // Form dataset find field?
-                    if (_value.ToUpper().IndexOf("DSFIND(") >= 0)
+                    if (_value.ToUpper().IndexOf("DSLOOKUP(") >= 0)
                     {
-                        // syntax is DSFIND(ds:column,criteria)
+                        // syntax is DSLOOKUP(ds:column,criteria)
                         // will return the first row found that matches the criteria and set the current position of the ds
                         _form = currentIGenForm;
                         if (_form != null)
@@ -709,14 +713,14 @@ namespace IGenForms
                             _rowIndex = 0;
 
                             // get the function
-                            _startIndex = _value.ToUpper().IndexOf("DSFIND(");
+                            _startIndex = _value.ToUpper().IndexOf("DSLOOKUP(");
                             _endIndex = _value.ToUpper().IndexOf(")", _startIndex);
                             if (_endIndex > _startIndex)
                             {
-                                int _length = _endIndex - _startIndex - "DSFIND(".Length;
+                                int _length = _endIndex - _startIndex - "DSLOOKUP(".Length;
 
                                 // get the part between the DSFIND( and )
-                                string _parms = _value.Substring(_startIndex + 7, _length);
+                                string _parms = _value.Substring(_startIndex + "DSLOOKUP(".Length, _length);
 
                                 string[] _parts = _parms.Split(',');
                                 _column = _parts[0];
@@ -1088,6 +1092,7 @@ namespace IGenForms
         public static string FormatValue(string value, string dataType, int numDecimalPlaces, string formatMask)
         {
             string _newValue = value;
+            bool _fieldIsNumeric = false;
 
             try
             {
@@ -1125,31 +1130,35 @@ namespace IGenForms
                     }
                 }
 
-                if (_suppressZeroFields && _decimal == 0)
+                switch (dataType.ToUpper())
                 {
-                    // don't reformat it
-                    _newValue = "";
+                    case "INTEGER":
+                        _integerString = (formatMask != "") ? formatMask : _integerString;
+                        _newValue = _decimal.ToString(_integerString, CultureInfo.InvariantCulture);
+                        _fieldIsNumeric = true;
+                        break;
+
+                    case "NUMERIC":
+                    case "DECIMAL":
+                        _formatString = (formatMask != "") ? formatMask : _formatString;
+                        _newValue = _decimal.ToString(_formatString, CultureInfo.InvariantCulture);
+                        _fieldIsNumeric = true;
+                        break;
+
+                    case "CURRENCY":
+                        _currencyString = (formatMask != "") ? formatMask : "$#,##0.00";
+                        _newValue = _decimal.ToString(_currencyString, CultureInfo.InvariantCulture);
+                        _fieldIsNumeric = true;
+                        break;
+
                 }
-                else
+
+                if (_fieldIsNumeric)
                 {
-                    switch (dataType.ToUpper())
+                    if (_suppressZeroFields && _decimal == 0)
                     {
-                        case "INTEGER":
-                            _integerString = (formatMask != "") ? formatMask : _integerString;
-                            _newValue = _decimal.ToString(_integerString, CultureInfo.InvariantCulture);
-                            break;
-
-                        case "NUMERIC":
-                        case "DECIMAL":
-                            _formatString = (formatMask != "") ? formatMask : _formatString;
-                            _newValue = _decimal.ToString(_formatString, CultureInfo.InvariantCulture);
-                            break;
-
-                        case "CURRENCY":
-                            _currencyString = (formatMask != "") ? formatMask : "$#,##0.00";
-                            _newValue = _decimal.ToString(_currencyString, CultureInfo.InvariantCulture);
-                            break;
-
+                        // don't reformat it
+                        _newValue = "";
                     }
 
                     if (_showSpaceInsteadOfPeriod)
@@ -1165,6 +1174,7 @@ namespace IGenForms
                         }
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -1246,7 +1256,7 @@ namespace IGenForms
                             break;
 
                         case "%TOTALPAGES%":
-                            _newValue =  CommonRoutines.ConvertToInt((currentIGenForm.dataset.Count / currentIGenForm.rowsPerPage + 1).ToString()).ToString();
+                            _newValue = currentIGenForm.totalPages.ToString(); 
                             break;
 
                         default:

@@ -49,14 +49,14 @@ namespace PdfGraphics
 
       DrawTitle(page, gfx, "Images");
 
-      DrawImage(gfx, 1);
-      DrawImageScaled(gfx, 2);
-      DrawImageRotated(gfx, 3);
-      DrawImageSheared(gfx, 4);
-      DrawGif(gfx, 5);
-      DrawPng(gfx, 6);
-      DrawTiff(gfx, 7);
-      DrawFormXObject(gfx, 8);
+      //DrawImage(gfx, 1);
+      //DrawImageScaled(gfx, 2);
+      //DrawImageRotated(gfx, 3);
+      //DrawImageSheared(gfx, 4);
+      //DrawGif(gfx, 5);
+      //DrawPng(gfx, 6);
+      //DrawTiff(gfx, 7);
+      //DrawFormXObject(gfx, 8);
     }
 
     /// <summary>
@@ -166,13 +166,6 @@ namespace PdfGraphics
       EndBox(gfx);
     }
 
-    /// <summary>
-    /// Draws a PNG image with transparency.
-    /// </summary>
-    public void DrawPng(XGraphics gfx, int number)
-    {
-        DrawPng(gfx, number);
-    }
 
     /// <summary>
     /// Draws a PNG image with transparency.
@@ -191,6 +184,65 @@ namespace PdfGraphics
         //gfx.DrawImage(image, (dx - width) / 2, (dy - height) / 2, width, height);
 
         const double dx = 250, dy = 140;
+
+        double width = image.PixelWidth * 72 / image.HorizontalResolution;
+        double height = image.PixelHeight * 72 / image.HorizontalResolution;
+
+        gfx.DrawImage(image, 0, 0, width, height);
+        //gfx.DrawImage(image, 0, 0, width, height);
+
+        //EndBox(gfx);
+    }
+
+    /// <summary>
+    /// Draws a PNG image with transparency.
+    /// </summary>
+    public void DrawPng(XGraphics gfx, int number, XImage pngImage)
+    {
+        //BeginBox(gfx, number, "DrawImage (PNG)");
+
+        XImage image = pngImage;
+
+        //const double dx = 250, dy = 140;
+
+        //double width = image.PixelWidth * 72 / image.HorizontalResolution;
+        //double height = image.PixelHeight * 72 / image.HorizontalResolution;
+
+        //gfx.DrawImage(image, (dx - width) / 2, (dy - height) / 2, width, height);
+
+        const double dx = 250, dy = 140;
+
+        double width = image.PixelWidth * 72 / image.HorizontalResolution;
+        double height = image.PixelHeight * 72 / image.HorizontalResolution;
+
+        gfx.DrawImage(image, 0, 0, width, height);
+        //gfx.DrawImage(image, 0, 0, width, height);
+
+        //EndBox(gfx);
+    }
+
+    /// <summary>
+    /// Draws a PNG image with transparency.
+    /// </summary>
+    public void DrawPngRotated(XGraphics gfx, int number, XImage pngImage)
+    {
+        //BeginBox(gfx, number, "DrawImage (PNG)");
+
+        XImage image = pngImage;
+
+        //const double dx = 250, dy = 140;
+
+        //double width = image.PixelWidth * 72 / image.HorizontalResolution;
+        //double height = image.PixelHeight * 72 / image.HorizontalResolution;
+
+        //gfx.DrawImage(image, (dx - width) / 2, (dy - height) / 2, width, height);
+
+        const double dx = 250, dy = 140;
+
+        gfx.TranslateTransform(dx / 2, dy / 2);
+        gfx.ScaleTransform(0.7);
+        gfx.RotateTransform(-25);
+        gfx.TranslateTransform(-dx / 2, -dy / 2);
 
         double width = image.PixelWidth * 72 / image.HorizontalResolution;
         double height = image.PixelHeight * 72 / image.HorizontalResolution;

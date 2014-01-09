@@ -18,7 +18,8 @@ namespace IGenFormsViewer
                             "1.1.5.0    SES     Only replace the schema for those WSTF references that don’t have a schema specified.",
                             "                   FB-13796 - Compile Errors on DSLOOKUP",
                             "1.1.6.0    SES     FB-13625 - Add page break logic to multi-page forms",
-                            "                   FB-13932 - Add check in IGenForms to ensure rows per page entered"
+                            "                   FB-13932 - Add check in IGenForms to ensure rows per page entered",
+                            "1.1.6.1    SES     More on FB-13625 - Got the multi-dataset forms to page correctly and print correctly"
                         };
 
 

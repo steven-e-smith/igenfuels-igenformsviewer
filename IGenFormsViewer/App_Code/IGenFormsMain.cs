@@ -413,9 +413,11 @@ namespace IGenFormsViewer
                 datasets.Clear();
 
                 // walk the XML and create the entities
-
-                foreach (string _xmlRecord in xmlRecords)
+                for (int _recNo=0;_recNo < xmlRecords.Count;_recNo++)
+                //foreach (string _xmlRecord in xmlRecords)
                 {
+                    string _xmlRecord = xmlRecords[_recNo];
+
                     // parse the string
                     int _offset = _xmlRecord.IndexOf('=');
                     if (_offset > 0)
@@ -592,13 +594,57 @@ namespace IGenFormsViewer
                                 break;
 
                             case "DATASETNAME":
+                                string _datasetName = _tagValue;
+                                int _datasetOrdinal = -1;
+                                // find it in the group datasets collection
+                                for (int n = 0; n < datasets.Count; n++)
+                                {
+                                    if (datasets[n].cursorName.ToUpper() == _datasetName.ToUpper())
+                                    {
+                                        _datasetOrdinal = n;
+                                        break;
+                                    }
+                                }
                                 if (_formFlag)
                                 {
-                                    _form.datasetName = _tagValue;
+                                    // add it to the datasetname list for the form
+                                    _form.datasetOrdinals.Add(_datasetOrdinal);
+                                    _form.datasetNames.Add(_datasetName);
+                                    if (_form.datasetName == "")
+                                    {
+                                        // default name is the first one in the xml list
+                                        _form.datasetName = _datasetName;
+                                        _form.datasetOrdinal = _datasetOrdinal;
+                                    }
                                 }
                                 else
                                 {
-                                    datasetName = _tagValue;
+                                    datasetName = _datasetName;        // for the GDS function
+                                    datasetOrdinal = _datasetOrdinal;
+                                }
+                                break;
+
+                            case "ROWSPERPAGE":
+                                if (_formFlag)
+                                {
+                                    int _rowsPerPage = CommonRoutines.ConvertToInt(_tagValue);
+                                    // check to see if this is a multipage form
+                                    if (_form.multiPageForm.ToUpper() == "TRUE")
+                                    {
+                                        if (_rowsPerPage < 1)
+                                        {
+                                            // give an error!
+                                            CommonRoutines.DisplayErrorMessage(_form.name + " - Rows per page must be greater than 0 if a multipage form");
+                                        }
+                                        else
+                                        {
+                                            _form._rowsPerPages.Add(_rowsPerPage);
+                                            if (_form.rowsPerPage < 0)
+                                            {
+                                                _form.rowsPerPage = _rowsPerPage;
+                                            }
+                                        }
+                                    }
                                 }
                                 break;
 
@@ -711,22 +757,6 @@ namespace IGenFormsViewer
                                 if (_formFlag)
                                 {
                                     _form.multiPageForm = (_tagValue.ToUpper() == "TRUE") ? "True" : "False";
-                                }
-                                break;
-
-                            case "ROWSPERPAGE":
-                                if (_formFlag)
-                                {
-                                    _form.rowsPerPage = CommonRoutines.ConvertToInt(_tagValue);
-                                    // check to see if this is a multipage form
-                                    if (_form.multiPageForm.ToUpper() == "TRUE")
-                                    {
-                                        if (_form.rowsPerPage < 1)
-                                        {
-                                            // give an error!
-                                            CommonRoutines.DisplayErrorMessage(_form.name + " - Rows per page must be greater than 0 if a multipage form");
-                                        }
-                                    }
                                 }
                                 break;
 
@@ -2021,7 +2051,17 @@ namespace IGenFormsViewer
                     _recs.Add("        <RowsPerPage>" + _form.rowsPerPage.ToString() + "</RowsPerPage> ");
                     _recs.Add("        <ProcessingOrder>" + _form.processingOrder.ToString() + "</ProcessingOrder> ");
                     _recs.Add("        <PrintOrientation>" + _form.printOrientation + "</PrintOrientation> ");
-                    _recs.Add("        <DataSetName>" + _form.datasetName + "</DataSetName> ");
+                    if (_form.datasetNames.Count > 0)
+                    {
+                        for (int n = 0; n < _form.datasetNames.Count; n++)
+                        {
+                            _recs.Add("        <DataSetName>" + _form.datasetNames[n] + "</DataSetName> ");
+                        }
+                    }
+                    else
+                    {
+                        _recs.Add("        <DataSetName></DataSetName> ");
+                    }
                     _recs.Add("        <Instructions>" + _form.instructions + "</Instructions> ");
                     _recs.Add("        <Comments>" + _form.comments.Replace("'","").Replace("\r", "").Replace("\n", "").Trim() + "</Comments> ");
                     _recs.Add("        <Fields>");
@@ -2854,12 +2894,32 @@ namespace IGenFormsViewer
 
 
 
+        public string RedisplaySelectedForm(PictureBox pallet, string formName)
+        {
+            string _result = "";
+
+            try
+            {
+                _result = RedisplaySelectedForm(pallet, formName, true);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".ProcessForms > " + ex.Message);
+            }
+
+            return _result;
+
+        }
+
+
+
+
 
         /// <summary>
         /// string RedisplaySelectedForm()
         /// Reisplay the current form
         /// </summary>
-        public string RedisplaySelectedForm(PictureBox pallet, string formName)
+        public string RedisplaySelectedForm(PictureBox pallet, string formName, bool displayForm)
         {
             string _result = "";
 
@@ -2903,7 +2963,7 @@ namespace IGenFormsViewer
                     }
                 }
 
-                if (_form != null)
+                if (_form != null && displayForm)
                 {
                     //_pallet.Controls.Clear();
 
@@ -4544,13 +4604,16 @@ namespace IGenFormsViewer
         public string dataSource = "";
         public string sql = "";
         public string datasetName = "";
+        public List<string> datasetNames = new List<string>();
         public string comments = "";
         public int datasetOrdinal = -1;
+        public List<int> datasetOrdinals = new List<int>();
         public IGenDataset dataset = new IGenDataset();
         public List<IGenPage> pages = new List<IGenPage>();
 
         public string multiPageForm = "False";
-        public int rowsPerPage = 0;
+        public int rowsPerPage = -1;
+        public List<int> _rowsPerPages = new List<int>();
         public string pageBreaks = "";
         public List<string[]> datasetRows = new List<string[]>();
         public List<int> cursorOrdinals = new List<int>();
@@ -4686,136 +4749,153 @@ namespace IGenFormsViewer
         public int DeterminePages()
         {
             int _numberPages = 0;
+            int _dsOrdinal = 0;
+            int _dsRowsPerPage = 0;
+            IGenDataset _dataset = null;
 
             try
             {
-                pages.Clear();
-
-                // walk the rows and set the pages
-                if (datasetOrdinal >= 0)
+                for (int _ds = 0; _ds < datasetOrdinals.Count; _ds++)
                 {
-                    // get the rows in the dataset
-                    if (dataset.dataTable != null)
+                    _dsOrdinal = datasetOrdinals[_ds];
+                    _dsRowsPerPage = (_rowsPerPages.Count > _ds) ? _rowsPerPages[_ds] : 0;
+                    _dataset = IGenFormCommonRoutines.currentIGenForms.datasets[_dsOrdinal];
+
+                    _dataset.pages.Clear();
+
+                    // walk the rows and set the pages
+                    if (_dsOrdinal >= 0 && _dsRowsPerPage > 0)
                     {
-                        int _dsRows = dataset.numRows;
-
-                        string _breakValues = "";
-
-                        // split the fields to check
-                        string[] _pageBreakFields = {};
-                        string[] _prevBreakFieldValues = {};
-                        string[] _currentBreakFieldValues = {};
-
-                        if (pageBreaks.Trim() != "")
+                        // get the rows in the dataset
+                        if (_dataset.dataTable != null)
                         {
-                            _pageBreakFields = pageBreaks.Split(',');
-                        }
+                            int _dsRows = _dataset.numRows;
 
-                        _prevBreakFieldValues = (string[])_pageBreakFields.Clone();
-                        _currentBreakFieldValues = (string[])_pageBreakFields.Clone();
+                            string _breakValues = "";
 
-                        // change them to ordinals
-                        for (int n = 0; n < dataset.fieldNames.Length; n++)
-                        {
-                            for (int m=0;m<_pageBreakFields.Length;m++)
+                            // split the fields to check
+                            string[] _pageBreakFields = { };
+                            string[] _prevBreakFieldValues = { };
+                            string[] _currentBreakFieldValues = { };
+
+                            if (pageBreaks.Trim() != "")
                             {
-                                if (_pageBreakFields[m].ToUpper() == dataset.fieldNames[n].ToUpper())
-                                {
-                                    _pageBreakFields[m] = n.ToString();
-                                }
-                            }
-                        }
-
-                        int _startingRow = 1;
-                        int _pageNo = 1;
-
-                        while (_startingRow < dataset.dataTable.Rows.Count)
-                        {
-                            int _endingRow = _startingRow + rowsPerPage - 1;
-
-                            if (_endingRow > dataset.dataTable.Rows.Count)
-                            {
-                                _endingRow = dataset.dataTable.Rows.Count;
+                                _pageBreakFields = pageBreaks.Split(',');
                             }
 
-                            // see if there are any page breaks defined
+                            _prevBreakFieldValues = (string[])_pageBreakFields.Clone();
+                            _currentBreakFieldValues = (string[])_pageBreakFields.Clone();
+
                             if (_pageBreakFields.Length > 0)
                             {
-                                // see if there is a page break in the block defined 
-                                List<string[]> _rows = dataset.GetRows(_startingRow, rowsPerPage);
-                                if (_rows.Count > 0)
+                                // change them to ordinals
+                                for (int n = 0; n < _dataset.fieldNames.Length; n++)
                                 {
-                                    // init prev values for first time thru
-                                    for (int n = 0; n < _pageBreakFields.Length; n++)
+                                    for (int m = 0; m < _pageBreakFields.Length; m++)
                                     {
-                                        int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFields[n]);
-                                        _prevBreakFieldValues[n] = _rows[1][_colIndex];
-                                    }
-
-                                    bool _failed = false;
-
-                                    int _breakRow = 0;
-
-                                    for (int n = 1; n < _rows.Count; n++)
-                                    {
-                                        if (_failed)
+                                        if (_pageBreakFields[m].ToUpper() == _dataset.fieldNames[n].ToUpper())
                                         {
-                                            break;
+                                            _pageBreakFields[m] = n.ToString();
+                                        }
+                                    }
+                                }
+                            }
+
+                            int _startingRow = 1;
+                            int _pageNo = 1;
+
+                            while (_startingRow < _dataset.dataTable.Rows.Count)
+                            {
+                                int _endingRow = _startingRow + rowsPerPage - 1;
+
+                                if (_endingRow > _dataset.dataTable.Rows.Count)
+                                {
+                                    _endingRow = _dataset.dataTable.Rows.Count;
+                                }
+
+                                // see if there are any page breaks defined
+                                if (_pageBreakFields.Length > 0)
+                                {
+                                    // see if there is a page break in the block defined 
+                                    List<string[]> _rows = _dataset.GetRows(_startingRow, rowsPerPage);
+                                    if (_rows.Count > 0)
+                                    {
+                                        // init prev values for first time thru
+                                        for (int n = 0; n < _pageBreakFields.Length; n++)
+                                        {
+                                            int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFields[n]);
+                                            _prevBreakFieldValues[n] = _rows[1][_colIndex];
                                         }
 
-                                        _breakValues = "";
+                                        bool _failed = false;
 
-                                        for (int m = 0; m < _pageBreakFields.Length; m++)
+                                        int _breakRow = 0;
+
+                                        for (int n = 1; n < _rows.Count; n++)
                                         {
-                                            // get the field value
-                                            int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFields[m]);
-                                            string _currentValue = _rows[n][_colIndex];
-                                            _breakValues = _breakValues + _currentValue + ";";
-                                            if (_currentValue.ToUpper() != _prevBreakFieldValues[m].ToUpper())
+                                            if (_failed)
                                             {
-                                                // failed, exit
-                                                _endingRow = _startingRow + _breakRow - 1;
-                                                _failed = true;
                                                 break;
                                             }
 
+                                            _breakValues = "";
+
+                                            for (int m = 0; m < _pageBreakFields.Length; m++)
+                                            {
+                                                // get the field value
+                                                int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFields[m]);
+                                                string _currentValue = _rows[n][_colIndex];
+                                                _breakValues = _breakValues + _currentValue + ";";
+                                                if (_currentValue.ToUpper() != _prevBreakFieldValues[m].ToUpper())
+                                                {
+                                                    // failed, exit
+                                                    _endingRow = _startingRow + _breakRow - 1;
+                                                    _failed = true;
+                                                    break;
+                                                }
+
+                                            }
+
+                                            _breakRow = _breakRow + 1;
+
                                         }
 
-                                        _breakRow = _breakRow + 1;
-
                                     }
-
                                 }
+
+                                IGenPage _page = new IGenPage(_dsOrdinal, _pageNo, _startingRow, _endingRow);
+
+                                _page.breakValues = _breakValues;
+
+                                _dataset.pages.Add(_page);
+
+                                _startingRow = _endingRow + 1;
+                                _pageNo = _pageNo + 1;
+
                             }
 
-                            IGenPage _page = new IGenPage(_pageNo, _startingRow, _endingRow);
+                            if (_dataset.pages.Count > 0)
+                            {
+                                // load the first page
+                                int _initialRows = _dataset.pages[0].endingRow - _dataset.pages[0].startingRow + 1;
+                                _dataset.results = _dataset.GetRows(1, _initialRows);
+                            }
 
-                            _page.breakValues = _breakValues;
+                            if (_dataset.pages.Count > _numberPages)
+                            {
+                                _numberPages = _dataset.pages.Count;
+                            }
 
-                            pages.Add(_page);
-
-                            _startingRow = _endingRow + 1;
-                            _pageNo = _pageNo + 1;
-
+                            pages = _dataset.pages;
                         }
 
-                        if (pages.Count > 0)
-                        {
-                            // load the first page
-                            int _initialRows = pages[0].endingRow - pages[0].startingRow + 1;
-                            dataset.results = dataset.GetRows(1, _initialRows);
-                        }
                     }
-
                 }
-
             }
             catch (Exception ex)
             {
                 CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".DeterminePages > " + ex.Message);
             }
-
-            _numberPages = pages.Count;
 
             totalPages = _numberPages;
 
@@ -6078,6 +6158,7 @@ namespace IGenFormsViewer
         public SqlDataReader cursor;
         public SqlDataAdapter dataAdapter;
         public DataTable dataTable;
+        public List<IGenPage> pages = new List<IGenPage>();
         public List<string[]> results;
         public int numRows = 0;
         public int currentPosition = 0;
@@ -6573,6 +6654,7 @@ namespace IGenFormsViewer
     {
         private static string moduleName = "IGenPage";
 
+        public int datasetOrdinal = 0;
         public int pageNo = 0;
         public int startingRow = 0;
         public int endingRow = 0;
@@ -6583,9 +6665,10 @@ namespace IGenFormsViewer
 
             try
             {
-                pageNo = 0;
-                startingRow = 0;
-                endingRow = 0;
+                datasetOrdinal = -1;
+                pageNo = -1;
+                startingRow = -1;
+                endingRow = -1;
             }
             catch (Exception ex)
             {
@@ -6599,18 +6682,19 @@ namespace IGenFormsViewer
 
 
 
-        public IGenPage(int pno, int srow, int erow)
+        public IGenPage(int pdatasetOrdinal, int pno, int srow, int erow)
         {
 
             try
             {
+                datasetOrdinal = pdatasetOrdinal;
                 pageNo = pno;
                 startingRow = srow;
                 endingRow = erow;
             }
             catch (Exception ex)
             {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".IGenPage(i,i,i) > " + ex.Message);
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".IGenPage(i,i,i,i) > " + ex.Message);
             }
 
             return;

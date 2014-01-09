@@ -29,21 +29,26 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tbrMain = new System.Windows.Forms.ToolStrip();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tbrMainExit = new System.Windows.Forms.ToolStripButton();
             this.tabDatasets = new System.Windows.Forms.TabControl();
             this.tabPageDatasets = new System.Windows.Forms.TabPage();
-            this.tabPageResults = new System.Windows.Forms.TabPage();
             this.dgvDatasets = new System.Windows.Forms.DataGridView();
+            this.tabPageResults = new System.Windows.Forms.TabPage();
             this.dgvResults = new System.Windows.Forms.DataGridView();
+            this.tabPageFormDatasets = new System.Windows.Forms.TabPage();
+            this.dgvFormDatasets = new System.Windows.Forms.DataGridView();
             this.tbrMain.SuspendLayout();
             this.tabDatasets.SuspendLayout();
             this.tabPageDatasets.SuspendLayout();
-            this.tabPageResults.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatasets)).BeginInit();
+            this.tabPageResults.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
+            this.tabPageFormDatasets.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFormDatasets)).BeginInit();
             this.SuspendLayout();
             // 
             // tbrMain
@@ -54,7 +59,7 @@
             this.tbrMainExit});
             this.tbrMain.Location = new System.Drawing.Point(0, 0);
             this.tbrMain.Name = "tbrMain";
-            this.tbrMain.Size = new System.Drawing.Size(701, 38);
+            this.tbrMain.Size = new System.Drawing.Size(878, 38);
             this.tbrMain.TabIndex = 6;
             this.tbrMain.Text = "toolStrip1";
             // 
@@ -76,6 +81,7 @@
             // tabDatasets
             // 
             this.tabDatasets.Controls.Add(this.tabPageDatasets);
+            this.tabDatasets.Controls.Add(this.tabPageFormDatasets);
             this.tabDatasets.Controls.Add(this.tabPageResults);
             this.tabDatasets.Location = new System.Drawing.Point(0, 41);
             this.tabDatasets.Name = "tabDatasets";
@@ -91,19 +97,8 @@
             this.tabPageDatasets.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageDatasets.Size = new System.Drawing.Size(681, 443);
             this.tabPageDatasets.TabIndex = 0;
-            this.tabPageDatasets.Text = "Datasets";
+            this.tabPageDatasets.Text = "Global Datasets";
             this.tabPageDatasets.UseVisualStyleBackColor = true;
-            // 
-            // tabPageResults
-            // 
-            this.tabPageResults.Controls.Add(this.dgvResults);
-            this.tabPageResults.Location = new System.Drawing.Point(4, 22);
-            this.tabPageResults.Name = "tabPageResults";
-            this.tabPageResults.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageResults.Size = new System.Drawing.Size(681, 443);
-            this.tabPageResults.TabIndex = 1;
-            this.tabPageResults.Text = "Results";
-            this.tabPageResults.UseVisualStyleBackColor = true;
             // 
             // dgvDatasets
             // 
@@ -121,9 +116,47 @@
             this.dgvDatasets.Size = new System.Drawing.Size(624, 391);
             this.dgvDatasets.TabIndex = 6;
             // 
+            // tabPageResults
+            // 
+            this.tabPageResults.Controls.Add(this.dgvResults);
+            this.tabPageResults.Location = new System.Drawing.Point(4, 22);
+            this.tabPageResults.Name = "tabPageResults";
+            this.tabPageResults.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageResults.Size = new System.Drawing.Size(681, 443);
+            this.tabPageResults.TabIndex = 1;
+            this.tabPageResults.Text = "Results";
+            this.tabPageResults.UseVisualStyleBackColor = true;
+            // 
             // dgvResults
             // 
             this.dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvResults.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dgvResults.Location = new System.Drawing.Point(8, 6);
+            this.dgvResults.Name = "dgvResults";
+            this.dgvResults.Size = new System.Drawing.Size(647, 419);
+            this.dgvResults.TabIndex = 7;
+            // 
+            // tabPageFormDatasets
+            // 
+            this.tabPageFormDatasets.Controls.Add(this.dgvFormDatasets);
+            this.tabPageFormDatasets.Location = new System.Drawing.Point(4, 22);
+            this.tabPageFormDatasets.Name = "tabPageFormDatasets";
+            this.tabPageFormDatasets.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageFormDatasets.Size = new System.Drawing.Size(681, 443);
+            this.tabPageFormDatasets.TabIndex = 2;
+            this.tabPageFormDatasets.Text = "Form Datasets";
+            this.tabPageFormDatasets.UseVisualStyleBackColor = true;
+            // 
+            // dgvFormDatasets
+            // 
+            this.dgvFormDatasets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -131,17 +164,17 @@
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvResults.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvResults.Location = new System.Drawing.Point(8, 6);
-            this.dgvResults.Name = "dgvResults";
-            this.dgvResults.Size = new System.Drawing.Size(647, 419);
-            this.dgvResults.TabIndex = 7;
+            this.dgvFormDatasets.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvFormDatasets.Location = new System.Drawing.Point(6, 6);
+            this.dgvFormDatasets.Name = "dgvFormDatasets";
+            this.dgvFormDatasets.Size = new System.Drawing.Size(624, 391);
+            this.dgvFormDatasets.TabIndex = 7;
             // 
             // frmDisplayDatasets
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(701, 522);
+            this.ClientSize = new System.Drawing.Size(878, 565);
             this.Controls.Add(this.tabDatasets);
             this.Controls.Add(this.tbrMain);
             this.Name = "frmDisplayDatasets";
@@ -151,9 +184,11 @@
             this.tbrMain.PerformLayout();
             this.tabDatasets.ResumeLayout(false);
             this.tabPageDatasets.ResumeLayout(false);
-            this.tabPageResults.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatasets)).EndInit();
+            this.tabPageResults.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).EndInit();
+            this.tabPageFormDatasets.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFormDatasets)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -169,5 +204,7 @@
         private System.Windows.Forms.DataGridView dgvDatasets;
         private System.Windows.Forms.TabPage tabPageResults;
         private System.Windows.Forms.DataGridView dgvResults;
+        private System.Windows.Forms.TabPage tabPageFormDatasets;
+        private System.Windows.Forms.DataGridView dgvFormDatasets;
     }
 }

@@ -18,7 +18,7 @@ namespace IGenFormsViewer
     {
         private string moduleName = "DatabaseRoutinesSQLServer";
 
-        private int maxRowsInCollection = 1000;
+        private int maxRowsInCollection = 30;
 
         public struct connectionObjectsType
         {

@@ -155,18 +155,66 @@ namespace IGenFormsViewer
                                 TabPage _tabPage = tabFormsToPrint.TabPages[_formName];
                                 if (_tabPage != null)
                                 {
+                                    #region [Print Form]
+
                                     PictureBox _pallet = (PictureBox)_tabPage.Controls[0];
                                     IGenForm _form = (IGenForm)_pallet.Tag;
                                     string _printOrientation = _form.printOrientation;
+                                    int _totalPages = _form.totalPages;
 
                                     bool _keepPrinting = true;
-                                    List<IGenPage> _pages = _form.pages;
-                                    int _pageNo = 1;
+
+                                    int _pageNo = 0;
 
                                     while (_keepPrinting)
                                     {
-                                        tbrMainPrintStatus.Text = "Printing form " + _formName + " page " + _pageNo + " of " +
-                                            (_pages.Count == 0?1:_pages.Count);
+                                        if (_pageNo >= _totalPages)
+                                        {
+                                            break;
+
+                                        }
+
+                                        tbrMainPrintStatus.Text = "Printing form " + _formName + " page " + (_pageNo + 1) + " of " + _totalPages;
+
+                                        // get the page for the form
+                                        #region [Increment Pages]
+
+                                        // now for each dataset on the form page the result sets
+                                        for (int m = 0; m < _form.datasetOrdinals.Count; m++)
+                                        {
+                                            int _dsOrdinal = _form.datasetOrdinals[m];
+                                            IGenDataset _dataset = IGenFormCommonRoutines.currentIGenForms.datasets[_dsOrdinal];
+
+                                            List<IGenPage> _pages = _dataset.pages;
+
+                                            if (_pageNo < _pages.Count)
+                                            {
+                                                // reload the page with the next page of data
+                                                // get the starting and ending values 
+                                                int _startingRow = _pages[_pageNo].startingRow;
+                                                int _endingRow = _pages[_pageNo].endingRow;
+                                                int _numRows = _endingRow - _startingRow + 1;
+
+                                                // see if there are any rows...
+                                                if (_dataset.numRows > 0)
+                                                {
+                                                    _dataset.currentPosition = _startingRow - 1;
+
+                                                    // get the rows for this page
+                                                    List<string[]> _results = _dataset.GetRows(_startingRow, _numRows);
+
+                                                    _dataset.results = _results;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                // clear out the results
+                                                _dataset.results.Clear();
+                                            }
+                                        }
+
+                                        // refresh the page
+                                        IGenFormCommonRoutines.currentIGenForms.RedisplaySelectedForm(_pallet, _formName, true);
 
                                         if (_printForm)
                                         {
@@ -181,51 +229,18 @@ namespace IGenFormsViewer
                                         {
                                             // create the image
                                             Image _image = CommonRoutines.GenerateBitmapFromPallet(_pallet, "");
-                                            // save the image
-                                            //_image.Save(_form.name + "_image.png");
                                             _pdfPrinter.PrintPDFPage(new Image[] { _image }, _printOrientation);
                                         }
 
                                         _pageNo = _pageNo + 1;
 
-                                        if (_pageNo < _pages.Count)
-                                        {
-                                            // reload the page with the next page of data
-                                            // get the starting and ending values 
-                                            int _startingRow = _form.pages[_pageNo].startingRow;
-                                            int _endingRow = _form.pages[_pageNo].endingRow;
-                                            int _numRows = _endingRow - _startingRow + 1;
-
-                                            IGenDataset _ds = _form.dataset;
-
-                                            // see if there are any rows...
-                                            if (_ds.numRows > 0)
-                                            {
-                                                _ds.currentPosition = _startingRow - 1;
-
-                                                // get the rows for this page
-                                                List<string[]> _results = _ds.GetRows(_startingRow, _numRows);
-
-                                                _ds.results = _results;
-
-                                                if (_results != null && _results.Count > 0)
-                                                {
-                                                    _form.currentRow = _startingRow;
-
-                                                    // refresh the page
-                                                    // get the form
-                                                    IGenFormCommonRoutines.currentIGenForms.RedisplaySelectedForm(_pallet, _formName);
-                                                }
-                                            }
-                                            
-                                        }
-                                        else
-                                        {
-                                            // exit
-                                            break;
-                                        }
+                                        #endregion
+                                        
 
                                     }
+
+                                    #endregion
+
                                 }
                             }
                         }

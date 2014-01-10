@@ -19,7 +19,9 @@ namespace IGenFormsViewer
                             "                   FB-13796 - Compile Errors on DSLOOKUP",
                             "1.1.6.0    SES     FB-13625 - Add page break logic to multi-page forms",
                             "                   FB-13932 - Add check in IGenForms to ensure rows per page entered",
-                            "1.1.6.1    SES     More on FB-13625 - Got the multi-dataset forms to page correctly and print correctly"
+                            "1.1.6.1    SES     More on FB-13625 - Got the multi-dataset forms to page correctly and print correctly",
+                            "                   FB-10417 - trimmed pageBreak field so it would match field name",
+                            "                              Added capability to set DSEOF on a page break so the =DSEOF function would work" 
                         };
 
 

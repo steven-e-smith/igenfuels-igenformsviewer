@@ -180,12 +180,13 @@ namespace IGenFormsViewer
                                         #region [Increment Pages]
 
                                         // now for each dataset on the form page the result sets
-                                        for (int m = 0; m < _form.datasetOrdinals.Count; m++)
+                                        for (int m = 0; m < _form.datasets.Count; m++)
                                         {
-                                            int _dsOrdinal = _form.datasetOrdinals[m];
+                                            IGenDataset _formDataset = _form.datasets[m];
+                                            int _dsOrdinal = _formDataset.referenceDatasetOrdinal;
                                             IGenDataset _dataset = IGenFormCommonRoutines.currentIGenForms.datasets[_dsOrdinal];
 
-                                            List<IGenPage> _pages = _dataset.pages;
+                                            List<IGenPage> _pages = _formDataset.pages;
 
                                             if (_pageNo < _pages.Count)
                                             {
@@ -203,18 +204,22 @@ namespace IGenFormsViewer
                                                     // get the rows for this page
                                                     List<string[]> _results = _dataset.GetRows(_startingRow, _numRows);
 
+                                                    _formDataset.results = _results;
+                                                    _form.dataset.results = _results;
                                                     _dataset.results = _results;
                                                 }
                                             }
                                             else
                                             {
                                                 // clear out the results
+                                                _formDataset.results.Clear();
+                                                _form.dataset.results.Clear();
                                                 _dataset.results.Clear();
                                             }
                                         }
 
                                         // refresh the page
-                                        IGenFormCommonRoutines.currentIGenForms.RedisplaySelectedForm(_pallet, _formName, true);
+                                        IGenFormCommonRoutines.currentIGenForms.RedisplaySelectedForm(_pallet, _formName, false);
 
                                         if (_printForm)
                                         {

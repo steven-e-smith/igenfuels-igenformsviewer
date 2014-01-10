@@ -253,9 +253,9 @@ namespace IGenFormsViewer
                                     dgvFormDatasets.Rows[_row].Cells["Ordinal"].Value = _igenForm.datasetOrdinals[m];
                                     dgvFormDatasets.Rows[_row].Cells["Rows"].Value = _igenForm.totalRows;
                                     dgvFormDatasets.Rows[_row].Cells["RowsPerPage"].Value = -1;
-                                    if (m < _igenForm._rowsPerPages.Count)
+                                    if (m < _igenForm.rowsPerPages.Count)
                                     {
-                                        dgvFormDatasets.Rows[_row].Cells["RowsPerPage"].Value = _igenForm._rowsPerPages[m];
+                                        dgvFormDatasets.Rows[_row].Cells["RowsPerPage"].Value = _igenForm.rowsPerPages[m];
                                     }
                                     if (m == 0)
                                     {

@@ -413,13 +413,11 @@ namespace IGenFormsViewer
                         displayIGenForms.LoadFormValues();
                     }
 
-                    initialDisplay = false;
+                    // recreate the forms
+                    DisplayStatus("Displaying form...");
+                    displayIGenForms.DisplayForms(tabForms, true);
 
                 }
-
-                // recreate the forms
-                DisplayStatus("Displaying form...");
-                displayIGenForms.DisplayForms(tabForms, true);
 
                 // set an event for the textboxes and checkboxes
                 for (int n = 0; n < tabForms.TabCount; n++)
@@ -467,6 +465,8 @@ namespace IGenFormsViewer
             {
                 CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".DisplayForms > " + ex.Message);
             }
+
+            initialDisplay = false;
 
             DisplayStatus("Ready");
 
@@ -1219,9 +1219,9 @@ namespace IGenFormsViewer
                 IGenForm _form = displayIGenForms.GetForm(_currentForm);
 
                 // page each of the dataset ordinals
-                for (int n = 0; n < _form.datasetOrdinals.Count; n++)
+                for (int n = 0; n < _form.datasets.Count; n++)
                 {
-                    int _dsOrdinal = _form.datasetOrdinals[n];
+                    int _dsOrdinal = _form.datasets[n].referenceDatasetOrdinal;
 
                     // get the dataset defined
                     if (_dsOrdinal >= 0)
@@ -1230,9 +1230,10 @@ namespace IGenFormsViewer
 
                         // set the pages
                         _form.datasetOrdinal = _dsOrdinal;
-                        _form.dataset = displayIGenForms.datasets[_dsOrdinal];
+                        _form.dataset = _form.datasets[n];  // displayIGenForms.datasets[_dsOrdinal];
                         _form.pages = _form.dataset.pages;
                         _form.dataset.currentPosition = _pageNo;
+                        _form.rowsPerPage = _form.rowsPerPages[n];
 
                         // see if the page number sent is valid for the number of pages determined
                         if (_form.pages.Count > 0)
@@ -1254,7 +1255,8 @@ namespace IGenFormsViewer
                             // offset the row
                             _pageNo = _pageNo - 1;
 
-                            IGenDataset _ds = _form.dataset;
+                            // set the referenced dataset
+                            IGenDataset _ds = displayIGenForms.datasets[_dsOrdinal];
 
                             if (_pageNo < _form.pages.Count)
                             {
@@ -1277,6 +1279,8 @@ namespace IGenFormsViewer
 
                                     _ds.results = _results;
 
+                                    _form.dataset.results = _results;
+
                                     if (_results != null && _results.Count > 0)
                                     {
                                         _form.currentRow = _startingRow;
@@ -1293,6 +1297,7 @@ namespace IGenFormsViewer
                             {
                                 // clear out the result set of this dataset
                                 _ds.results.Clear();
+                                _form.dataset.results.Clear();
                             }
                         }
                     }

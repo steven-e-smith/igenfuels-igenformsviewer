@@ -1494,6 +1494,7 @@ namespace IGenFormsViewer
                                             // replace the compiled value
                                             _field = _form.formFields.fields[m];
                                             _value = _field.value;
+                                            // datasetname here is the default one specified for the form group
                                             _value = ResolveDS(datasetName, _field, _value, "GDS(");
                                         }
                                         else
@@ -1776,21 +1777,14 @@ namespace IGenFormsViewer
                                         _dsOrdinal = -1;
 
                                         // may be one of the ordinal, field or name,field formats
-                                        if (CommonRoutines.IsNumeric(_datasetName))
+                                        if (CommonRoutines.IsNumeric(_datasetName) &&
+                                                    (CommonRoutines.ConvertToInt(_datasetName) >= 0 && CommonRoutines.ConvertToInt(_datasetName) < datasets.Count))
                                         {
                                             _dsOrdinal = CommonRoutines.ConvertToInt(_datasetName);
-                                            if (_dsOrdinal < 0 || _dsOrdinal >= datasets.Count)
+                                            _fieldNames = datasets[_dsOrdinal].results[0];
+                                            if (_fieldNames.Length < 1)
                                             {
-                                                // not a valid one.  see if the dataset can be found from the name
                                                 _dsOrdinal = -1;
-                                            }
-                                            else
-                                            {
-                                                _fieldNames = datasets[_dsOrdinal].results[0];
-                                                if (_fieldNames.Length < 1)
-                                                {
-                                                    _dsOrdinal = -1;
-                                                }
                                             }
                                         }
 
@@ -2242,7 +2236,7 @@ namespace IGenFormsViewer
                         // clear the progress bar
                         progressBar.Minimum = 0;
                         progressBar.Maximum = 100;
-                        progressBar.Visible = !progressBar.Visible;
+                        progressBar.Visible = false;  // !progressBar.Visible;
                         if (progressPercentage != null)
                         {
                             progressPercentage.Text = "";
@@ -2251,6 +2245,7 @@ namespace IGenFormsViewer
                     }
                     else
                     {
+                        progressBar.Visible = true;
                         // calc percentage
                         double _percent = (entity * 100 / totalEntities);
                         progressBar.Value = CommonRoutines.ConvertToInt(_percent.ToString());
@@ -2260,6 +2255,10 @@ namespace IGenFormsViewer
                             progressPercentage.Text = progressBar.Value.ToString() + "%";
                         }
                     }
+                }
+                else
+                {
+                    int x = 0;
                 }
 
             }
@@ -2655,7 +2654,10 @@ namespace IGenFormsViewer
 
             try
             {
-                statusLabel = statusControl;
+                if (statusControl != null)
+                {
+                    statusLabel = statusControl;
+                }
 
                 DisplayStatus("Starting processing...");
 
@@ -2987,7 +2989,8 @@ namespace IGenFormsViewer
                 IGenFormCommonRoutines.currentIGenForm = _form;
                 PictureBox _pallet = pallet;
 
-                DisplayStatus("Loading page data....");
+                DisplayStatus("Loading page " + formName + " data....");
+
                 DisplayProgress(0, 0);
 
                 for (int m = 0; m < _form.formFields.fields.Count; m++)
@@ -4853,9 +4856,9 @@ namespace IGenFormsViewer
                             if (_pageBreakFields.Length > 0)
                             {
                                 // change them to ordinals
-                                for (int n = 0; n < _dataset.fieldNames.Length; n++)
+                                for (int m = 0; m < _pageBreakFields.Length; m++)
                                 {
-                                    for (int m = 0; m < _pageBreakFields.Length; m++)
+                                    for (int n = 0; n < _dataset.fieldNames.Length; n++)
                                     {
                                         if (_pageBreakFields[m].Trim().ToUpper() == _dataset.fieldNames[n].Trim().ToUpper())
                                         {
@@ -4868,7 +4871,7 @@ namespace IGenFormsViewer
                             int _startingRow = 1;
                             int _pageNo = 1;
 
-                            while (_startingRow < _dataset.dataTable.Rows.Count)
+                            while (_startingRow <= _dataset.dataTable.Rows.Count)
                             {
                                 int _endingRow = _startingRow + rowsPerPage - 1;
 
@@ -4880,6 +4883,7 @@ namespace IGenFormsViewer
                                 // see if there are any page breaks defined
                                 if (_pageBreakFields.Length > 0)
                                 {
+                                    #region [Page Break Logic]
                                     // see if there is a page break in the block defined 
                                     List<string[]> _rows = _dataset.GetRows(_startingRow, rowsPerPage);
                                     if (_rows.Count > 0)
@@ -4925,8 +4929,11 @@ namespace IGenFormsViewer
                                         }
 
                                     }
-                                }
 
+                                    #endregion 
+
+                                }
+                                
                                 IGenPage _page = new IGenPage(_ds, _pageNo, _startingRow, _endingRow);
 
                                 _page.pageBreak = _failed;

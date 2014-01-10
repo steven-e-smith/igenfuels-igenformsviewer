@@ -110,6 +110,7 @@ namespace IGenFormsViewer
                         {
                             _pdfImagesPage.Orientation = PdfSharp.PageOrientation.Portrait;
                         }
+                        _pdfImagesPage.Size = PdfSharp.PageSize.A4;
                         XGraphics _pdfGraphics = XGraphics.FromPdfPage(_pdfImagesPage);
                         pdfImages.DrawPng(_pdfGraphics, 1, _image);
                     }

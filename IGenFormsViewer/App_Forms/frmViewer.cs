@@ -413,10 +413,26 @@ namespace IGenFormsViewer
                         displayIGenForms.LoadFormValues();
                     }
 
+                    // now process the form rules
+                    DisplayStatus("Processing form rules...");
+                    displayIGenForms.ProcessForms();
+
                     // recreate the forms
                     DisplayStatus("Displaying form...");
                     displayIGenForms.DisplayForms(tabForms, true);
 
+                }
+                else
+                {
+                    DisplayStatus("Processing form rules...");
+                    displayIGenForms.ProcessForms();
+
+                    for (int n=0;n<displayIGenForms.forms.Count;n++)
+                    {
+                        string _formName = displayIGenForms.forms[n].name;
+                        PictureBox _pallet = (PictureBox)tabForms.SelectedTab.Controls[0];
+                        displayIGenForms.RedisplaySelectedForm(_pallet, _formName);
+                    }
                 }
 
                 // set an event for the textboxes and checkboxes
@@ -467,6 +483,9 @@ namespace IGenFormsViewer
             }
 
             initialDisplay = false;
+
+            // reset the progress bar
+            displayIGenForms.DisplayProgress(0, 0);
 
             DisplayStatus("Ready");
 
@@ -673,10 +692,6 @@ namespace IGenFormsViewer
                     displayIGenForms.CompileFormValues();
                     displayIGenForms.compileFormsFlag = false;
                 }
-
-                // now process the form rules
-                DisplayStatus("Processing form rules...");
-                displayIGenForms.ProcessForms(tbrMainStatus);
 
                 // recreate the forms
                 DisplayStatus("Displaying form...");
@@ -1218,6 +1233,8 @@ namespace IGenFormsViewer
 
                 IGenForm _form = displayIGenForms.GetForm(_currentForm);
 
+                DisplayStatus("Paging form " + _form.name);
+
                 // page each of the dataset ordinals
                 for (int n = 0; n < _form.datasets.Count; n++)
                 {
@@ -1291,7 +1308,7 @@ namespace IGenFormsViewer
                                     }
                                 }
 
-                                DisplayStatus("S=" + _startingRow + ", E=" + _endingRow + ", N=" + _numRows);
+                                //DisplayStatus("S=" + _startingRow + ", E=" + _endingRow + ", N=" + _numRows);
                             }
                             else
                             {
@@ -1318,6 +1335,8 @@ namespace IGenFormsViewer
             }
 
             this.Cursor = _saveCursor;
+
+            DisplayStatus("Ready");
 
             return;
 

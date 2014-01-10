@@ -185,6 +185,7 @@ namespace IGenFormsViewer
                                             IGenDataset _formDataset = _form.datasets[m];
                                             int _dsOrdinal = _formDataset.referenceDatasetOrdinal;
                                             IGenDataset _dataset = IGenFormCommonRoutines.currentIGenForms.datasets[_dsOrdinal];
+                                            _form.dataset = _dataset;
 
                                             List<IGenPage> _pages = _formDataset.pages;
 
@@ -216,10 +217,13 @@ namespace IGenFormsViewer
                                                 _form.dataset.results.Clear();
                                                 _dataset.results.Clear();
                                             }
+                                            
                                         }
 
                                         // refresh the page
-                                        IGenFormCommonRoutines.currentIGenForms.RedisplaySelectedForm(_pallet, _formName, false);
+                                        //IGenFormCommonRoutines.currentIGenForms.ProcessForms();
+
+                                        IGenFormCommonRoutines.currentIGenForms.RedisplaySelectedForm(_pallet, _formName);
 
                                         if (_printForm)
                                         {

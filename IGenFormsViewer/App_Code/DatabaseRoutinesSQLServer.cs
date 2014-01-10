@@ -18,7 +18,7 @@ namespace IGenFormsViewer
     {
         private string moduleName = "DatabaseRoutinesSQLServer";
 
-        private int maxRowsInCollection = 30;
+        public int maxRowsInCollection = 50;
 
         public struct connectionObjectsType
         {
@@ -1537,7 +1537,10 @@ namespace IGenFormsViewer
                                     "   and table_schema='" + _schema + "' " +
                                     "order by ORDINAL_POSITION ";
 
+                int _saveMaxFields = maxRowsInCollection;
+                maxRowsInCollection = 1000;
                 List<string[]> _rows = Select(connectionString, _sql);
+                maxRowsInCollection = _saveMaxFields;
 
                 // create the fields
                 if (_rows.Count > 1)

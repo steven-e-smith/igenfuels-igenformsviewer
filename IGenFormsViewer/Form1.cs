@@ -57,16 +57,20 @@ namespace IGenFormsViewer
             _interface.BaseConnectionDBMS = ConfigRoutines.GetSetting("BaseDBMS");
             _interface.ConnectionString = ConfigRoutines.GetSetting("MainConnection");
             _interface.ConnectionDBMS = ConfigRoutines.GetSetting("MainDBMS");
-            _interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\USOil/NY/PT100-102";
             _interface.FormImagesFolder = CommonRoutines.currentFormImagesPath;
 
-            _interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\USOil/NY/PT100-102";
-            _interface.FormGroup = "PT100-102";
-            _interface.FormFileName = "PT100-102.frm";
+            //_interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\USOil/NY/PT100-102";
+            //_interface.FormGroup = "PT100-102";
+            //_interface.FormFileName = "PT100-102.frm";
 
             //_interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\USOil/SC";
             //_interface.FormGroup = "South_Carolina_Tax";
             //_interface.FormFileName = "SC Supplier.frm";
+
+            _interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\IGen\\NJ\\SMF 10";
+            _interface.FormGroup = "SMF10 Supplier";
+            _interface.FormFileName = "SMF10 Supplier.frm";
+
 
             _interface.GenerateForms();
 

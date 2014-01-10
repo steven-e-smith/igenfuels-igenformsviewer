@@ -21,7 +21,8 @@ namespace IGenFormsViewer
                             "                   FB-13932 - Add check in IGenForms to ensure rows per page entered",
                             "1.1.6.1    SES     More on FB-13625 - Got the multi-dataset forms to page correctly and print correctly",
                             "                   FB-10417 - trimmed pageBreak field so it would match field name",
-                            "                              Added capability to set DSEOF on a page break so the =DSEOF function would work" 
+                            "                              Added capability to set DSEOF on a page break so the =DSEOF function would work",
+                            "1.1.6.2    SES     Fixed issues with paging and leaving last record off"
                         };
 
 

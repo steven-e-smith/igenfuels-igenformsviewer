@@ -34,6 +34,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tbrMainClose = new System.Windows.Forms.ToolStripButton();
             this.tabPageIGenForms = new System.Windows.Forms.TabPage();
+            this.chkFormsCompileOnLoad = new System.Windows.Forms.CheckBox();
             this.chkFormsPersistValues = new System.Windows.Forms.CheckBox();
             this.chkShowSpaceInsteadOfPeriod = new System.Windows.Forms.CheckBox();
             this.chkMakeLabelsOpaque = new System.Windows.Forms.CheckBox();
@@ -98,7 +99,10 @@
             this.label9 = new System.Windows.Forms.Label();
             this.txtWallpaper = new System.Windows.Forms.TextBox();
             this.tabOptions = new System.Windows.Forms.TabControl();
-            this.chkFormsCompileOnLoad = new System.Windows.Forms.CheckBox();
+            this.tabPageVariables = new System.Windows.Forms.TabPage();
+            this.dgvVariables = new System.Windows.Forms.DataGridView();
+            this.VariableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.VariableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbrMain.SuspendLayout();
             this.tabPageIGenForms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumberOfDecimalPlaces)).BeginInit();
@@ -117,6 +121,8 @@
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picWallpaper)).BeginInit();
             this.tabOptions.SuspendLayout();
+            this.tabPageVariables.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvVariables)).BeginInit();
             this.SuspendLayout();
             // 
             // tbrMain
@@ -175,6 +181,17 @@
             this.tabPageIGenForms.TabIndex = 6;
             this.tabPageIGenForms.Text = "Forms";
             this.tabPageIGenForms.UseVisualStyleBackColor = true;
+            // 
+            // chkFormsCompileOnLoad
+            // 
+            this.chkFormsCompileOnLoad.AutoSize = true;
+            this.chkFormsCompileOnLoad.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkFormsCompileOnLoad.Location = new System.Drawing.Point(201, 264);
+            this.chkFormsCompileOnLoad.Name = "chkFormsCompileOnLoad";
+            this.chkFormsCompileOnLoad.Size = new System.Drawing.Size(170, 22);
+            this.chkFormsCompileOnLoad.TabIndex = 6;
+            this.chkFormsCompileOnLoad.Text = "Compile form on load";
+            this.chkFormsCompileOnLoad.UseVisualStyleBackColor = true;
             // 
             // chkFormsPersistValues
             // 
@@ -978,6 +995,7 @@
             this.tabOptions.Controls.Add(this.tabPageImportExportOptions);
             this.tabOptions.Controls.Add(this.tabPageSQLOptions);
             this.tabOptions.Controls.Add(this.tabPageIGenForms);
+            this.tabOptions.Controls.Add(this.tabPageVariables);
             this.tabOptions.Location = new System.Drawing.Point(4, 63);
             this.tabOptions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabOptions.Name = "tabOptions";
@@ -985,16 +1003,39 @@
             this.tabOptions.Size = new System.Drawing.Size(827, 492);
             this.tabOptions.TabIndex = 4;
             // 
-            // chkFormsCompileOnLoad
+            // tabPageVariables
             // 
-            this.chkFormsCompileOnLoad.AutoSize = true;
-            this.chkFormsCompileOnLoad.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkFormsCompileOnLoad.Location = new System.Drawing.Point(201, 264);
-            this.chkFormsCompileOnLoad.Name = "chkFormsCompileOnLoad";
-            this.chkFormsCompileOnLoad.Size = new System.Drawing.Size(170, 22);
-            this.chkFormsCompileOnLoad.TabIndex = 6;
-            this.chkFormsCompileOnLoad.Text = "Compile form on load";
-            this.chkFormsCompileOnLoad.UseVisualStyleBackColor = true;
+            this.tabPageVariables.Controls.Add(this.dgvVariables);
+            this.tabPageVariables.Location = new System.Drawing.Point(4, 26);
+            this.tabPageVariables.Name = "tabPageVariables";
+            this.tabPageVariables.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageVariables.Size = new System.Drawing.Size(819, 462);
+            this.tabPageVariables.TabIndex = 7;
+            this.tabPageVariables.Text = "Variables";
+            this.tabPageVariables.UseVisualStyleBackColor = true;
+            // 
+            // dgvVariables
+            // 
+            this.dgvVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvVariables.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.VariableName,
+            this.VariableValue});
+            this.dgvVariables.Location = new System.Drawing.Point(6, 6);
+            this.dgvVariables.Name = "dgvVariables";
+            this.dgvVariables.Size = new System.Drawing.Size(807, 450);
+            this.dgvVariables.TabIndex = 0;
+            // 
+            // VariableName
+            // 
+            this.VariableName.HeaderText = "Name";
+            this.VariableName.Name = "VariableName";
+            this.VariableName.Width = 200;
+            // 
+            // VariableValue
+            // 
+            this.VariableValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.VariableValue.HeaderText = "Value";
+            this.VariableValue.Name = "VariableValue";
             // 
             // frmOptions
             // 
@@ -1041,6 +1082,8 @@
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picWallpaper)).EndInit();
             this.tabOptions.ResumeLayout(false);
+            this.tabPageVariables.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvVariables)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1118,6 +1161,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkWrapSumWithCoalesce;
         private System.Windows.Forms.CheckBox chkFormsCompileOnLoad;
+        private System.Windows.Forms.TabPage tabPageVariables;
+        private System.Windows.Forms.DataGridView dgvVariables;
+        private System.Windows.Forms.DataGridViewTextBoxColumn VariableName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn VariableValue;
 
     }
 }

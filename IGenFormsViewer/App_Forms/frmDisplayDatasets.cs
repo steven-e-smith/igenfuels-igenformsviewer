@@ -338,12 +338,16 @@ namespace IGenFormsViewer
                     string _sql = (dgvDatasets.Rows[row].Cells["SQL"].Value != null) ? dgvDatasets.Rows[row].Cells["SQL"].Value.ToString() : "";
                     if (_sql != "")
                     {
+                        // resolve symbolics
+                        _sql = IGenFormCommonRoutines.ResolveSymbolics(_sql);
                         dgvResults.Rows.Clear();
                         this.Cursor = Cursors.WaitCursor;
                         List<string[]> _rows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
-                        tabDatasets.SelectedIndex = 1;
                         CommonRoutines.LoadGridWithResults(dgvResults, _rows);
+                        // update the rows found
+                        //dgvDatasets.Rows[row].Cells["Rows"].Value = _rows.Count;
                         dgvResults.Refresh();
+                        tabDatasets.SelectedIndex = 2;
                         this.Cursor = Cursors.Arrow;
                     }
                 }

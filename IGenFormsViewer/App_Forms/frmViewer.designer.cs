@@ -33,16 +33,27 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tbrMain = new System.Windows.Forms.ToolStrip();
+            this.tbrMainSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbrMainRun = new System.Windows.Forms.ToolStripButton();
+            this.tbrMainStop = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbrMainOptions = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbrMainPrint = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbrMainClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.tbrMainNavSep4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbrMainFirstPage = new System.Windows.Forms.ToolStripButton();
             this.tbrMainNavSep2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbrMainPreviousPage = new System.Windows.Forms.ToolStripButton();
             this.tbrMainNavSep3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbrMainNextPage = new System.Windows.Forms.ToolStripButton();
             this.tbrMainNavSep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbrMainLastPage = new System.Windows.Forms.ToolStripButton();
             this.tbrMainNavSep5 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbrMainGotoPage = new System.Windows.Forms.ToolStripButton();
             this.tbrMainPageNo = new System.Windows.Forms.ToolStripLabel();
             this.tbrMainOfLabel = new System.Windows.Forms.ToolStripLabel();
             this.tbrMainTotalPages = new System.Windows.Forms.ToolStripLabel();
@@ -69,17 +80,9 @@
             this.mnuMainToolsOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.tbrMainSave = new System.Windows.Forms.ToolStripButton();
-            this.tbrMainRun = new System.Windows.Forms.ToolStripButton();
-            this.tbrMainStop = new System.Windows.Forms.ToolStripButton();
-            this.tbrMainOptions = new System.Windows.Forms.ToolStripButton();
-            this.tbrMainPrint = new System.Windows.Forms.ToolStripButton();
-            this.tbrMainClose = new System.Windows.Forms.ToolStripButton();
-            this.tbrMainFirstPage = new System.Windows.Forms.ToolStripButton();
-            this.tbrMainPreviousPage = new System.Windows.Forms.ToolStripButton();
-            this.tbrMainNextPage = new System.Windows.Forms.ToolStripButton();
-            this.tbrMainLastPage = new System.Windows.Forms.ToolStripButton();
-            this.tbrMainGotoPage = new System.Windows.Forms.ToolStripButton();
+            this.mnuMainViewRefresh = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainActions = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainActionsPrepare = new System.Windows.Forms.ToolStripMenuItem();
             this.tabForms.SuspendLayout();
             this.tbrMain.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -159,25 +162,86 @@
             this.tbrMain.TabIndex = 53;
             this.tbrMain.Text = "toolStrip1";
             // 
+            // tbrMainSave
+            // 
+            this.tbrMainSave.Image = ((System.Drawing.Image)(resources.GetObject("tbrMainSave.Image")));
+            this.tbrMainSave.ImageTransparentColor = System.Drawing.Color.White;
+            this.tbrMainSave.Name = "tbrMainSave";
+            this.tbrMainSave.Size = new System.Drawing.Size(70, 35);
+            this.tbrMainSave.Text = "Save To DB";
+            this.tbrMainSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainSave.Click += new System.EventHandler(this.tbrMainSave_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 38);
+            // 
+            // tbrMainRun
+            // 
+            this.tbrMainRun.Image = global::IGenFormsViewer.Properties.Resources.Execute;
+            this.tbrMainRun.ImageTransparentColor = System.Drawing.Color.White;
+            this.tbrMainRun.Name = "tbrMainRun";
+            this.tbrMainRun.Size = new System.Drawing.Size(51, 35);
+            this.tbrMainRun.Text = "Prepare";
+            this.tbrMainRun.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainRun.Click += new System.EventHandler(this.tbrMainRun_Click);
+            // 
+            // tbrMainStop
+            // 
+            this.tbrMainStop.Image = ((System.Drawing.Image)(resources.GetObject("tbrMainStop.Image")));
+            this.tbrMainStop.ImageTransparentColor = System.Drawing.Color.White;
+            this.tbrMainStop.Name = "tbrMainStop";
+            this.tbrMainStop.Size = new System.Drawing.Size(35, 35);
+            this.tbrMainStop.Text = "Stop";
+            this.tbrMainStop.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainStop.Click += new System.EventHandler(this.tbrMainStop_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 38);
             // 
+            // tbrMainOptions
+            // 
+            this.tbrMainOptions.Image = global::IGenFormsViewer.Properties.Resources.Options;
+            this.tbrMainOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbrMainOptions.Name = "tbrMainOptions";
+            this.tbrMainOptions.Size = new System.Drawing.Size(53, 35);
+            this.tbrMainOptions.Text = "Options";
+            this.tbrMainOptions.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainOptions.Click += new System.EventHandler(this.tbrMainOptions_Click);
+            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 38);
             // 
+            // tbrMainPrint
+            // 
+            this.tbrMainPrint.Image = global::IGenFormsViewer.Properties.Resources.PRINT;
+            this.tbrMainPrint.ImageTransparentColor = System.Drawing.Color.White;
+            this.tbrMainPrint.Name = "tbrMainPrint";
+            this.tbrMainPrint.Size = new System.Drawing.Size(36, 35);
+            this.tbrMainPrint.Text = "Print";
+            this.tbrMainPrint.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainPrint.ToolTipText = "Run";
+            this.tbrMainPrint.Click += new System.EventHandler(this.tbrMainPrint_Click);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 38);
+            // 
+            // tbrMainClose
+            // 
+            this.tbrMainClose.Image = ((System.Drawing.Image)(resources.GetObject("tbrMainClose.Image")));
+            this.tbrMainClose.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbrMainClose.Name = "tbrMainClose";
+            this.tbrMainClose.Size = new System.Drawing.Size(40, 35);
+            this.tbrMainClose.Text = "Close";
+            this.tbrMainClose.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainClose.Click += new System.EventHandler(this.tbrMainClose_Click);
             // 
             // toolStripLabel3
             // 
@@ -190,25 +254,85 @@
             this.tbrMainNavSep4.Name = "tbrMainNavSep4";
             this.tbrMainNavSep4.Size = new System.Drawing.Size(6, 38);
             // 
+            // tbrMainFirstPage
+            // 
+            this.tbrMainFirstPage.AutoSize = false;
+            this.tbrMainFirstPage.BackColor = System.Drawing.Color.Transparent;
+            this.tbrMainFirstPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08UP;
+            this.tbrMainFirstPage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbrMainFirstPage.Name = "tbrMainFirstPage";
+            this.tbrMainFirstPage.Size = new System.Drawing.Size(60, 35);
+            this.tbrMainFirstPage.Text = "First";
+            this.tbrMainFirstPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainFirstPage.ToolTipText = "First Page";
+            // 
             // tbrMainNavSep2
             // 
             this.tbrMainNavSep2.Name = "tbrMainNavSep2";
             this.tbrMainNavSep2.Size = new System.Drawing.Size(6, 38);
+            // 
+            // tbrMainPreviousPage
+            // 
+            this.tbrMainPreviousPage.AutoSize = false;
+            this.tbrMainPreviousPage.BackColor = System.Drawing.Color.Transparent;
+            this.tbrMainPreviousPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08LT;
+            this.tbrMainPreviousPage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbrMainPreviousPage.Name = "tbrMainPreviousPage";
+            this.tbrMainPreviousPage.Size = new System.Drawing.Size(60, 35);
+            this.tbrMainPreviousPage.Text = "Previous";
+            this.tbrMainPreviousPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainPreviousPage.ToolTipText = "First Page";
             // 
             // tbrMainNavSep3
             // 
             this.tbrMainNavSep3.Name = "tbrMainNavSep3";
             this.tbrMainNavSep3.Size = new System.Drawing.Size(6, 38);
             // 
+            // tbrMainNextPage
+            // 
+            this.tbrMainNextPage.AutoSize = false;
+            this.tbrMainNextPage.BackColor = System.Drawing.Color.Transparent;
+            this.tbrMainNextPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08RT;
+            this.tbrMainNextPage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbrMainNextPage.Name = "tbrMainNextPage";
+            this.tbrMainNextPage.Size = new System.Drawing.Size(60, 35);
+            this.tbrMainNextPage.Text = "Next";
+            this.tbrMainNextPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainNextPage.ToolTipText = "First Page";
+            // 
             // tbrMainNavSep1
             // 
             this.tbrMainNavSep1.Name = "tbrMainNavSep1";
             this.tbrMainNavSep1.Size = new System.Drawing.Size(6, 38);
             // 
+            // tbrMainLastPage
+            // 
+            this.tbrMainLastPage.AutoSize = false;
+            this.tbrMainLastPage.BackColor = System.Drawing.Color.Transparent;
+            this.tbrMainLastPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08DN;
+            this.tbrMainLastPage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbrMainLastPage.Name = "tbrMainLastPage";
+            this.tbrMainLastPage.Size = new System.Drawing.Size(60, 35);
+            this.tbrMainLastPage.Text = "Last";
+            this.tbrMainLastPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainLastPage.ToolTipText = "First Page";
+            // 
             // tbrMainNavSep5
             // 
             this.tbrMainNavSep5.Name = "tbrMainNavSep5";
             this.tbrMainNavSep5.Size = new System.Drawing.Size(6, 38);
+            // 
+            // tbrMainGotoPage
+            // 
+            this.tbrMainGotoPage.AutoSize = false;
+            this.tbrMainGotoPage.BackColor = System.Drawing.Color.Transparent;
+            this.tbrMainGotoPage.Image = global::IGenFormsViewer.Properties.Resources._goto;
+            this.tbrMainGotoPage.ImageTransparentColor = System.Drawing.Color.White;
+            this.tbrMainGotoPage.Name = "tbrMainGotoPage";
+            this.tbrMainGotoPage.Size = new System.Drawing.Size(60, 35);
+            this.tbrMainGotoPage.Text = "GoTo";
+            this.tbrMainGotoPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainGotoPage.ToolTipText = "First Page";
             // 
             // tbrMainPageNo
             // 
@@ -335,6 +459,7 @@
             this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuMainFile,
             this.mnuMainView,
+            this.mnuMainActions,
             this.mnuMainTools,
             this.mnuMainHelp});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
@@ -375,7 +500,8 @@
             // mnuMainView
             // 
             this.mnuMainView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuMainViewDatasets});
+            this.mnuMainViewDatasets,
+            this.mnuMainViewRefresh});
             this.mnuMainView.Name = "mnuMainView";
             this.mnuMainView.Size = new System.Drawing.Size(44, 20);
             this.mnuMainView.Text = "&View";
@@ -383,7 +509,7 @@
             // mnuMainViewDatasets
             // 
             this.mnuMainViewDatasets.Name = "mnuMainViewDatasets";
-            this.mnuMainViewDatasets.Size = new System.Drawing.Size(118, 22);
+            this.mnuMainViewDatasets.Size = new System.Drawing.Size(159, 22);
             this.mnuMainViewDatasets.Text = "&Datasets";
             this.mnuMainViewDatasets.Click += new System.EventHandler(this.mnuMainViewDatasets_Click);
             // 
@@ -398,8 +524,9 @@
             // mnuMainToolsOptions
             // 
             this.mnuMainToolsOptions.Name = "mnuMainToolsOptions";
-            this.mnuMainToolsOptions.Size = new System.Drawing.Size(116, 22);
+            this.mnuMainToolsOptions.Size = new System.Drawing.Size(152, 22);
             this.mnuMainToolsOptions.Text = "&Options";
+            this.mnuMainToolsOptions.Click += new System.EventHandler(this.mnuMainToolsOptions_Click);
             // 
             // mnuMainHelp
             // 
@@ -412,130 +539,33 @@
             // mnuMainHelpAbout
             // 
             this.mnuMainHelpAbout.Name = "mnuMainHelpAbout";
-            this.mnuMainHelpAbout.Size = new System.Drawing.Size(107, 22);
+            this.mnuMainHelpAbout.Size = new System.Drawing.Size(152, 22);
             this.mnuMainHelpAbout.Text = "&About";
             this.mnuMainHelpAbout.Click += new System.EventHandler(this.mnuMainHelpAbout_Click);
             // 
-            // tbrMainSave
+            // mnuMainViewRefresh
             // 
-            this.tbrMainSave.Image = ((System.Drawing.Image)(resources.GetObject("tbrMainSave.Image")));
-            this.tbrMainSave.ImageTransparentColor = System.Drawing.Color.White;
-            this.tbrMainSave.Name = "tbrMainSave";
-            this.tbrMainSave.Size = new System.Drawing.Size(70, 35);
-            this.tbrMainSave.Text = "Save To DB";
-            this.tbrMainSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainSave.Click += new System.EventHandler(this.tbrMainSave_Click);
+            this.mnuMainViewRefresh.Name = "mnuMainViewRefresh";
+            this.mnuMainViewRefresh.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
+            this.mnuMainViewRefresh.Size = new System.Drawing.Size(159, 22);
+            this.mnuMainViewRefresh.Text = "&Refresh";
+            this.mnuMainViewRefresh.Click += new System.EventHandler(this.mnuMainViewRefresh_Click);
             // 
-            // tbrMainRun
+            // mnuMainActions
             // 
-            this.tbrMainRun.Image = global::IGenFormsViewer.Properties.Resources.Execute;
-            this.tbrMainRun.ImageTransparentColor = System.Drawing.Color.White;
-            this.tbrMainRun.Name = "tbrMainRun";
-            this.tbrMainRun.Size = new System.Drawing.Size(51, 35);
-            this.tbrMainRun.Text = "Prepare";
-            this.tbrMainRun.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainRun.Click += new System.EventHandler(this.tbrMainRun_Click);
+            this.mnuMainActions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuMainActionsPrepare});
+            this.mnuMainActions.Name = "mnuMainActions";
+            this.mnuMainActions.Size = new System.Drawing.Size(62, 20);
+            this.mnuMainActions.Text = "&Actions ";
             // 
-            // tbrMainStop
+            // mnuMainActionsPrepare
             // 
-            this.tbrMainStop.Image = ((System.Drawing.Image)(resources.GetObject("tbrMainStop.Image")));
-            this.tbrMainStop.ImageTransparentColor = System.Drawing.Color.White;
-            this.tbrMainStop.Name = "tbrMainStop";
-            this.tbrMainStop.Size = new System.Drawing.Size(35, 35);
-            this.tbrMainStop.Text = "Stop";
-            this.tbrMainStop.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainStop.Click += new System.EventHandler(this.tbrMainStop_Click);
-            // 
-            // tbrMainOptions
-            // 
-            this.tbrMainOptions.Image = global::IGenFormsViewer.Properties.Resources.Options;
-            this.tbrMainOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbrMainOptions.Name = "tbrMainOptions";
-            this.tbrMainOptions.Size = new System.Drawing.Size(53, 35);
-            this.tbrMainOptions.Text = "Options";
-            this.tbrMainOptions.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainOptions.Click += new System.EventHandler(this.tbrMainOptions_Click);
-            // 
-            // tbrMainPrint
-            // 
-            this.tbrMainPrint.Image = global::IGenFormsViewer.Properties.Resources.PRINT;
-            this.tbrMainPrint.ImageTransparentColor = System.Drawing.Color.White;
-            this.tbrMainPrint.Name = "tbrMainPrint";
-            this.tbrMainPrint.Size = new System.Drawing.Size(36, 35);
-            this.tbrMainPrint.Text = "Print";
-            this.tbrMainPrint.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainPrint.ToolTipText = "Run";
-            this.tbrMainPrint.Click += new System.EventHandler(this.tbrMainPrint_Click);
-            // 
-            // tbrMainClose
-            // 
-            this.tbrMainClose.Image = ((System.Drawing.Image)(resources.GetObject("tbrMainClose.Image")));
-            this.tbrMainClose.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbrMainClose.Name = "tbrMainClose";
-            this.tbrMainClose.Size = new System.Drawing.Size(40, 35);
-            this.tbrMainClose.Text = "Close";
-            this.tbrMainClose.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainClose.Click += new System.EventHandler(this.tbrMainClose_Click);
-            // 
-            // tbrMainFirstPage
-            // 
-            this.tbrMainFirstPage.AutoSize = false;
-            this.tbrMainFirstPage.BackColor = System.Drawing.Color.Transparent;
-            this.tbrMainFirstPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08UP;
-            this.tbrMainFirstPage.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbrMainFirstPage.Name = "tbrMainFirstPage";
-            this.tbrMainFirstPage.Size = new System.Drawing.Size(60, 35);
-            this.tbrMainFirstPage.Text = "First";
-            this.tbrMainFirstPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainFirstPage.ToolTipText = "First Page";
-            // 
-            // tbrMainPreviousPage
-            // 
-            this.tbrMainPreviousPage.AutoSize = false;
-            this.tbrMainPreviousPage.BackColor = System.Drawing.Color.Transparent;
-            this.tbrMainPreviousPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08LT;
-            this.tbrMainPreviousPage.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbrMainPreviousPage.Name = "tbrMainPreviousPage";
-            this.tbrMainPreviousPage.Size = new System.Drawing.Size(60, 35);
-            this.tbrMainPreviousPage.Text = "Previous";
-            this.tbrMainPreviousPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainPreviousPage.ToolTipText = "First Page";
-            // 
-            // tbrMainNextPage
-            // 
-            this.tbrMainNextPage.AutoSize = false;
-            this.tbrMainNextPage.BackColor = System.Drawing.Color.Transparent;
-            this.tbrMainNextPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08RT;
-            this.tbrMainNextPage.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbrMainNextPage.Name = "tbrMainNextPage";
-            this.tbrMainNextPage.Size = new System.Drawing.Size(60, 35);
-            this.tbrMainNextPage.Text = "Next";
-            this.tbrMainNextPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainNextPage.ToolTipText = "First Page";
-            // 
-            // tbrMainLastPage
-            // 
-            this.tbrMainLastPage.AutoSize = false;
-            this.tbrMainLastPage.BackColor = System.Drawing.Color.Transparent;
-            this.tbrMainLastPage.Image = global::IGenFormsViewer.Properties.Resources.ARW08DN;
-            this.tbrMainLastPage.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbrMainLastPage.Name = "tbrMainLastPage";
-            this.tbrMainLastPage.Size = new System.Drawing.Size(60, 35);
-            this.tbrMainLastPage.Text = "Last";
-            this.tbrMainLastPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainLastPage.ToolTipText = "First Page";
-            // 
-            // tbrMainGotoPage
-            // 
-            this.tbrMainGotoPage.AutoSize = false;
-            this.tbrMainGotoPage.BackColor = System.Drawing.Color.Transparent;
-            this.tbrMainGotoPage.Image = global::IGenFormsViewer.Properties.Resources._goto;
-            this.tbrMainGotoPage.ImageTransparentColor = System.Drawing.Color.White;
-            this.tbrMainGotoPage.Name = "tbrMainGotoPage";
-            this.tbrMainGotoPage.Size = new System.Drawing.Size(60, 35);
-            this.tbrMainGotoPage.Text = "GoTo";
-            this.tbrMainGotoPage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainGotoPage.ToolTipText = "First Page";
+            this.mnuMainActionsPrepare.Name = "mnuMainActionsPrepare";
+            this.mnuMainActionsPrepare.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.mnuMainActionsPrepare.Size = new System.Drawing.Size(152, 22);
+            this.mnuMainActionsPrepare.Text = "&Prepare";
+            this.mnuMainActionsPrepare.Click += new System.EventHandler(this.mnuMainActionsPrepare_Click);
             // 
             // frmViewer
             // 
@@ -615,6 +645,9 @@
         private System.Windows.Forms.ToolStripMenuItem mnuMainExportToExcel;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripButton tbrMainGotoPage;
+        private System.Windows.Forms.ToolStripMenuItem mnuMainViewRefresh;
+        private System.Windows.Forms.ToolStripMenuItem mnuMainActions;
+        private System.Windows.Forms.ToolStripMenuItem mnuMainActionsPrepare;
     }
 }
 

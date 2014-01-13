@@ -418,6 +418,23 @@ namespace IGenFormsViewer
                 }
                 cboSchemas.Text = _defaultSchema;
 
+                // setup the variables
+                List<string> _variables = ConfigRoutines.GetSettingsByPrefix("variable");
+                dgvVariables.Rows.Clear();
+                if (_variables.Count > 0)
+                {
+                    for (int n = 0; n < _variables.Count; n++)
+                    {
+                        string[] _variable = _variables[n].Split(';');
+                        if (_variable.Length > 1)
+                        {
+                            // remove the prefix
+                            _variable[0] = _variable[0].ToUpper().Replace("VARIABLE_", "");
+                            dgvVariables.Rows.Add(new object[] { _variable[0], _variable[1] });
+                        }
+                    }
+                }
+
             }
             catch (Exception ex)
             {
@@ -517,6 +534,29 @@ namespace IGenFormsViewer
                 // default schema
                 ConfigRoutines.AddSetting("DefaultSchema", cboSchemas.Text.ToUpper());
 
+                // setup the variables
+                // delete the variables
+                ConfigRoutines.DeleteSettingByPrefix("Variable_");
+                for (int n = 0; n < dgvVariables.Rows.Count; n++)
+                {
+                    if (dgvVariables.Rows[n].Cells["VariableName"].Value != null)
+                    {
+                        string _variableName = dgvVariables.Rows[n].Cells["VariableName"].Value.ToString();
+                        if (_variableName != "")
+                        {
+                            _variableName = _variableName;
+                            string _variableValue = "";
+                            if (dgvVariables.Rows[n].Cells["VariableValue"].Value != null)
+                            {
+                                _variableValue = dgvVariables.Rows[n].Cells["VariableValue"].Value.ToString();
+                            }
+                            ConfigRoutines.AddSetting("Variable_" + _variableName, _variableValue);
+
+                            // update the csa variables
+                            CSA.AddProperty("CONFIG", _variableName, _variableValue);
+                        }
+                    }
+                }
 
                 //// write out the config file
                 ConfigRoutines.WriteConfigFile();

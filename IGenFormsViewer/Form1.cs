@@ -71,6 +71,10 @@ namespace IGenFormsViewer
             _interface.FormGroup = "SMF10 Supplier";
             _interface.FormFileName = "SMF10 Supplier.frm";
 
+            //_interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\USOil/AL";
+            //_interface.FormGroup = "Alabama Forms Group";
+            //_interface.FormFileName = "Supplier.frm";
+
 
             _interface.GenerateForms();
 

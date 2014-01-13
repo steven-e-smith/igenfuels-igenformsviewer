@@ -105,12 +105,13 @@ namespace IGenFormsViewer
                         if (orientation.ToUpper().IndexOf('L') == 0)
                         {
                             _pdfImagesPage.Orientation = PdfSharp.PageOrientation.Landscape;
+                            //_pdfImagesPage.Size = PdfSharp.PageSize.Legal;
                         }
                         else
                         {
                             _pdfImagesPage.Orientation = PdfSharp.PageOrientation.Portrait;
+                            //_pdfImagesPage.Size = PdfSharp.PageSize.A4;
                         }
-                        _pdfImagesPage.Size = PdfSharp.PageSize.A4;
                         XGraphics _pdfGraphics = XGraphics.FromPdfPage(_pdfImagesPage);
                         pdfImages.DrawPng(_pdfGraphics, 1, _image);
                     }

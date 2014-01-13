@@ -1160,62 +1160,67 @@ namespace IGenFormsViewer
                     if (_ds.sql != "")
                     {
                         // is this a WSTF table reference or a vw_WSTF view reference?
-                        _sql = _ds.sql;
-                        // get the table/view specified
-                        int _fromOffset = _sql.ToUpper().IndexOf(" FROM ");
-                        if (_fromOffset > 0)
+                        string _overrideSchema = ConfigRoutines.GetSetting("OverrideSchema").ToUpper();
+                        if (_overrideSchema.IndexOf('T') == 0)
                         {
-                            // is there a where clause?
-                            int _whereOffset = _sql.ToUpper().IndexOf(" WHERE ", _fromOffset);
-                            if (_whereOffset > 0)
+                            _sql = _ds.sql;
+                            // get the table/view specified
+                            int _fromOffset = _sql.ToUpper().IndexOf(" FROM ");
+                            if (_fromOffset > 0)
                             {
-                                _tableName = _sql.Substring(_fromOffset, _whereOffset - _fromOffset).Trim();
-                                // set a marker
-                                _sql = _sql.Substring(0, _fromOffset + 6) + "^" + _sql.Substring(_whereOffset);
-                            }
-                            else
-                            {
-                                _tableName = _sql.Substring(_fromOffset);
-                                _sql = _sql.Substring(0, _fromOffset + 6) + "^";
-                            }
-
-                            _tableName = _tableName.Substring(5).Trim();
-                            // is there a prefix on it?
-                            int _lastPeriod = _tableName.LastIndexOf('.');
-                            if (_lastPeriod > 0)
-                            {
-                                _schema = _tableName.Substring(0, _lastPeriod);
-                                if (_schema.ToUpper() == "DBO")
+                                // is there a where clause?
+                                int _whereOffset = _sql.ToUpper().IndexOf(" WHERE ", _fromOffset);
+                                if (_whereOffset > 0)
                                 {
-                                    _tableName = _tableName.Substring(_lastPeriod + 1);
-                                    _schema = _useSchema;
+                                    _tableName = _sql.Substring(_fromOffset, _whereOffset - _fromOffset).Trim();
+                                    // set a marker
+                                    _sql = _sql.Substring(0, _fromOffset + 6) + "^" + _sql.Substring(_whereOffset);
                                 }
                                 else
                                 {
-                                    _schema = "";
+                                    _tableName = _sql.Substring(_fromOffset);
+                                    _sql = _sql.Substring(0, _fromOffset + 6) + "^";
                                 }
-                            }
-                            else
-                            {
-                                if (_tableName.ToUpper().IndexOf("WSTF") >= 0)
+
+                                _tableName = _tableName.Substring(5).Trim();
+                                // is there a prefix on it?
+                                int _lastPeriod = _tableName.LastIndexOf('.');
+                                if (_lastPeriod > 0)
                                 {
-                                    _schema = _useSchema;
+                                    _schema = _tableName.Substring(0, _lastPeriod);
+                                    if (_schema.ToUpper() == "DBO")
+                                    {
+                                        _tableName = _tableName.Substring(_lastPeriod + 1);
+                                        _schema = _useSchema;
+                                    }
+                                    else
+                                    {
+                                        _schema = "";
+                                    }
                                 }
-                            }
-
-                            if (_schema != "")
-                            {
-                                if (_tableName.ToUpper().IndexOf("WSTF") >= 0)
+                                else
                                 {
-                                    _tableName = "[" + _useSchema + "]." + _tableName;
+                                    if (_tableName.ToUpper().IndexOf("WSTF") >= 0)
+                                    {
+                                        _schema = _useSchema;
+                                    }
                                 }
+
+                                if (_schema != "")
+                                {
+                                    if (_tableName.ToUpper().IndexOf("WSTF") >= 0)
+                                    {
+                                        _tableName = "[" + _useSchema + "]." + _tableName;
+                                    }
+                                }
+
+                                // replace the table
+                                _sql = _sql.Replace("^", _tableName).Replace("..", ".");
+
+                                _ds.sql = _sql;
                             }
-
-                            // replace the table
-                            _sql = _sql.Replace("^", _tableName).Replace("..",".");
-
-                            _ds.sql = _sql;
                         }
+
                         // get the fields from the sql
                         string[] _fieldNames = DatabaseRoutines.GetSQLFields(_ds.sql);
                         _ds.fieldNames = _fieldNames;
@@ -3017,6 +3022,8 @@ namespace IGenFormsViewer
                     {
                         _field.value = _field.originalValue.Trim();
                     }
+
+                    _form.formFields.fields[m] = _field;
                 }
 
                 if (_form != null && displayForm)
@@ -6502,6 +6509,9 @@ namespace IGenFormsViewer
                 {
                     string _sql = "Select count(*) " + sql.Substring(_fromOffset);
 
+                    // resolve symbolics 
+                    _sql = IGenFormCommonRoutines.ResolveSymbolics(_sql);
+
                     // check for an order by
                     int _orderOffset = _sql.ToUpper().IndexOf(" ORDER BY ");
                     if (_orderOffset > 0)
@@ -6726,12 +6736,13 @@ namespace IGenFormsViewer
 
             try
             {
-                // see if there are page breaks specified and if so create the Order By 
+                // check for any symbolics in the sql
+                string _sql = IGenFormCommonRoutines.ResolveSymbolics(sql);
                 
                 IGenDataset _dataset = DatabaseRoutines.SelectCursor(DatabaseRoutines.MainConnection, 
                                 DatabaseRoutines.MainDBMS, 
                                 cursorName, 
-                                sql, 
+                                _sql, 
                                 true);
 
                 if (_dataset.currentPosition >= 0)

@@ -1319,6 +1319,7 @@ namespace IGenFormsViewer
                             break;
 
                         case "%TOTALPAGES%":
+                        case "%PAGES%":
                             _newValue = currentIGenForm.totalPages.ToString(); 
                             break;
 

@@ -22,7 +22,8 @@ namespace IGenFormsViewer
                             "1.1.6.1    SES     More on FB-13625 - Got the multi-dataset forms to page correctly and print correctly",
                             "                   FB-10417 - trimmed pageBreak field so it would match field name",
                             "                              Added capability to set DSEOF on a page break so the =DSEOF function would work",
-                            "1.1.6.2    SES     Fixed issues with paging and leaving last record off"
+                            "1.1.6.2    SES     Fixed issues with paging and leaving last record off",
+                            "1.1.6.3    SES     Added capability to add variables that can be used as %VARIABLENAME% in forms"
                         };
 
 
@@ -207,7 +208,7 @@ namespace IGenFormsViewer
             {
                 for (int n=0;n<properties.Count;n++)
                 {
-                    if (properties[n].parentName.ToUpper() == parent.ToUpper())
+                    if (properties[n].parentName.ToUpper() == parent.ToUpper() || parent.Trim() == "")
                     {
                         if (properties[n].propertyName.ToUpper() == name.ToUpper())
                         {
@@ -294,7 +295,7 @@ namespace IGenFormsViewer
             {
                 foreach (udtProperty _property in properties)
                 {
-                    if (_property.parentName.ToUpper() == parent.ToUpper())
+                    if (_property.parentName.ToUpper() == parent.ToUpper() || parent.Trim() == "")
                     {
                         if (_property.propertyName.ToUpper() == name.ToUpper())
                         {

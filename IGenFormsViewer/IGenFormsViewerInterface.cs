@@ -162,6 +162,20 @@ namespace IGenFormsViewer
             // load the config file
             ConfigRoutines.ReadConfigFile();
 
+            // load the variables from the configuration
+            List<string> _variables = ConfigRoutines.GetSettingsByPrefix("variable_");
+            for (int n = 0; n < _variables.Count; n++)
+            {
+                string[] _variable = _variables[n].Split(';');
+                if (_variable.Length > 1)
+                {
+                    // remove the prefix
+                    _variable[0] = _variable[0].ToUpper().Replace("VARIABLE_", "");
+                    CSA.AddProperty("CONFIG", _variable[0], _variable[1]);
+                }
+            }
+
+
             return;
 
         }

@@ -84,16 +84,16 @@ namespace IGenFormsViewer
                 _selectCheckBox.Width = 50;
                 dgvFormsToPrint.Columns.Add(_selectCheckBox);
 
-                dgvFormsToPrint.Columns.Add("FormTitle","Form");
-                dgvFormsToPrint.Columns["FormTitle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
                 dgvFormsToPrint.Columns.Add("Pages", "#Pages");
-                dgvFormsToPrint.Columns["Pages"].Width = 50;
+                dgvFormsToPrint.Columns["Pages"].Width = 90;
                 dgvFormsToPrint.Columns["Pages"].Visible = true;
 
+                dgvFormsToPrint.Columns.Add("FormTitle", "Form");
+                dgvFormsToPrint.Columns["FormTitle"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
                 dgvFormsToPrint.Columns.Add("FormName", "Form Name");
-                dgvFormsToPrint.Columns["FormName"].Width = 10;
-                dgvFormsToPrint.Columns["FormName"].Visible = false;
+                dgvFormsToPrint.Columns["FormName"].Width = 150;
+                dgvFormsToPrint.Columns["FormName"].Visible = true;
 
                 // fill in the rows
                 dgvFormsToPrint.Rows.Add(tabFormsToPrint.TabCount);
@@ -102,9 +102,9 @@ namespace IGenFormsViewer
                     PictureBox _pallet = (PictureBox)tabFormsToPrint.TabPages[n].Controls[0];
                     IGenForm _form = (IGenForm)_pallet.Tag;
                     dgvFormsToPrint.Rows[n].Cells["PrintForm"].Value = false;
-                    dgvFormsToPrint.Rows[n].Cells["FormName"].Value = _form.name;
                     dgvFormsToPrint.Rows[n].Cells["Pages"].Value = (_form.pages.Count == 0?1:_form.pages.Count);
                     dgvFormsToPrint.Rows[n].Cells["FormTitle"].Value = _form.title;
+                    dgvFormsToPrint.Rows[n].Cells["FormName"].Value = _form.name;
                 }
 
             }
@@ -129,6 +129,12 @@ namespace IGenFormsViewer
             {
                 tbrMainPrintStatus.Text = "Printing forms...";
 
+                //// make sure all changes have been made
+                //int _row = dgvFormsToPrint.CurrentCell.RowIndex;
+                //int _col = dgvFormsToPrint.CurrentCell.ColumnIndex;
+//                dgvFormsToPrint.UpdateCellValue(_row, _col);
+                dgvFormsToPrint.EndEdit();
+
                 // do they want to save to a file?
                 string _printerSelected = cboPrinterSelected.Text;
 
@@ -152,7 +158,7 @@ namespace IGenFormsViewer
                                 string _formName = dgvFormsToPrint.Rows[n].Cells["FormName"].Value.ToString();
                                 string _formTitle = dgvFormsToPrint.Rows[n].Cells["FormTitle"].Value.ToString();
 
-                                TabPage _tabPage = tabFormsToPrint.TabPages[_formName];
+                                TabPage _tabPage = tabFormsToPrint.TabPages[n];
                                 if (_tabPage != null)
                                 {
                                     #region [Print Form]
@@ -161,6 +167,12 @@ namespace IGenFormsViewer
                                     IGenForm _form = (IGenForm)_pallet.Tag;
                                     string _printOrientation = _form.printOrientation;
                                     int _totalPages = _form.totalPages;
+                                    if (_totalPages < 1)
+                                    {
+                                        _totalPages = 1;
+                                    }
+
+                                    _totalPages = 1;
 
                                     bool _keepPrinting = true;
 
@@ -174,7 +186,9 @@ namespace IGenFormsViewer
 
                                         }
 
-                                        tbrMainPrintStatus.Text = "Printing form " + _formName + " page " + (_pageNo + 1) + " of " + _totalPages;
+                                        _form.currentPage = _pageNo + 1;
+
+                                        tbrMainPrintStatus.Text = "Printing form " + _formTitle + " (" + _formName + ")  page " + (_pageNo + 1) + " of " + _totalPages;
 
                                         // get the page for the form
                                         #region [Increment Pages]
@@ -237,7 +251,7 @@ namespace IGenFormsViewer
                                         else
                                         {
                                             // create the image
-                                            Image _image = CommonRoutines.GenerateBitmapFromPallet(_pallet, "");
+                                            Image _image = CommonRoutines.GenerateBitmapFromPallet(_pallet, "",_form.printOrientation);
                                             _pdfPrinter.PrintPDFPage(new Image[] { _image }, _printOrientation);
                                         }
 

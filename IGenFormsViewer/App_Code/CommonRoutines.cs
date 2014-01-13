@@ -40,8 +40,8 @@ namespace IGenFormsViewer
         public static string errorStatus = "";
         public static string errorMessages = "";
         public static string sortMethod = "D";
-        public static Size portraitSize = new Size(900, 1200);
-        public static Size landscapeSize = new Size(1200, 900);
+        public static Size portraitSize = new Size(816, 1056);
+        public static Size landscapeSize = new Size(1056, 816);
         public static string lastPath = "";
         public static string currentPath = AppDomain.CurrentDomain.BaseDirectory;
         public static string currentFormsPath = CommonRoutines.currentPath + "formfiles";
@@ -2348,6 +2348,35 @@ namespace IGenFormsViewer
 
 
 
+
+        /// <summary>
+        /// Image ResizeImage(Image image, Size size)
+        /// Resize the passed image to the new size specified
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static Image ResizeImage(Bitmap bitmap, Size size)
+        {
+            Image _newImage = null;
+
+            try
+            {
+                _newImage = ResizeImage((Image)bitmap, size);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".ResizeImage(Bitmap, Size) > " + ex.Message);
+            }
+
+            return _newImage;
+
+        }
+
+
+
+
+
         /// <summary>
         /// Image ResizeImage(Image image, Size size)
         /// Resize the passed image to the new size specified
@@ -2392,8 +2421,8 @@ namespace IGenFormsViewer
                     _percent = _percentWidth;
                 }
 
-                int destWidth = (int)(_sourceWidth * _percent);
-                int destHeight = (int)(_sourceHeight * _percent);
+                int destWidth = (int)(_sourceWidth * _percentWidth);
+                int destHeight = (int)(_sourceHeight * _percentHeight);
 
                 Bitmap b = new Bitmap(destWidth, destHeight);
                 Graphics g = Graphics.FromImage((Image)b);
@@ -2406,7 +2435,7 @@ namespace IGenFormsViewer
             }
             catch (Exception ex)
             {
-                CommonRoutines.Log("$E:" + moduleName + ".ResizeImage > " + ex.Message);
+                CommonRoutines.Log("$E:" + moduleName + ".ResizeImage(Image, Size) > " + ex.Message);
             }
 
             return _newImage;
@@ -3465,9 +3494,6 @@ namespace IGenFormsViewer
             {
                 if (results.Count > 0)
                 {
-                    grid.Rows.Clear();
-                    grid.Columns.Clear();
-
                     // first record should be the field names
                     string[] _fieldNames = results[0];
 
@@ -3489,6 +3515,15 @@ namespace IGenFormsViewer
                     grid.AutoResizeColumns();
 
                 }
+                else
+                {
+                    grid.Columns.Add("Message", "Message");
+                    grid.Columns["Message"].Width = grid.Width - 20;
+                    string[] _fields = { "No rows to display" };
+                    grid.Rows.Add(_fields);
+                }
+
+                grid.Refresh();
 
             }
             catch (Exception ex)
@@ -3663,7 +3698,7 @@ namespace IGenFormsViewer
 
             try
             {
-                _fileName = CreateBitmapFromPallet(pallet, title, "");
+                _fileName = CreateBitmapFromPallet(pallet, title, "P", "");
             }
             catch (Exception ex)
             {
@@ -3683,7 +3718,7 @@ namespace IGenFormsViewer
         /// <param name="pallet"></param>
         /// <param name="title"></param>
         /// <returns></returns>
-        public static string CreateBitmapFromPallet(PictureBox pallet, string title, string saveToFileName)
+        public static string CreateBitmapFromPallet(PictureBox pallet, string title, string orientation, string saveToFileName)
         {
             // get the image for the current form
             Bitmap _bitmap = null;
@@ -3706,7 +3741,7 @@ namespace IGenFormsViewer
 
             try
             {
-                _bitmap = GenerateBitmapFromPallet(pallet, title);
+                _bitmap = GenerateBitmapFromPallet(pallet, title, orientation);
 
                 if (_bitmap != null)
                 {
@@ -3737,13 +3772,13 @@ namespace IGenFormsViewer
 
 
 
-        public static Bitmap GenerateBitmapFromPallet(PictureBox pallet, string title)
+        public static Bitmap GenerateBitmapFromPallet(PictureBox pallet, string title, string orientation)
         {
             Bitmap _bitmap = null;
 
             try 
             {
-                _bitmap = GenerateBitmapFromPallet(pallet, title, false);
+                _bitmap = GenerateBitmapFromPallet(pallet, title, orientation, false);
             }
             catch (Exception ex)
             {
@@ -3765,7 +3800,7 @@ namespace IGenFormsViewer
         /// <param name="pallet"></param>
         /// <param name="title"></param>
         /// <returns></returns>
-        public static Bitmap GenerateBitmapFromPallet(PictureBox pallet, string title, bool labelsOpaque)
+        public static Bitmap GenerateBitmapFromPallet(PictureBox pallet, string title, string orientation, bool labelsOpaque)
         {
             // get the image for the current form
             Bitmap _bitmap = null;
@@ -3919,10 +3954,10 @@ namespace IGenFormsViewer
                                     _graphic.DrawRectangle(_opaquePen, objRect);
                                 }
 
-                                //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                                _graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                                 //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
-                                _graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-                                _graphic.TextContrast = 0;
+                                //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                                //_graphic.TextContrast = 0;
                                 _graphic.DrawString(_value, new Font(_font, _fontSize), Brushes.Black, objRect, objFormat);
                             }
                             break;
@@ -3936,12 +3971,25 @@ namespace IGenFormsViewer
                     _fontSize = (float)36;
                     _font = "Calibri";
                     _value = title;
-                    StringFormat objFormat = new StringFormat(StringFormatFlags.NoWrap);
+                    StringFormat objFormat = new StringFormat();
                     objFormat.Alignment = StringAlignment.Center;
                     Rectangle objRect = new Rectangle(0, 0, _maxWidth + _minWidth, _maxHeight + _minHeight);
                     _graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                     _graphic.DrawString(_value, new Font(_font, _fontSize), Brushes.Black, objRect, objFormat);
                 }
+
+                // does the image have to be resized?
+                Image _newImage = (Image)_bitmap;
+                if (orientation.ToUpper().IndexOf('P') == 0)
+                {
+                    _newImage = ResizeImage(_newImage, portraitSize);
+                }
+                else
+                {
+                    _newImage = ResizeImage(_newImage, landscapeSize);
+                }
+
+                _bitmap = (Bitmap)_newImage;
 
                 _createImage = true;
             }

@@ -14,6 +14,7 @@ namespace IGenFormsViewer
             public string value;
             public string originalValue;
             public string source;
+            public bool delete;
         }
 
         public static bool dbConfigSettingsFound = false;
@@ -74,6 +75,68 @@ namespace IGenFormsViewer
 
 
 
+        public static int DeleteSetting(string key)
+        {
+
+            try
+            {
+                if (configSettings.Count < 1)
+                {
+                    for (int n = 0; n < configSettings.Count; n++)
+                    {
+                        udtConfigSettings configSetting = configSettings[n];
+
+                        if (configSetting.key.ToUpper().Equals(key.ToUpper()))
+                        {
+                            // set the delete flag
+                            configSetting.delete = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".AddSetting > " + ex.Message);
+            }
+
+            return configSettings.Count;
+        }
+
+
+
+
+
+        public static int DeleteSettingByPrefix(string prefix)
+        {
+
+            try
+            {
+                if (configSettings.Count > 0)
+                {
+                    for (int n = 0; n < configSettings.Count; n++)
+                    {
+                        udtConfigSettings configSetting = configSettings[n];
+
+                        if (configSetting.key.ToUpper().IndexOf(prefix.ToUpper()) == 0)
+                        {
+                            // set the delete flag
+                            configSetting.delete = true;
+                            configSettings[n] = configSetting;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".AddSetting > " + ex.Message);
+            }
+
+            return configSettings.Count;
+        }
+
+
+
 
         /// <summary>
         /// int ReadConfigFile()
@@ -103,6 +166,8 @@ namespace IGenFormsViewer
 
                 // get the logged on user
                 string _userId = CommonRoutines.GetCurrentUser();
+                CSA.currentUser = CommonRoutines.GetCurrentUser();
+
                 // strip any prefix from the user
                 if (_userId.IndexOf('\\') > 0)
                 {
@@ -219,7 +284,7 @@ namespace IGenFormsViewer
                 if (DatabaseRoutines.TestConnection())
                 {
                     // load the rest of the configuration
-                    string _sql = "Select * From Config Where User_Id='" + CSA.currentUser + "' Order by Key_Name ";
+                    string _sql = "Select * From Config Where User_Id='" + CSA.currentUser + "' and Status='A' Order by Key_Name ";
                     List<string[]> _rows = DatabaseRoutines.Select(_sql);
                     if (_rows.Count > 1)
                     {
@@ -233,6 +298,13 @@ namespace IGenFormsViewer
                             _configSetting.originalValue = _configSetting.value;
                             _configSetting.source = "D";
                             configSettings.Add(_configSetting);
+                        
+                            // if a variable setting, add to the CSA properties
+                            if (_configSetting.key.ToUpper().IndexOf("VARIABLE_") == 0)
+                            {
+                                string _configKey = _configSetting.key.Substring(9);
+                                CSA.AddProperty("CONFIG",_configKey, _configSetting.value);
+                            }
                         }
                     }
                 }
@@ -251,7 +323,6 @@ namespace IGenFormsViewer
                     // save to the new user file name
                     WriteConfigFile();
                 }
-
 
             }
             catch (Exception ex)
@@ -347,6 +418,40 @@ namespace IGenFormsViewer
 
             return _value;
         }
+
+
+        public static List<string> GetSettingsByPrefix(string prefix)
+        {
+            List<string> _settings = new List<string>();
+
+            try
+            {
+                if (configSettings.Count < 1)
+                {
+                    // load the config file
+                    ConfigRoutines.ReadConfigFile();
+                }
+
+                for (int n = 0; n < configSettings.Count; n++)
+                {
+                    udtConfigSettings configSetting = configSettings[n];
+
+                    if (configSetting.key.ToUpper().IndexOf(prefix.ToUpper()) == 0)
+                    {
+                        _settings.Add(configSetting.key + ";" + configSetting.value);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".GetSettingsByPrefix(s) > " + ex.Message);
+            }
+
+            return _settings;
+        }
+
+
 
 
 
@@ -556,13 +661,31 @@ namespace IGenFormsViewer
                     {
                         if (configSettings[m].source == "D")
                         {
-                            // try to update it, if it is not there then insert it
-                            string _sql = "Update Config " +
-                                            "Set Key_Value='" + configSettings[m].value.Replace("'", "''") + "' " +
-                                            "Where User_Id='" + CSA.currentUser + "' and " +
-                                            "      Key_Name='" + configSettings[m].key + "' ";
+                            string _sql = "";
+                            int _rowsAffected = 0;
 
-                            int _rowsAffected = DatabaseRoutines.Execute(_sql);
+                            // if deleted, then delete
+                            if (configSettings[m].delete)
+                            {
+                                _sql = "Delete From Config " +
+                                                "Where User_Id='" + CSA.currentUser + "' and " +
+                                                "      Key_Name='" + configSettings[m].key + "' ";
+                                _rowsAffected = DatabaseRoutines.Execute(_sql);
+                                if (_rowsAffected > 0)
+                                {
+                                    _rowsAffected = 0;
+                                }
+                            }
+                            else
+                            {
+                                // try to update it, if it is not there then insert it
+                                _sql = "Update Config " +
+                                                "Set Key_Value='" + configSettings[m].value.Replace("'", "''") + "', " +
+                                                "      Status='" + (configSettings[m].delete ? "D" : "A") + "' " +
+                                                "Where User_Id='" + CSA.currentUser + "' and " +
+                                                "      Key_Name='" + configSettings[m].key + "' ";
+                                _rowsAffected = DatabaseRoutines.Execute(_sql);
+                            }
 
                             if (_rowsAffected < 1)
                             {

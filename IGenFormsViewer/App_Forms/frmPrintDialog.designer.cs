@@ -39,9 +39,9 @@
             this.tbrMainClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.tbrMainPrintStatus = new System.Windows.Forms.ToolStripLabel();
             this.optPrintToPDF = new System.Windows.Forms.RadioButton();
             this.optPrintToPrinter = new System.Windows.Forms.RadioButton();
-            this.tbrMainPrintStatus = new System.Windows.Forms.ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFormsToPrint)).BeginInit();
             this.tbrMain.SuspendLayout();
             this.SuspendLayout();
@@ -51,15 +51,16 @@
             this.cboPrinterSelected.Enabled = false;
             this.cboPrinterSelected.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboPrinterSelected.FormattingEnabled = true;
-            this.cboPrinterSelected.Location = new System.Drawing.Point(149, 81);
+            this.cboPrinterSelected.Location = new System.Drawing.Point(301, 53);
             this.cboPrinterSelected.Name = "cboPrinterSelected";
             this.cboPrinterSelected.Size = new System.Drawing.Size(379, 26);
             this.cboPrinterSelected.TabIndex = 2;
+            this.cboPrinterSelected.Visible = false;
             // 
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(16, 117);
+            this.label2.Location = new System.Drawing.Point(16, 86);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(190, 23);
             this.label2.TabIndex = 3;
@@ -69,7 +70,7 @@
             // 
             this.chkPrintAll.AutoSize = true;
             this.chkPrintAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkPrintAll.Location = new System.Drawing.Point(25, 145);
+            this.chkPrintAll.Location = new System.Drawing.Point(25, 114);
             this.chkPrintAll.Name = "chkPrintAll";
             this.chkPrintAll.Size = new System.Drawing.Size(75, 22);
             this.chkPrintAll.TabIndex = 4;
@@ -80,9 +81,9 @@
             // dgvFormsToPrint
             // 
             this.dgvFormsToPrint.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvFormsToPrint.Location = new System.Drawing.Point(22, 171);
+            this.dgvFormsToPrint.Location = new System.Drawing.Point(22, 142);
             this.dgvFormsToPrint.Name = "dgvFormsToPrint";
-            this.dgvFormsToPrint.Size = new System.Drawing.Size(511, 367);
+            this.dgvFormsToPrint.Size = new System.Drawing.Size(901, 396);
             this.dgvFormsToPrint.TabIndex = 5;
             // 
             // tbrMain
@@ -98,7 +99,7 @@
             this.tbrMainPrintStatus});
             this.tbrMain.Location = new System.Drawing.Point(0, 0);
             this.tbrMain.Name = "tbrMain";
-            this.tbrMain.Size = new System.Drawing.Size(560, 38);
+            this.tbrMain.Size = new System.Drawing.Size(946, 38);
             this.tbrMain.TabIndex = 54;
             this.tbrMain.Text = "toolStrip1";
             // 
@@ -140,6 +141,13 @@
             this.toolStripLabel2.Name = "toolStripLabel2";
             this.toolStripLabel2.Size = new System.Drawing.Size(50, 35);
             // 
+            // tbrMainPrintStatus
+            // 
+            this.tbrMainPrintStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbrMainPrintStatus.ForeColor = System.Drawing.Color.Blue;
+            this.tbrMainPrintStatus.Name = "tbrMainPrintStatus";
+            this.tbrMainPrintStatus.Size = new System.Drawing.Size(0, 35);
+            // 
             // optPrintToPDF
             // 
             this.optPrintToPDF.AutoSize = true;
@@ -157,25 +165,19 @@
             // 
             this.optPrintToPrinter.AutoSize = true;
             this.optPrintToPrinter.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optPrintToPrinter.Location = new System.Drawing.Point(19, 82);
+            this.optPrintToPrinter.Location = new System.Drawing.Point(171, 54);
             this.optPrintToPrinter.Name = "optPrintToPrinter";
             this.optPrintToPrinter.Size = new System.Drawing.Size(124, 22);
             this.optPrintToPrinter.TabIndex = 57;
             this.optPrintToPrinter.Text = "Print to Printer:";
             this.optPrintToPrinter.UseVisualStyleBackColor = true;
-            // 
-            // tbrMainPrintStatus
-            // 
-            this.tbrMainPrintStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbrMainPrintStatus.ForeColor = System.Drawing.Color.Blue;
-            this.tbrMainPrintStatus.Name = "tbrMainPrintStatus";
-            this.tbrMainPrintStatus.Size = new System.Drawing.Size(0, 35);
+            this.optPrintToPrinter.Visible = false;
             // 
             // frmPrintDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(560, 550);
+            this.ClientSize = new System.Drawing.Size(946, 550);
             this.Controls.Add(this.optPrintToPrinter);
             this.Controls.Add(this.optPrintToPDF);
             this.Controls.Add(this.tbrMain);

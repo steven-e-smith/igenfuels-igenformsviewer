@@ -378,6 +378,8 @@ namespace IGenFormsViewer
 
                 if (initialDisplay)
                 {
+                    #region [Initial Time Starting]
+
                     // get the file name from the global one
                     //if (displayIGenForms.forms.Count == 0)
                     if (displayIGenForms.xmlRecs.Count == 0)
@@ -413,13 +415,14 @@ namespace IGenFormsViewer
                         displayIGenForms.LoadFormValues();
                     }
 
-                    // now process the form rules
-                    DisplayStatus("Processing form rules...");
-                    displayIGenForms.ProcessForms();
+                    //// now process the form rules
+                    //DisplayStatus("Processing form rules...");
+                    //displayIGenForms.ProcessForms();
 
                     // recreate the forms
                     DisplayStatus("Displaying form...");
                     displayIGenForms.DisplayForms(tabForms, true);
+                    #endregion
 
                 }
                 else
@@ -427,11 +430,22 @@ namespace IGenFormsViewer
                     DisplayStatus("Processing form rules...");
                     displayIGenForms.ProcessForms();
 
-                    for (int n=0;n<displayIGenForms.forms.Count;n++)
+                    for (int m = 0; m < tabForms.TabCount; m++)
                     {
-                        string _formName = displayIGenForms.forms[n].name;
-                        PictureBox _pallet = (PictureBox)tabForms.SelectedTab.Controls[0];
-                        displayIGenForms.RedisplaySelectedForm(_pallet, _formName);
+                        //tabForms.SelectedIndex = m;
+                        tabForms.SelectedTab = tabForms.TabPages[m];
+                        string _currentForm = tabForms.SelectedTab.Name;
+                        IGenForm _form = displayIGenForms.GetForm(_currentForm);
+
+                        if (_form.multiPageForm.ToUpper().IndexOf('T') == 0)
+                        {
+                            GotoPage(_form, 1);
+                        }
+                        else
+                        {
+                            PictureBox _pallet = (PictureBox)tabForms.SelectedTab.Controls[0];
+                            displayIGenForms.RedisplaySelectedForm(_pallet, _form.name,true);
+                        }
                     }
                 }
 
@@ -1218,7 +1232,34 @@ namespace IGenFormsViewer
 
 
 
+           
         private void GotoPage(int pageNo)
+        {
+
+            try
+            {
+                string _currentForm = tabForms.TabPages[tabForms.SelectedIndex].Name;
+
+                IGenForm _form = displayIGenForms.GetForm(_currentForm);
+
+                GotoPage(_form, pageNo);
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".GotoPage > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+    
+    
+    
+    
+    
+        private void GotoPage(IGenForm form, int pageNo)
         {
             int _pageNo = pageNo;
             // set the cursor
@@ -1229,9 +1270,7 @@ namespace IGenFormsViewer
 
                 this.Cursor = Cursors.WaitCursor;
 
-                string _currentForm = tabForms.TabPages[tabForms.SelectedIndex].Name;
-
-                IGenForm _form = displayIGenForms.GetForm(_currentForm);
+                IGenForm _form = form;
 
                 DisplayStatus("Paging form " + _form.name);
 
@@ -1718,6 +1757,94 @@ namespace IGenFormsViewer
             catch (Exception ex)
             {
                 CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainExportToExcel_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+        private void mnuMainToolsOptions_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                tbrMainOptions_Click(sender, e);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainToolsOptions_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+        private void mnuMainViewRefresh_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                RefreshForm();
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewRefresh_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+        private void RefreshForm()
+        {
+
+            try
+            {
+                // refresh the current form
+                string _currentForm = tabForms.TabPages[tabForms.SelectedIndex].Name;
+                PictureBox _pallet = (PictureBox)tabForms.SelectedTab.Controls[0];
+                displayIGenForms.RedisplaySelectedForm(_pallet, _currentForm);
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".RefreshForm > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+
+
+        private void mnuMainActionsPrepare_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                tbrMainRun_Click(sender, e);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainActionsPrepare_Click > " + ex.Message);
             }
 
             return;

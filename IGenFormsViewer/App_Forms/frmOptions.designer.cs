@@ -103,6 +103,10 @@
             this.dgvVariables = new System.Windows.Forms.DataGridView();
             this.VariableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.VariableValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPageSymbolics = new System.Windows.Forms.TabPage();
+            this.dgvSymbolics = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbrMain.SuspendLayout();
             this.tabPageIGenForms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumberOfDecimalPlaces)).BeginInit();
@@ -123,6 +127,8 @@
             this.tabOptions.SuspendLayout();
             this.tabPageVariables.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvVariables)).BeginInit();
+            this.tabPageSymbolics.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSymbolics)).BeginInit();
             this.SuspendLayout();
             // 
             // tbrMain
@@ -996,6 +1002,7 @@
             this.tabOptions.Controls.Add(this.tabPageSQLOptions);
             this.tabOptions.Controls.Add(this.tabPageIGenForms);
             this.tabOptions.Controls.Add(this.tabPageVariables);
+            this.tabOptions.Controls.Add(this.tabPageSymbolics);
             this.tabOptions.Location = new System.Drawing.Point(4, 63);
             this.tabOptions.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabOptions.Name = "tabOptions";
@@ -1036,6 +1043,40 @@
             this.VariableValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.VariableValue.HeaderText = "Value";
             this.VariableValue.Name = "VariableValue";
+            // 
+            // tabPageSymbolics
+            // 
+            this.tabPageSymbolics.Controls.Add(this.dgvSymbolics);
+            this.tabPageSymbolics.Location = new System.Drawing.Point(4, 26);
+            this.tabPageSymbolics.Name = "tabPageSymbolics";
+            this.tabPageSymbolics.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSymbolics.Size = new System.Drawing.Size(819, 462);
+            this.tabPageSymbolics.TabIndex = 8;
+            this.tabPageSymbolics.Text = "Symbolics";
+            this.tabPageSymbolics.UseVisualStyleBackColor = true;
+            // 
+            // dgvSymbolics
+            // 
+            this.dgvSymbolics.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSymbolics.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2});
+            this.dgvSymbolics.Location = new System.Drawing.Point(6, 6);
+            this.dgvSymbolics.Name = "dgvSymbolics";
+            this.dgvSymbolics.Size = new System.Drawing.Size(807, 450);
+            this.dgvSymbolics.TabIndex = 1;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "Name";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 200;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn2.HeaderText = "Value";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             // 
             // frmOptions
             // 
@@ -1084,6 +1125,8 @@
             this.tabOptions.ResumeLayout(false);
             this.tabPageVariables.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvVariables)).EndInit();
+            this.tabPageSymbolics.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSymbolics)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1165,6 +1208,10 @@
         private System.Windows.Forms.DataGridView dgvVariables;
         private System.Windows.Forms.DataGridViewTextBoxColumn VariableName;
         private System.Windows.Forms.DataGridViewTextBoxColumn VariableValue;
+        private System.Windows.Forms.TabPage tabPageSymbolics;
+        private System.Windows.Forms.DataGridView dgvSymbolics;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
 
     }
 }

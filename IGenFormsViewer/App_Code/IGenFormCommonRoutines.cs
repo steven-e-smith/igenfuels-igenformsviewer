@@ -32,6 +32,7 @@ namespace IGenFormsViewer
         public static Color[] _layerColors = { Color.White, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Indigo, Color.Violet };
         public static string[] _layerOrder = { "None", "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh" };
 
+        public static string[] symbolics = { "TODAY", "DATE", "MONTH", "YEAR", "DAY", "SOURCE", "ROW", "TOTALROWS", "PAGE", "PAGES", "TOTALPAGES", "RETURNID" };
 
         public static bool severeError = false;
         public static List<string> _processMessages = new List<string>();

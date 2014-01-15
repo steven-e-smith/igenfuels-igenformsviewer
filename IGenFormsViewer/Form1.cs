@@ -67,13 +67,17 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "South_Carolina_Tax";
             //_interface.FormFileName = "SC Supplier.frm";
 
-            _interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\IGen\\NJ\\SMF 10";
-            _interface.FormGroup = "SMF10 Supplier";
-            _interface.FormFileName = "SMF10 Supplier.frm";
+            //_interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\IGen\\NJ\\SMF 10";
+            //_interface.FormGroup = "SMF10 Supplier";
+            //_interface.FormFileName = "SMF10 Supplier.frm";
 
             //_interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\USOil/AL";
             //_interface.FormGroup = "Alabama Forms Group";
             //_interface.FormFileName = "Supplier.frm";
+
+            _interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\Good forms\\OH";
+            _interface.FormGroup = "Ohio_MF2";
+            _interface.FormFileName = "Ohio_MF2.frm";
 
 
             _interface.GenerateForms();

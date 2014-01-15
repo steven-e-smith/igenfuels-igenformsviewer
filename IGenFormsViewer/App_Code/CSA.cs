@@ -314,6 +314,35 @@ namespace IGenFormsViewer
         }
 
 
+
+        public static List<string[]> GetProperties(string parent)
+        {
+            List<string[]> _values = new List<string[]>();
+
+            try
+            {
+                foreach (udtProperty _property in properties)
+                {
+                    if (_property.parentName.ToUpper() == parent.ToUpper() || parent.Trim() == "")
+                    {
+                        string _propertyName = _property.parentName != "" ? _property.parentName + "." : "";
+                        _propertyName = _propertyName + _property.propertyName;
+                        string _propertyValue = _property.propertyValue;
+                        string[] _propertyPair = { _propertyName, _propertyValue };
+                        _values.Add(_propertyPair);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return _values;
+
+        }
+
+
+
         #endregion [Properties]
 
 

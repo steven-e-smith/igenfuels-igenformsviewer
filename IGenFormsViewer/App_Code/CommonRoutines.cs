@@ -3958,6 +3958,16 @@ namespace IGenFormsViewer
                                 //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
                                 //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
                                 //_graphic.TextContrast = 0;
+
+                                // see if any special processing on the value...
+                                switch (strType.ToUpper())
+                                {
+                                    case "CHECKBOX":
+                                        _value = _value.ToUpper().IndexOf("TRUE") == 0 ? "X" : "";
+                                        break;
+
+                                }
+
                                 _graphic.DrawString(_value, new Font(_font, _fontSize), Brushes.Black, objRect, objFormat);
                             }
                             break;

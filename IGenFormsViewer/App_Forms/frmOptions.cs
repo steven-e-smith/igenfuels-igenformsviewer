@@ -114,6 +114,16 @@ namespace IGenFormsViewer
                 // check some fields 
                 nudNumberOfDecimalPlaces.Left = lblNumberOfDecimalPlaces.Left + lblNumberOfDecimalPlaces.Width + 10;
 
+                tabOptions.SelectedTab = tabPageVariables;
+                dgvVariables.Width = tabPageVariables.Width - dgvVariables.Left - 20;
+                dgvVariables.Height = tabPageVariables.Height - dgvVariables.Top - 20;
+
+                tabOptions.SelectedTab = tabPageSymbolics;
+                dgvSymbolics.Width = tabPageSymbolics.Width - dgvSymbolics.Left - 20;
+                dgvSymbolics.Height = tabPageSymbolics.Height - dgvSymbolics.Top - 20;
+
+                tabOptions.SelectedIndex = 0;
+            
             }
             catch (Exception ex)
             {
@@ -418,22 +428,7 @@ namespace IGenFormsViewer
                 }
                 cboSchemas.Text = _defaultSchema;
 
-                // setup the variables
-                List<string> _variables = ConfigRoutines.GetSettingsByPrefix("variable");
-                dgvVariables.Rows.Clear();
-                if (_variables.Count > 0)
-                {
-                    for (int n = 0; n < _variables.Count; n++)
-                    {
-                        string[] _variable = _variables[n].Split(';');
-                        if (_variable.Length > 1)
-                        {
-                            // remove the prefix
-                            _variable[0] = _variable[0].ToUpper().Replace("VARIABLE_", "");
-                            dgvVariables.Rows.Add(new object[] { _variable[0], _variable[1] });
-                        }
-                    }
-                }
+                LoadVariablesSymbolics();
 
             }
             catch (Exception ex)
@@ -784,6 +779,9 @@ namespace IGenFormsViewer
             }
         }
         
+
+        
+        
         private void btnTestMainConnection_Click(object sender, EventArgs e)
         {
 
@@ -796,6 +794,60 @@ namespace IGenFormsViewer
                 CommonRoutines.DisplayErrorMessage("Main Connection is NOT valid.");
             }
         }
+
+
+
+        private void LoadVariablesSymbolics()
+        {
+
+            try
+            {
+                // setup the variables
+                List<string> _variables = ConfigRoutines.GetSettingsByPrefix("variable");
+                dgvVariables.Rows.Clear();
+                if (_variables.Count > 0)
+                {
+                    for (int n = 0; n < _variables.Count; n++)
+                    {
+                        string[] _variable = _variables[n].Split(';');
+                        if (_variable.Length > 1)
+                        {
+                            // remove the prefix
+                            _variable[0] = _variable[0].ToUpper().Replace("VARIABLE_", "");
+                            dgvVariables.Rows.Add(new object[] { _variable[0], _variable[1] });
+                        }
+                    }
+                }
+
+                // setup the symbolics
+                dgvSymbolics.Rows.Clear();
+                for (int n = 0; n < IGenFormCommonRoutines.symbolics.Length; n++)
+                {
+                    string _symbolicName = IGenFormCommonRoutines.symbolics[n];
+                    string _symbolicValue = IGenFormCommonRoutines.ResolveSymbolics("%" + _symbolicName + "%");
+                    dgvSymbolics.Rows.Add(new object[] { _symbolicName, _symbolicValue });
+                }
+
+                // now add in the properties bag
+                List<string[]> _properties = CSA.GetProperties("");
+                for (int n = 0; n < _properties.Count; n++)
+                {
+                    string[] _property = _properties[n];
+                    dgvSymbolics.Rows.Add(new object[] { _property[0], _property[1] });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".LoadVariablesSymbolics > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
 
 
 

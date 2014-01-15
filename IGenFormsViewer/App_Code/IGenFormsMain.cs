@@ -954,10 +954,15 @@ namespace IGenFormsViewer
                             case "VALUE":
                                 if (_fieldFlag)
                                 {
-                                    if (_field.type.ToUpper().IndexOf("CHECKBOX") >= 0)
+                                    // if it is not an expression
+                                    if (_tagValue.IndexOf('=') < 0)
                                     {
-                                        _field.value = "";
-                                        _field.checkedFlag = (_tagValue.ToUpper() == "TRUE") ? true : false;
+                                        if (_field.type.ToUpper().IndexOf("CHECKBOX") >= 0)
+                                        {
+                                            bool _checkValue = CommonRoutines.ConvertToBool(_tagValue);
+                                            _field.value = _checkValue.ToString();
+                                            _field.checkedFlag = _checkValue;
+                                        }
                                     }
                                     else
                                     {
@@ -3018,9 +3023,15 @@ namespace IGenFormsViewer
 
                     _field.text = IGenFormCommonRoutines.FormatValue(_value, _field.dataType);
 
-                    if (_field.type.ToUpper().IndexOf("BUTTON") >= 0)
+                    switch (_field.type.ToUpper())
                     {
-                        _field.value = _field.originalValue.Trim();
+                        case "BUTTON":
+                            _field.value = _field.originalValue.Trim();
+                            break;
+
+                        case "CHECKBOX":
+                            break;
+
                     }
 
                     _form.formFields.fields[m] = _field;
@@ -3037,6 +3048,22 @@ namespace IGenFormsViewer
                         if (_control.Tag != null && _control.Tag.GetType().Name.ToUpper().IndexOf("IGENFIELD") >= 0)
                         {
                             IGenField _field = (IGenField)_control.Tag;
+                            switch (_field.type.ToUpper())
+                            {
+                                case "CHECKBOX":
+                                    if (_control.GetType().Name.ToUpper().IndexOf("CHECKBOX") >= 0)
+                                    {
+                                        CheckBox _checkBox = (CheckBox)_control;
+                                        _checkBox.Checked = CommonRoutines.ConvertToBool(_field.text);
+                                    }
+                                    break;
+
+                                default:
+                                    _control.Text = _field.text;
+                                    break;
+
+                            }
+
                             _control.Text = _field.text;
                         }
                     }
@@ -4050,7 +4077,7 @@ namespace IGenFormsViewer
                 if (_wildcardChar == _prePattern.Length - 1)
                 {
                     // a pattern
-                    _prePattern = _prePattern.Substring(0, _wildcardChar - 1);
+                    _prePattern = _prePattern.Substring(0, _wildcardChar);
                 }
                 else
                 {
@@ -6759,9 +6786,16 @@ namespace IGenFormsViewer
                         if (this.dataTable.Rows.Count > 0)
                         {
                             List<string[]> _rows = GetRows(1);
-                            for (int n = 0; n < this.fieldNames.Length; n++)
+                            // first entry is the fields
+                            if (_rows.Count > 0)
                             {
-                                CSA.AddProperty("", this.fieldNames[n], _rows[1][n]);
+                                string[] _fieldNames = _rows[0];
+                                string[] _values = _rows[1];
+                                for (int n = 0; n < _fieldNames.Length; n++)
+                                {
+                                    CSA.AddProperty("DS", _fieldNames[n], _values[n]);
+
+                                }
                             }
                         }
                     }

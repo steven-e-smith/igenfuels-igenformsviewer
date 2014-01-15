@@ -172,8 +172,6 @@ namespace IGenFormsViewer
                                         _totalPages = 1;
                                     }
 
-                                    _totalPages = 1;
-
                                     bool _keepPrinting = true;
 
                                     int _pageNo = 0;

@@ -47,7 +47,9 @@ namespace IGenFormsViewer
         public bool visible = true;
 
         public bool compileFormsFlag = false;
-        
+
+        public List<string[]> formVariables = new List<string[]>();
+
         public List<string[]> dataset = new List<string[]>();
         public List<int> cursorOrdinals = new List<int>();
 
@@ -403,6 +405,9 @@ namespace IGenFormsViewer
             IGenField _field = null;
             IGenDataset _dataset = null;
             string _formGroupPath = "";
+            bool _variableFlag = false;
+            string _variableName = "";
+            string _variableValue = "";
 
             try
             {
@@ -500,6 +505,25 @@ namespace IGenFormsViewer
                                 break;
 
                             case "/RULE":
+                                break;
+
+                            case "VARIABLES":
+                                _variableFlag = true;
+                                break;
+
+                            case "/VARIABLES":
+                                _variableFlag = false;
+                                break;
+
+                            case "VARIABLE":
+                                break;
+
+                            case "/VARIABLE":
+                                // write the variable to the csa properties
+                                if (_variableName != "")
+                                {
+                                    formVariables.Add(new string[] { _variableName, _variableValue });
+                                }
                                 break;
 
                             case "/FIELD":
@@ -703,6 +727,13 @@ namespace IGenFormsViewer
                                         if (_datasetFlag)
                                         {
                                             _dataset.cursorName = _tagValue;
+                                        }
+                                        else
+                                        {
+                                            if (_variableFlag)
+                                            {
+                                                _variableName = _tagValue;
+                                            }
                                         }
                                     }
                                 }
@@ -973,7 +1004,10 @@ namespace IGenFormsViewer
                                 }
                                 else
                                 {
-
+                                    if (_variableFlag)
+                                    {
+                                        _variableValue = _tagValue;
+                                    }
                                 }
                                 break;
 

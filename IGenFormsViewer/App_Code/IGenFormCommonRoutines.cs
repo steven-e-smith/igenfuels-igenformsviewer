@@ -369,7 +369,8 @@ namespace IGenFormsViewer
                         else
                         {
                             _temp = _newField.text; // _newField.compiledValue.Trim();
-                            if (_temp.IndexOf(',') >= 0 && _temp.IndexOf("=SQL") < 0)
+                            if ((_temp.IndexOf(',') >= 0 || _temp.IndexOf('$') >= 0) &&
+                                        _temp.IndexOf("=SQL") < 0)
                             {
                                 switch (_fieldType)
                                 {
@@ -378,6 +379,7 @@ namespace IGenFormsViewer
                                     case "CURRENCY":
                                     case "INTEGER":
                                         _temp = _temp.Replace(",", "");
+                                        _temp = _temp.Replace("$", "");
                                         if (_temp == "")
                                         {
                                             _temp = "0";
@@ -460,6 +462,11 @@ namespace IGenFormsViewer
                 #endregion 
 
                 _value = _tempValue.ToUpper();
+
+                if (_field.name.ToUpper() == "1.1.6.A")
+                {
+                    int x = 0;
+                }
 
                 // check the value to see if there is nothing to do (operators but no values to operate on)
                 string _checkValue = _value;

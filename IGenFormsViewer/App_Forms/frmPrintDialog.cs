@@ -16,7 +16,7 @@ namespace IGenFormsViewer
         private string moduleName = "frmPrintDialog";
 
         TabControl tabFormsToPrint = new TabControl();
-
+        private int maxPages = 1;
 
         public frmPrintDialog(TabControl tabForms)
         {
@@ -170,6 +170,12 @@ namespace IGenFormsViewer
                                     if (_totalPages < 1)
                                     {
                                         _totalPages = 1;
+                                    }
+
+                                    if (_totalPages > maxPages)
+                                    {
+                                        _totalPages = maxPages;
+
                                     }
 
                                     bool _keepPrinting = true;

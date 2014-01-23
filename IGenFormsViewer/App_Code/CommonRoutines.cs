@@ -3816,7 +3816,7 @@ namespace IGenFormsViewer
             Pen _pen = new Pen(Brushes.Black);
             int _index = 0;
             bool _createImage = false;
-            string _defaultFont = "Microsoft Sans Serif";
+            string _defaultFont = "Arial";  // "Microsoft Sans Serif";
             int _printLeftOffset = 0;
             int _printTopOffset = 0;
 
@@ -3881,7 +3881,17 @@ namespace IGenFormsViewer
                     _bitmap = new Bitmap(_maxWidth + _minWidth, _maxHeight + _minHeight);
                 }
 
+                //int _newWidth = (int)(_bitmap.Width * _pctSizeX);
+                //int _newHeight = (int)(_bitmap.Height * _pctSizeY);
+                //_bitmap = (Bitmap)ResizeImage(_bitmap, new Size(_newWidth, _newHeight));
+                //_bitmap.SetResolution(140.0F, 120.0F);
+               
                 Graphics _graphic = Graphics.FromImage(_bitmap);
+                _graphic.SmoothingMode = SmoothingMode.AntiAlias;
+                _graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+                //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
+                //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                _graphic.TextContrast = 0;
 
                 // walk the controls and draw to the image
                 foreach (Control _control in pallet.Controls)
@@ -3914,14 +3924,14 @@ namespace IGenFormsViewer
                         default:
                             if (_igenFieldObject.visible)
                             {
-                                _fieldLeft = _control.Left + _printLeftOffset + _factorX;
-                                _fieldTop = _control.Top + _printTopOffset + _factorY;
-                                _fieldHeight = _control.Height + _factorY;
-                                _fieldWidth = _control.Width + _factorX;
-                                _fontSize = (float)_control.Font.Size;
-                                _font = _control.Font.Name;
+                                _fieldLeft = (_control.Left + _printLeftOffset + _factorX);
+                                _fieldTop = (_control.Top + _printTopOffset + _factorY);
+                                _fieldHeight = (_control.Height + _factorY);
+                                _fieldWidth = (_control.Width + _factorX);
+                                _fontSize = (float) (_control.Font.Size);
+                                _font = _defaultFont;  // _control.Font.Name;
                                 _value = _control.Text;
-                                StringFormat objFormat = new StringFormat(StringFormatFlags.NoWrap);
+                                StringFormat objFormat = new StringFormat(); // (StringFormatFlags.NoWrap);
                                 objFormat.Alignment = StringAlignment.Near;
                                 Rectangle objRect = new Rectangle((int)_fieldLeft, (int)_fieldTop, (int)_fieldWidth, (int)_fieldHeight);
 
@@ -3954,11 +3964,6 @@ namespace IGenFormsViewer
                                     _graphic.DrawRectangle(_opaquePen, objRect);
                                 }
 
-                                _graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-                                //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
-                                //_graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-                                //_graphic.TextContrast = 0;
-
                                 // see if any special processing on the value...
                                 switch (strType.ToUpper())
                                 {
@@ -3979,7 +3984,7 @@ namespace IGenFormsViewer
                 {
                     // write the name of the pallet at the top
                     _fontSize = (float)36;
-                    _font = "Calibri";
+                    _font = "Arial";
                     _value = title;
                     StringFormat objFormat = new StringFormat();
                     objFormat.Alignment = StringAlignment.Center;
@@ -3989,17 +3994,17 @@ namespace IGenFormsViewer
                 }
 
                 // does the image have to be resized?
-                Image _newImage = (Image)_bitmap;
-                if (orientation.ToUpper().IndexOf('P') == 0)
-                {
-                    _newImage = ResizeImage(_newImage, portraitSize);
-                }
-                else
-                {
-                    _newImage = ResizeImage(_newImage, landscapeSize);
-                }
+                //Image _newImage = (Image)_bitmap;
+                //if (orientation.ToUpper().IndexOf('P') == 0)
+                //{
+                //    _newImage = ResizeImage(_newImage, portraitSize);
+                //}
+                //else
+                //{
+                //    _newImage = ResizeImage(_newImage, landscapeSize);
+                //}
 
-                _bitmap = (Bitmap)_newImage;
+                //_bitmap = (Bitmap)_newImage;
 
                 _createImage = true;
             }

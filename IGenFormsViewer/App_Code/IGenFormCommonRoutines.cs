@@ -490,6 +490,11 @@ namespace IGenFormsViewer
                     int _startIndex = 0;
                     int _endIndex = 0;
 
+                    if (_field.name.ToUpper() == "TOTAL_GROSS_GALLONS")
+                    {
+                        int xyz = 0;
+                    }
+
                     #region [Config]
 
                     // Config value?
@@ -702,6 +707,96 @@ namespace IGenFormsViewer
 
                     #endregion 
 
+                    #region [Process DSSUMFIELD requests]
+
+                    // note:  change to loop to find all references
+                    // Form dataset field?
+                    if (_value.ToUpper().IndexOf("DSSUMFIELD(") >= 0)
+                    {
+                        //_form = currentIGenForm;
+                        if (_form != null)
+                        {
+                            _formName = _form.name;
+
+                            while (_value.ToUpper().IndexOf("DSSUMFIELD(") >= 0)
+                            {
+                                int _startOffset = _value.ToUpper().IndexOf("DSSUMFIELD(");
+                                if (_startOffset >= 0)
+                                {
+                                    string _ds = _value.Substring(_startOffset);
+                                    // find the end
+                                    int _endOffset = _ds.IndexOf(')');
+                                    if (_endOffset > 0)
+                                    {
+                                        // next byte may be a :
+                                        if (_ds.Length > (_endOffset + 1))
+                                        {
+                                            if (_ds.Substring(_endOffset + 1, 1) == ":")
+                                            {
+                                                // find the next non numeric or end of the line 
+                                                _endOffset = _endOffset + 2;
+                                                while (_endOffset < _ds.Length)
+                                                {
+                                                    if (CommonRoutines.IsNumeric(_ds.Substring(_endOffset, 1)))
+                                                    {
+                                                        _endOffset = _endOffset + 1;
+                                                    }
+                                                    else
+                                                    {
+                                                        _endOffset = _endOffset - 1;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        if (_endOffset < _ds.Length)
+                                        {
+                                            _ds = _ds.Substring(0, _endOffset + 1);
+                                        }
+
+                                        int _dsOrdinal = -1;
+                                        string _tempDs = _ds.Substring("DSSUMFIELD(".Length).Replace(")", "");
+                                        string[] _parts = _tempDs.Split(':');
+                                        if (_parts.Length > 1)
+                                        {
+                                            _dsOrdinal = CommonRoutines.ConvertToInt(_parts[0]);
+
+                                            if (_dsOrdinal >= 0)
+                                            {
+                                                _fieldName = _parts[1];
+                                            }
+
+                                            string _dsValue = "";
+                                            if (_dsOrdinal >= 0)
+                                            {
+                                                _dsValue = igenForms.SumDatasetField(_dsOrdinal, _fieldName);
+                                            }
+
+                                            // if the field is a numeric and it is blank, then make it a 0
+                                            if (_dsValue.Trim() == "")
+                                            {
+                                                if (_field.dataType.ToUpper() == "NUMERIC" ||
+                                                        _field.dataType.ToUpper() == "CURRENCY" ||
+                                                        _field.dataType.ToUpper() == "DECIMAL")
+                                                {
+                                                    _dsValue = "0.00";
+                                                }
+                                            }
+                                            _value = _value.Replace(_ds, _dsValue);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            _value = "DSErr";
+                        }
+                    }
+
+                    #endregion
+
                     #region [Process DSLOOKUP requests]
 
                     // Form dataset find field?
@@ -794,7 +889,7 @@ namespace IGenFormsViewer
                                 string _x = "";
                             }
                             // get the sql statement parsed out
-                            int _startParen = _startIndex + 3;
+                            int _startParen = _startIndex + "SQL".Length;
                             int _endParen = _tempValue.Length;
                             int _pairCount = 0;
                             for (int j = _startParen; j < _tempValue.Length; j++)
@@ -894,6 +989,139 @@ namespace IGenFormsViewer
                     }
 
                     #endregion 
+
+                    #region [Process ONLASTPAGE requests]
+
+                    // Form dataset find field?
+                    if (_value.ToUpper().IndexOf("ONLASTPAGE(") >= 0)
+                    {
+                        // format is =DSEOF(ds, criteria, true, false)
+                        int _startOffset = _value.ToUpper().IndexOf("ONLASTPAGE(");
+                        if (_startOffset >= 0)
+                        {
+                            string _dseofValue = _value.Substring(_startOffset + "ONLASTPAGE(".Length);
+                            // find the end
+                            int _endOffset = _dseofValue.LastIndexOf(')');
+                            if (_endOffset > 0)
+                            {
+
+                                if (_endOffset < _dseofValue.Length)
+                                {
+                                    // get the parms
+                                    _dseofValue = _dseofValue.Substring(0, _endOffset);
+
+                                    // split the parms
+                                    string[] _parms = _dseofValue.Split(',');
+
+                                    if (_parms.Length == 2)
+                                    {
+                                        string _dseofOrdinal = _parms[0];
+                                        string _dseofCriteria = _parms[1];
+
+                                        // strip off the field ordinal
+                                        int _colonIndex = _dseofOrdinal.IndexOf(':');
+                                        if (_colonIndex > 0)
+                                        {
+                                            _dseofOrdinal = _dseofOrdinal.Substring(0, _colonIndex);
+                                        }
+
+                                        int _ordinal = CommonRoutines.ConvertToInt(_dseofOrdinal);
+                                        if (_ordinal >= 0)
+                                        {
+                                            IGenDataset _dseofDS = currentIGenForms.datasets[_ordinal];
+                                            if (_dseofDS.eof)
+                                            {
+                                                // set the value = criteria
+                                                _value = _dseofCriteria;
+                                            }
+                                            else
+                                            {
+                                                _value = "";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // check to see if at the end of the forms pages
+                                            if (_form.currentPage < _form.totalPages)
+                                            {
+                                                _value = "";
+                                            }
+                                            else 
+                                            {
+                                                _value = _dseofCriteria;
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            _value = "ONLASTPAGE Error";
+                        }
+                    }
+
+                    #endregion
+
+                    #region [Process ONPAGEBREAK requests]
+
+                    // Form dataset find field?
+                    if (_value.ToUpper().IndexOf("ONPAGEBREAK(") >= 0)
+                    {
+                        // format is =DSEOF(ds, criteria, true, false)
+                        int _startOffset = _value.ToUpper().IndexOf("ONPAGEBREAK(");
+                        if (_startOffset >= 0)
+                        {
+                            string _onpagebreakValue = _value.Substring(_startOffset + "ONPAGEBREAK(".Length);
+                            // find the end
+                            int _endOffset = _onpagebreakValue.LastIndexOf(')');
+                            if (_endOffset > 0)
+                            {
+
+                                if (_endOffset < _onpagebreakValue.Length)
+                                {
+                                    // get the parms
+                                    _onpagebreakValue = _onpagebreakValue.Substring(0, _endOffset);
+
+                                    // split the parms
+                                    string[] _parms = _onpagebreakValue.Split(',');
+
+                                    if (_parms.Length == 2)
+                                    {
+                                        string _dseofOrdinal = _parms[0];
+                                        string _dseofCriteria = _parms[1];
+
+                                        // strip off the field ordinal
+                                        int _colonIndex = _dseofOrdinal.IndexOf(':');
+                                        if (_colonIndex > 0)
+                                        {
+                                            _dseofOrdinal = _dseofOrdinal.Substring(0, _colonIndex);
+                                        }
+
+                                        int _ordinal = CommonRoutines.ConvertToInt(_dseofOrdinal);
+                                        IGenDataset _dseofDS = currentIGenForms.datasets[_ordinal];
+                                        if (_dseofDS.pageBreak)
+                                        {
+                                            // set the value = criteria
+                                            _value = _dseofCriteria;
+                                        }
+                                        else
+                                        {
+                                            _value = "";
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            _value = "ONLASTPAGE Error";
+                        }
+                    }
+
+                    #endregion
 
                     #region [Process MATH requests]
 

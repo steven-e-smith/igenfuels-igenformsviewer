@@ -57,31 +57,46 @@ namespace IGenFormsViewer
             _interface.BaseConnectionDBMS = ConfigRoutines.GetSetting("BaseDBMS");
             _interface.ConnectionString = ConfigRoutines.GetSetting("MainConnection");
             _interface.ConnectionDBMS = ConfigRoutines.GetSetting("MainDBMS");
+            _interface.FormFilesFolder = CommonRoutines.currentFormsPath;
             _interface.FormImagesFolder = CommonRoutines.currentFormImagesPath;
 
-            //_interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\USOil/NY/PT100-102";
-            //_interface.FormGroup = "PT100-102";
-            //_interface.FormFileName = "PT100-102.frm";
+            string _formFileFolder = ConfigRoutines.GetSetting("FormsFolder");
+            if (_formFileFolder != "")
+            {
+                _interface.FormFilesFolder = _formFileFolder;
+            }
+            
 
-            //_interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\USOil/SC";
+            string _formFileImageFolder = ConfigRoutines.GetSetting("FormImagesFolder");
+            if (_formFileImageFolder != "")
+            {
+                _interface.FormImagesFolder = _formFileImageFolder;
+            }
+
+            _interface.FormFilesFolder = _interface.FormFilesFolder + "/Good forms/NY";
+            _interface.FormGroup = "PT100-102";
+            _interface.FormFileName = "PT100-102-TEST.frm";
+
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil/SC";
             //_interface.FormGroup = "South_Carolina_Tax";
             //_interface.FormFileName = "SC Supplier.frm";
 
-            //_interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\IGen\\NJ\\SMF 10";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\IGen\\NJ\\SMF 10";
             //_interface.FormGroup = "SMF10 Supplier";
             //_interface.FormFileName = "SMF10 Supplier.frm";
 
-            _interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\Good Forms/AL";
-            _interface.FormGroup = "Alabama Forms Group";
-            _interface.FormFileName = "Supplier.frm";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms/AL";
+            //_interface.FormGroup = "Alabama Forms Group";
+            //_interface.FormFileName = "Supplier.frm";
 
-            //_interface.FormFilesFolder = CommonRoutines.currentFormsPath + "\\Good forms\\OH";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good forms\\OH";
             //_interface.FormGroup = "Ohio_MF2";
             //_interface.FormFileName = "Ohio_MF2.frm";
 
 
             _interface.GenerateForms();
 
+            this.Close();
         }
 
 

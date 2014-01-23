@@ -1319,11 +1319,14 @@ namespace IGenFormsViewer
                                 // get the starting and ending values 
                                 int _startingRow = _form.pages[_pageNo].startingRow;
                                 int _endingRow = _form.pages[_pageNo].endingRow;
+                                bool _pageBreak = _form.pages[_pageNo].pageBreak;
                                 int _numRows = _endingRow - _startingRow + 1;
 
                                 tbrMainPageNo.Text = _form.currentPage.ToString();
                                 tbrMainTotalPages.Text = _form.totalPages.ToString();
                                 Application.DoEvents();
+
+                                _ds.pageBreak = false;
 
                                 // see if there are any rows...
                                 if (_ds.numRows > 0)
@@ -1334,6 +1337,8 @@ namespace IGenFormsViewer
                                     List<string[]> _results = _ds.GetRows(_startingRow, _numRows);
 
                                     _ds.results = _results;
+
+                                    _ds.pageBreak = _pageBreak;
 
                                     _form.dataset.results = _results;
 
@@ -1347,11 +1352,32 @@ namespace IGenFormsViewer
                                     }
                                 }
 
+                                // if this is the last page for this dataset, then set the eof flag
+                                if (_pageNo == (_form.pages.Count - 1))
+                                {
+                                    _ds.eof = true;
+                                    _ds.bof = false;
+                                }
+                                else
+                                {
+                                    if (_pageNo == 0)
+                                    {
+                                        _ds.eof = false;
+                                        _ds.bof = true;
+                                    }
+                                    else
+                                    {
+                                        _ds.eof = false;
+                                        _ds.bof = false;
+                                    }
+                                }
                                 //DisplayStatus("S=" + _startingRow + ", E=" + _endingRow + ", N=" + _numRows);
                             }
                             else
                             {
                                 // clear out the result set of this dataset
+                                _ds.eof = false;
+                                _ds.bof = false;
                                 _ds.results.Clear();
                                 _form.dataset.results.Clear();
                             }

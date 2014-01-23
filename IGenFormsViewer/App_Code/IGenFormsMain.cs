@@ -1568,6 +1568,51 @@ namespace IGenFormsViewer
                                     }
                                     #endregion [Check for DS(]
 
+                                    #region [Check for DSSUMFIELD(]
+
+                                    if (_value.ToUpper().IndexOf("DSSUMFIELD(") >= 0)
+                                    {
+                                        // replace the compiled value
+                                        _field = _form.formFields.fields[m];
+                                        //_value = _field.value;
+                                        _value = ResolveDS(_form.datasetName, _field, _value, "DSSUMFIELD(");
+                                        _field.compiledValue = _value;
+                                        _field.text = "";
+                                        _form.formFields.fields[m] = _field;
+                                        _keepChecking = false;
+                                    }
+                                    #endregion [Check for DSSUMFIELD(]
+
+                                    #region [Check for DSBOF(]
+
+                                    if (_value.ToUpper().IndexOf("DSBOF(") >= 0)
+                                    {
+                                        // replace the compiled value
+                                        _field = _form.formFields.fields[m];
+                                        //_value = _field.value;
+                                        _value = ResolveDS(_form.datasetName, _field, _value, "DSBOF(");
+                                        _field.compiledValue = _value;
+                                        _field.text = "";
+                                        _form.formFields.fields[m] = _field;
+                                        _keepChecking = false;
+                                    }
+                                    #endregion [Check for DSEOF(]
+
+                                    #region [Check for DSEOF(]
+
+                                    if (_value.ToUpper().IndexOf("DSEOF(") >= 0)
+                                    {
+                                        // replace the compiled value
+                                        _field = _form.formFields.fields[m];
+                                        //_value = _field.value;
+                                        _value = ResolveDS(_form.datasetName, _field, _value, "DSEOF(");
+                                        _field.compiledValue = _value;
+                                        _field.text = "";
+                                        _form.formFields.fields[m] = _field;
+                                        _keepChecking = false;
+                                    }
+                                    #endregion [Check for DSEOF(]
+
                                     #region [Check for DSLOOKUP(]
 
                                     if (_value.ToUpper().IndexOf("DSLOOKUP(") >= 0)
@@ -1584,21 +1629,36 @@ namespace IGenFormsViewer
                                     }
                                     #endregion [Check for DSLOOKUP(]
 
-                                    #region [Check for PAGEBREAK(]
+                                    #region [Check for ONLASTPAGE(]
 
-                                    if (_value.ToUpper().IndexOf("PAGEBREAK(") >= 0)
+                                    if (_value.ToUpper().IndexOf("ONLASTPAGE(") >= 0)
                                     {
-                                        // syntax:  PAGEBREAK(dsname|dsordinal!, true stmt, false stmt>
                                         // replace the compiled value
                                         _field = _form.formFields.fields[m];
                                         //_value = _field.value;
-                                        _value = ResolveDS(_form.datasetName, _field, _value, "PAGEBREAK(");
+                                        _value = ResolveDS(_form.datasetName, _field, _value, "ONLASTPAGE(");
                                         _field.compiledValue = _value;
                                         _field.text = "";
                                         _form.formFields.fields[m] = _field;
                                         _keepChecking = false;
                                     }
-                                    #endregion [Check for PAGEBREAK(]
+                                    #endregion [Check for ONLASTPAGE(]
+
+                                    #region [Check for ONPAGEBREAK(]
+
+                                    if (_value.ToUpper().IndexOf("ONPAGEBREAK(") >= 0)
+                                    {
+                                        // syntax:  PAGEBREAK(dsname|dsordinal!, true stmt, false stmt>
+                                        // replace the compiled value
+                                        _field = _form.formFields.fields[m];
+                                        //_value = _field.value;
+                                        _value = ResolveDS(_form.datasetName, _field, _value, "ONPAGEBREAK(");
+                                        _field.compiledValue = _value;
+                                        _field.text = "";
+                                        _form.formFields.fields[m] = _field;
+                                        _keepChecking = false;
+                                    }
+                                    #endregion [Check for ONPAGEBREAK(]
 
                                     if (_keepChecking)
                                     {
@@ -1806,7 +1866,7 @@ namespace IGenFormsViewer
                                     }
                                     else
                                     {
-                                        if (prefix.ToUpper().IndexOf("PAGEBREAK") == 0)
+                                        if (prefix.ToUpper().IndexOf("ONLASTPAGE") == 0 || prefix.ToUpper().IndexOf("ONPAGEBREAK") == 0)
                                         {
                                             // a dsname or ordinal was specified
                                             _datasetName = _dsParts[0];
@@ -3189,7 +3249,39 @@ namespace IGenFormsViewer
 
                 if (runMode)
                 {
-                    _control.BackColor = Color.LightBlue;
+                    switch (field.type.ToUpper())
+                    {
+                        case "LABEL":
+                            if (_makeOpaque)
+                            {
+                                _control.BackColor = Color.White;
+                            }
+                            else
+                            {
+                                _control.BackColor = Color.Transparent;
+                            }
+                            break;
+
+                        case "BUTTON":
+                            _control.BackColor = buttonColor;
+                            break;
+
+                        case "TEXTBOX":
+                            _control.BackColor = Color.LightBlue;
+                            break;
+
+                        case "COMBOBOX":
+                            _control.BackColor = Color.LightBlue;
+                            break;
+
+                        case "CHECKBOX":
+                            _control.BackColor = Color.Transparent;
+                            break;
+
+                        default:
+                            break;
+
+                    }
                 }
                 else
                 {
@@ -3360,17 +3452,6 @@ namespace IGenFormsViewer
 
                         case "LABEL":
                             Label _label = (Label)_control;
-                            if (runMode)
-                            {
-                                if (_makeOpaque)
-                                {
-                                    _label.BackColor = Color.White;
-                                }
-                                else
-                                {
-                                    _label.BackColor = Color.Transparent;
-                                }
-                            }
                             if (field.alignment.ToUpper().IndexOf('C') == 0)
                             {
                                 _label.TextAlign = ContentAlignment.BottomCenter;
@@ -3934,6 +4015,47 @@ namespace IGenFormsViewer
             return _value;
 
         }
+
+
+
+
+        public string SumDatasetField(int datasetOrdinal, string fieldName)
+        {
+            string _value = "";
+            double _sumOfField = 0.0;
+            string _fieldName = fieldName.ToUpper();
+            int _datasetOrdinal = datasetOrdinal;
+
+            try
+            {
+                if (_datasetOrdinal >= 0 && _datasetOrdinal < datasets.Count)
+                {
+                    IGenDataset _ds = datasets[_datasetOrdinal];
+
+                    // set the fieldname to a column ordinal
+                    int _fieldOrdinal = CommonRoutines.ConvertToInt(_fieldName);
+
+                    for (int n = 0; n < _ds.dataTable.Rows.Count;n++)
+                    {
+                        // get the value
+                        _value = _ds.dataTable.Rows[n][_fieldOrdinal].ToString();
+                        double _doubleValue = CommonRoutines.ConvertToDouble(_value);
+                        _sumOfField = _sumOfField + _doubleValue;
+                    }
+
+                    _value = _sumOfField.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                // an error
+                CommonRoutines.Log("Error: " + moduleName + ".SumDatasetField > " + ex.Message);
+            }
+
+            return _value;
+
+        }
+
 
 
 
@@ -4938,6 +5060,7 @@ namespace IGenFormsViewer
 
                             int _startingRow = 1;
                             int _pageNo = 1;
+                            bool _pageBreak = false;
 
                             while (_startingRow <= _dataset.dataTable.Rows.Count)
                             {
@@ -4986,6 +5109,7 @@ namespace IGenFormsViewer
                                                 {
                                                     // failed, exit
                                                     _endingRow = _startingRow + _breakRow - 1;
+                                                    _pageBreak = true;
                                                     _failed = true;
                                                     break;
                                                 }
@@ -5006,6 +5130,7 @@ namespace IGenFormsViewer
 
                                 _page.pageBreak = _failed;
                                 _page.breakValues = _breakValues;
+                                _page.pageBreak = _pageBreak;
 
                                 _formDataset.pages.Add(_page);
 
@@ -6312,10 +6437,10 @@ namespace IGenFormsViewer
         public int currentPageNo = 0;
         public bool createSymbolics = false;
         public int referenceDatasetOrdinal = -1;        // this is the global dataset that will be called for the results
-        public bool pageBreak = false;
 
         public bool eof = false;
         public bool bof = false;
+        public bool pageBreak = false;
 
 
 

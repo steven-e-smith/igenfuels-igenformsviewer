@@ -231,9 +231,18 @@ namespace IGenFormsViewer
                                             else
                                             {
                                                 // clear out the results
-                                                _formDataset.results.Clear();
-                                                _form.dataset.results.Clear();
-                                                _dataset.results.Clear();
+                                                if (_formDataset.results != null)
+                                                {
+                                                    _formDataset.results.Clear();
+                                                }
+                                                if (_form.dataset.results != null)
+                                                {
+                                                    _form.dataset.results.Clear();
+                                                }
+                                                if (_dataset.results != null)
+                                                {
+                                                    _dataset.results.Clear();
+                                                }
                                             }
                                             
                                         }
@@ -254,9 +263,13 @@ namespace IGenFormsViewer
                                         }
                                         else
                                         {
-                                            // create the image
-                                            Image _image = CommonRoutines.GenerateBitmapFromPallet(_pallet, "",_form.printOrientation);
-                                            _pdfPrinter.PrintPDFPage(new Image[] { _image }, _printOrientation);
+                                            //Image _image = CommonRoutines.GenerateBitmapFromPallet(_pallet, "", _form.printOrientation);
+                                            //// open in paint
+                                            //_image.Save("testimage.png");
+                                            //CommonRoutines.Shell("mspaint.exe", "testimage.png");
+                                            //_pdfPrinter.PrintPDFPage(new Image[] { _pallet.Image }, _printOrientation);
+
+                                            _pdfPrinter.GeneratePdfPageFromPallet(_pallet, "", _form.printOrientation, false);
                                         }
 
                                         _pageNo = _pageNo + 1;

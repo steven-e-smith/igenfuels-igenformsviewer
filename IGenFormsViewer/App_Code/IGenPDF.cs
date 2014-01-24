@@ -33,6 +33,8 @@ using PdfSharp.Pdf;
 using System.Windows.Forms;
 using System.Drawing;
 using PdfGraphics;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 
 namespace IGenFormsViewer
 {
@@ -42,6 +44,7 @@ namespace IGenFormsViewer
 
         public PdfDocument pdfDoc = null;
         private PdfGraphics.Images pdfImages = null;
+        private PdfGraphics.Text pdfText = null;
 
 
 
@@ -73,6 +76,7 @@ namespace IGenFormsViewer
             {
                 pdfDoc = new PdfDocument();
                 pdfImages = new Images();
+                pdfText = new Text();
                 pdfDoc.Info.Title = "IGenFuels PDF Creator";
                 pdfDoc.Info.Author = "IGenFuels";
                 pdfDoc.Info.Subject = "Create a PDF file";
@@ -113,7 +117,26 @@ namespace IGenFormsViewer
                             //_pdfImagesPage.Size = PdfSharp.PageSize.A4;
                         }
                         XGraphics _pdfGraphics = XGraphics.FromPdfPage(_pdfImagesPage);
+
+                        // now that we have the graphics, we can draw the image and the text onto it                        
+                        
                         pdfImages.DrawPng(_pdfGraphics, 1, _image);
+
+                        // draw across
+                        for (int m = 0; m < 7; m++)
+                        {
+                            pdfText.DrawText(_pdfGraphics, m.ToString(), (m * 100), 10);
+                        }
+
+                        // draw down 
+                        for (int m = 0; m < 10; m++)
+                        {
+                            pdfText.DrawText(_pdfGraphics, m.ToString(), 10, (m * 100) - 5);
+                        }
+
+                        //// Write on top of background with known colors
+                        //_pdfGraphics.DrawString("TEXT ON PDF PAGE", new XFont("Helvetica", 12, XFontStyle.Regular), XBrushes.White, 10, 0, XStringFormats.TopLeft);
+
                     }
                 }
 
@@ -130,6 +153,26 @@ namespace IGenFormsViewer
 
         }
 
+
+
+        private void DrawStuff(PdfPage pdfPage)
+        {
+
+            //PdfDocument document = new PdfDocument();
+            //PdfPage page = document.AddPage();
+            //XGraphics gfx = XGraphics.FromPdfPage(page);
+            //XFont font = new XFont("Times New Roman", 10, XFontStyle.Bold);
+            //XTextFormatter tf = new XTextFormatter(gfx);
+            //XRect rect = new XRect(40, 100, 250, 220);
+            //gfx.DrawRectangle(XBrushes.SeaShell, rect);
+            ////tf.Alignment = ParagraphAlignment.Left;
+            //tf.DrawString(text, font, XBrushes.Black, rect, XStringFormats.TopLeft);
+            //rect = new XRect(310, 100, 250, 220);
+            //gfx.DrawRectangle(XBrushes.SeaShell, rect);
+            //tf.Alignment = XParagraphAlignment.Right;
+            //tf.DrawString(text, font, XBrushes.Black, rect, XStringFormats.TopLeft);
+
+        }
 
 
 
@@ -232,6 +275,138 @@ namespace IGenFormsViewer
             return _status;
 
         }
+
+
+
+
+        public void GeneratePdfPageFromPallet(PictureBox pallet, string title, string orientation, bool labelsOpaque)
+        {
+            // get the image for the current form
+            string _value = "";
+            string _font = "";
+            float _fontSize = 0;
+            float _factorX = 1.35F;
+            float _factorY = 1.20F;
+            Pen _pen = new Pen(Brushes.Black);
+            string _defaultFont = "Arial";  // "Microsoft Sans Serif";
+            int _printLeftOffset = 0;
+            int _printTopOffset = 0;
+
+            try
+            {
+
+                PdfPage _pdfPage = pdfDoc.AddPage();
+                if (orientation.ToUpper().IndexOf('L') == 0)
+                {
+                    _pdfPage.Orientation = PdfSharp.PageOrientation.Landscape;
+                    //_pdfImagesPage.Size = PdfSharp.PageSize.Legal;
+                }
+                else
+                {
+                    _pdfPage.Orientation = PdfSharp.PageOrientation.Portrait;
+                    //_pdfImagesPage.Size = PdfSharp.PageSize.A4;
+                }
+                XGraphics _pdfGraphics = XGraphics.FromPdfPage(_pdfPage);
+                XPdfFontOptions options = new XPdfFontOptions(PdfFontEncoding.WinAnsi, PdfFontEmbedding.Default);
+                XFont _pdfFont = new XFont("Times New Roman", 9, XFontStyle.Regular, options);
+
+                pdfImages.DrawPng(_pdfGraphics, 1, pallet.Image);
+
+                //pdfText.DrawText(_pdfGraphics, "Test Text", 10, 20);
+                _pdfGraphics.DrawString("Test Text", _pdfFont, XBrushes.Black, 10, 20);
+
+                // walk the controls and draw to the image
+                //foreach (Control _control in pallet.Controls)
+                for (int n = 0; n < pallet.Controls.Count;n++ )
+                {
+                    Control _control = pallet.Controls[n];
+
+                    IGenField _igenFieldObject = null;
+                    if (_control.Tag != null && _control.Tag.GetType().Name.ToUpper() == "IGENFIELD")
+                    {
+                        _igenFieldObject = (IGenField)_control.Tag;
+                    }
+
+                    string strType = _control.GetType().Name.ToUpper();
+
+                    switch (strType)
+                    {
+                        case "PICTUREBOX":
+                            // draw the image at the location
+                            PictureBox _pic = (PictureBox)_control;
+                            break;
+
+                        case "BUTTON":
+                        case "IMAGEBUTTON":
+                            break;
+
+                        default:
+                            if (_igenFieldObject.visible)
+                            {
+                                _fontSize = (float)(_control.Font.Size);
+                                _font = _defaultFont;  // _control.Font.Name;
+                                _value = _control.Text;
+
+                                // create a rect of where the control sits
+                                Rectangle _rect = new Rectangle((int)(_control.Left * .745), 
+                                                (int)(_control.Top * .755), 
+                                                (int)(_control.Width * .745), 
+                                                (int) (_control.Height * .755));
+                                XStringFormat _format = new XStringFormat();
+                                _format.LineAlignment = XLineAlignment.Far;
+
+                                if (_igenFieldObject != null)
+                                {
+                                    // check alignment
+                                    switch (_igenFieldObject.alignment.ToUpper())
+                                    {
+                                        case "LEFT":
+                                            _format.Alignment = XStringAlignment.Near;
+                                            break;
+
+                                        case "CENTER":
+                                            _format.Alignment = XStringAlignment.Center;
+                                            break;
+
+                                        case "RIGHT":
+                                            _format.Alignment = XStringAlignment.Far;
+                                            break;
+                                    }
+
+                                }
+
+                                // see if any special processing on the value...
+                                switch (strType.ToUpper())
+                                {
+                                    case "CHECKBOX":
+                                        _value = _value.ToUpper().IndexOf("TRUE") == 0 ? "X" : "";
+                                        break;
+
+                                }
+
+                                //_value = (n * 1000).ToString();
+                                _pdfGraphics.DrawString(_value, _pdfFont, XBrushes.Black, _rect, _format);
+
+                                //int _left = (int)(_control.Left * .795);
+                                //int _top = (int)(_control.Top * .765);
+                                //_pdfGraphics.DrawString(_value, _pdfFont, XBrushes.Black, _left, _top);
+                            }
+                            break;
+
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".GeneratePdfPageFromPallet > " + ex.Message);
+            }
+
+            return;
+        }
+
+
+
 
 
 

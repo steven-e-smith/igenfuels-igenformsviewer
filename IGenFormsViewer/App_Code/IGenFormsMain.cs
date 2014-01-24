@@ -985,6 +985,7 @@ namespace IGenFormsViewer
                             case "VALUE":
                                 if (_fieldFlag)
                                 {
+                                    _field.value = _tagValue;
                                     // if it is not an expression
                                     if (_tagValue.IndexOf('=') < 0)
                                     {
@@ -994,10 +995,12 @@ namespace IGenFormsViewer
                                             _field.value = _checkValue.ToString();
                                             _field.checkedFlag = _checkValue;
                                         }
-                                    }
-                                    else
-                                    {
-                                        _field.value = _tagValue;
+                                        else
+                                        {
+                                            // also set the caption if not set
+                                            _field.caption = (_field.caption == "") ? _field.value : _field.caption;
+                                            _field.text = (_field.text == "") ? _field.value : _field.text;
+                                        }
                                     }
                                     _field.originalValue = _field.value;
                                     _field.compiledValue = _field.value;
@@ -1315,6 +1318,11 @@ namespace IGenFormsViewer
                         // put here to fix the first textbox not retaining entered values
                         _field = _form.formFields.fields[m];
 
+                        if (_field.name.ToUpper().IndexOf("FUEL_TAX_RATE_PER") >= 0)
+                        {
+                            int fdfd = 0;
+                        }
+
                         switch (_field.type.ToUpper())
                         {
                             case "TEXTBOX":
@@ -1352,6 +1360,11 @@ namespace IGenFormsViewer
                         {
                             // get the value
                             _field = _form.formFields.fields[m];
+
+                            if (_field.name.ToUpper().IndexOf("FUEL_TAX_RATE_PER") >= 0)
+                            {
+                                int fdfd = 0;
+                            }
 
                             _fieldToCompile = _fieldToCompile + 1;
                             DisplayProgress(_fieldToCompile, _totalFieldsToCompile);
@@ -2623,7 +2636,7 @@ namespace IGenFormsViewer
                             _imageName = _imageName.Substring(_imageName.LastIndexOf('\\') + 1);
                         }
 
-                        string _imagePath = ConfigRoutines.GetSetting("FormImages");
+                        string _imagePath = ConfigRoutines.GetSetting("FormImagesFolder");
                         if (_imagePath == "")
                         {
                             _imagePath = CommonRoutines.currentPath + "\\formimages";

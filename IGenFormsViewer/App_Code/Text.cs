@@ -38,9 +38,11 @@ namespace PdfGraphics
   /// </summary>
   public class Text : Base
   {
-    public void DrawPage(PdfPage page)
+    public void DrawTextOnImage(PdfPage page, Images pdfImage, XImage image)
     {
       XGraphics gfx = XGraphics.FromPdfPage(page);
+
+      pdfImage.DrawPng(gfx, 1, image);
 
       DrawTitle(page, gfx, "Text");
 
@@ -48,6 +50,44 @@ namespace PdfGraphics
       DrawTextAlignment(gfx, 2);
       MeasureText(gfx, 3);
     }
+
+
+    public void DrawImage(XGraphics gfx, Images pdfImage, XImage image)
+    {
+        pdfImage.DrawPng(gfx, 1, image);
+
+    }
+
+
+
+
+    public void DrawPage(PdfPage page)
+    {
+        XGraphics gfx = XGraphics.FromPdfPage(page);
+
+        DrawTitle(page, gfx, "Text");
+
+        DrawText(gfx, 1);
+        DrawTextAlignment(gfx, 2);
+        MeasureText(gfx, 3);
+    }
+
+
+
+    public void DrawText(XGraphics gfx, string text, int x, int y)
+    {
+        const string facename = "Times New Roman";
+
+        XPdfFontOptions options = new XPdfFontOptions(PdfFontEncoding.WinAnsi, PdfFontEmbedding.Default);
+
+        XFont fontRegular = new XFont(facename, 9, XFontStyle.Regular, options);
+
+        gfx.DrawString(text, fontRegular, XBrushes.Black, x, y);
+
+    }
+
+
+
 
     /// <summary>
     /// Draws text in different styles.
@@ -74,6 +114,8 @@ namespace PdfGraphics
 
       EndBox(gfx);
     }
+
+
 
     /// <summary>
     /// Shows how to align text in the layout rectangle.

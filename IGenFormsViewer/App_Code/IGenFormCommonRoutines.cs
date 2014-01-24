@@ -319,6 +319,11 @@ namespace IGenFormsViewer
                 string _fieldType = _field.dataType.ToUpper();
                 string _type = _field.type.ToUpper();
 
+                if (_field.name.ToUpper().IndexOf("TAX_DUE_PER_FUEL_PRODUCT") >= 0)
+                {
+                    int fdfd = 0;
+                }
+
                 // see if there are any expressions to resolve
                 if (_value.IndexOf('=') == 0)
                 {
@@ -368,7 +373,7 @@ namespace IGenFormsViewer
                         }
                         else
                         {
-                            _temp = _newField.text; // _newField.compiledValue.Trim();
+                            _temp = _newField.text;  // (_newField.compiledValue.Trim() == "" ? _newField.text : _newField.compiledValue.Trim());  // _newField.text;  <-- was this..
                             if ((_temp.IndexOf(',') >= 0 || _temp.IndexOf('$') >= 0) &&
                                         _temp.IndexOf("=SQL") < 0)
                             {
@@ -463,10 +468,10 @@ namespace IGenFormsViewer
 
                 _value = _tempValue.ToUpper();
 
-                if (_field.name.ToUpper() == "1.1.6.A")
-                {
-                    int x = 0;
-                }
+                //if (_field.name.ToUpper() == "1.1.6.A")
+                //{
+                //    int x = 0;
+                //}
 
                 // check the value to see if there is nothing to do (operators but no values to operate on)
                 string _checkValue = _value;

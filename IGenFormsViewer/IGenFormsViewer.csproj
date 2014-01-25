@@ -68,7 +68,8 @@
     <Compile Include="App_Code\DatabaseRoutinesSQLServer.cs" />
     <Compile Include="App_Code\ExcelRoutines.cs" />
     <Compile Include="App_Code\Expressions.cs" />
-    <Compile Include="App_Code\IGenPDF.cs" />
+    <Compile Include="App_Code\IGenPDFGhostScript.cs" />
+    <Compile Include="App_Code\IGenPDFSharp.cs" />
     <Compile Include="App_Code\Images.cs" />
     <Compile Include="App_Code\Text.cs" />
     <Compile Include="App_Forms\frmAbout.cs">

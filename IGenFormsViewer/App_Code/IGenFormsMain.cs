@@ -2663,19 +2663,44 @@ namespace IGenFormsViewer
 
                         if (CommonRoutines.FileExists(_imageName))
                         {
-                            // load the image into the pallet
-                            _pallet.SizeMode = PictureBoxSizeMode.Normal;
-                            using (Image temp = Image.FromFile(_imageName))
+                            // replace the form imagename
+                            _form.imageName = _imageName;
+
+                            Image _tempImage = null;
+
+                            // is it a pdf?
+                            string _extension = _imageName.Substring(_imageName.LastIndexOf('.')).ToUpper();
+                            if (_extension == ".PDF")
                             {
-                                _pallet.Image = new Bitmap(temp);
-                                _form.originalImage = new Bitmap(temp);
-                                PictureBox _gridPallet = new PictureBox();
-                                _gridPallet.Image = new Bitmap(temp);
-                                _form.gridImage = CommonRoutines.DrawGrid(_gridPallet, 20);
+                                // load the image from the pdf first page
+                                //IGenPDFSharp _pdfPrinter = new IGenPDFSharp();
+                                //_tempImage = _pdfPrinter.ExportImageFromPDF(_imageName);
+                                IGenPDFGhostScript _pdfAPI = new IGenPDFGhostScript();
+                                _tempImage = _pdfAPI.CreateImageFromPDF(_imageName, "", "jpeg", 1, 1, 96, 96);
                             }
-                            //_pallet.Image = Image.FromFile(_imageName);
-                            _pallet.Refresh();
+                            else
+                            {
+                                _tempImage = Image.FromFile(_imageName);
+                            }
+
+                            if (_tempImage != null)
+                            {
+                                // load the image into the pallet
+                                _pallet.SizeMode = PictureBoxSizeMode.Normal;
+                                // see if temp needs to be resized...
+                                _pallet.Image = CommonRoutines.ResizeImage(_tempImage, new Size(816, 1056));
+                                //_pallet.Image = new Bitmap(_tempImage);
+                                _form.originalImage = new Bitmap(_tempImage);
+                                PictureBox _gridPallet = new PictureBox();
+                                _gridPallet.Image = new Bitmap(_tempImage);
+                                _form.gridImage = CommonRoutines.DrawGrid(_gridPallet, 20);
+                                //_pallet.Image = Image.FromFile(_imageName);
+                                _pallet.Refresh();
+                                
+                            }
+
                             // free up the image file
+                            _tempImage = null;
                         }
 
                         _tabPage.Controls.Add(_pallet);

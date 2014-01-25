@@ -123,11 +123,18 @@ namespace IGenFormsViewer
         {
             bool _printForm = printForm;
             bool _saveForm = saveForm;
-            IGenPDF _pdfPrinter = new IGenPDF();
+            IGenPDFSharp _pdfPrinter = new IGenPDFSharp();
 
             try
             {
                 tbrMainPrintStatus.Text = "Printing forms...";
+
+                // see if there is a temp folder in the current path...
+                if (!CommonRoutines.FolderExists("Temp"))
+                {
+                    // make one
+                    
+                }
 
                 //// make sure all changes have been made
                 //int _row = dgvFormsToPrint.CurrentCell.RowIndex;
@@ -269,7 +276,9 @@ namespace IGenFormsViewer
                                             //CommonRoutines.Shell("mspaint.exe", "testimage.png");
                                             //_pdfPrinter.PrintPDFPage(new Image[] { _pallet.Image }, _printOrientation);
 
-                                            _pdfPrinter.GeneratePdfPageFromPallet(_pallet, "", _form.printOrientation, false);
+                                            // see if a pdf was specified for the image file
+                                            string _imageName = _form.imageName;
+                                            _pdfPrinter.GeneratePdfPageFromPallet(_imageName, _pallet, "", _form.printOrientation, false);
                                         }
 
                                         _pageNo = _pageNo + 1;

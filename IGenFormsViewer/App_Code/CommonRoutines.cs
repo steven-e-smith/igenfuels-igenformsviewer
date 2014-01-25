@@ -1142,6 +1142,32 @@ namespace IGenFormsViewer
 
 
         /// <summary>
+        /// bool FolderExists(string folderName)
+        /// See if a file exists
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static bool FolderExists(string folderName)
+        {
+            bool _exists = false;
+
+            try
+            {
+                _exists = Directory.Exists(folderName);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".FolderExists > " + ex.Message);
+            }
+
+            return _exists;
+
+        }
+
+
+
+
+        /// <summary>
         /// bool ErrorStatus()
         /// Returns the error flag if there are any errors
         /// </summary>

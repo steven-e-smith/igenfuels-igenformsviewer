@@ -1945,7 +1945,8 @@ namespace IGenFormsViewer
                     string _errMsg = "Field " + field.parentFormName + "!" + field.name + ": IF statement " + expression + " is malformed. ";
                     _errMsg = (!_operatorFound) ? _errMsg = _errMsg + " No Operator was found." : _errMsg;
                     _errMsg = (!_partsFound) ? _errMsg = _errMsg + " No true/false parts were found." : _errMsg;
-                    CommonRoutines.DisplayErrorMessage(_errMsg + "  Please check.");
+                    // move determination of the IF malformation to the compile routine.  just log here
+                    CommonRoutines.Log(_errMsg + "  Please check.");
                 }
 
             }

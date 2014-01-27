@@ -123,11 +123,18 @@ namespace IGenFormsViewer
         {
             bool _printForm = printForm;
             bool _saveForm = saveForm;
-            IGenPDF _pdfPrinter = new IGenPDF();
+            IGenPDFSharp _pdfPrinter = new IGenPDFSharp();
 
             try
             {
                 tbrMainPrintStatus.Text = "Printing forms...";
+
+                // see if there is a temp folder in the current path...
+                if (!CommonRoutines.FolderExists("Temp"))
+                {
+                    // make one
+                    
+                }
 
                 //// make sure all changes have been made
                 //int _row = dgvFormsToPrint.CurrentCell.RowIndex;
@@ -231,9 +238,18 @@ namespace IGenFormsViewer
                                             else
                                             {
                                                 // clear out the results
-                                                _formDataset.results.Clear();
-                                                _form.dataset.results.Clear();
-                                                _dataset.results.Clear();
+                                                if (_formDataset.results != null)
+                                                {
+                                                    _formDataset.results.Clear();
+                                                }
+                                                if (_form.dataset.results != null)
+                                                {
+                                                    _form.dataset.results.Clear();
+                                                }
+                                                if (_dataset.results != null)
+                                                {
+                                                    _dataset.results.Clear();
+                                                }
                                             }
                                             
                                         }
@@ -254,9 +270,15 @@ namespace IGenFormsViewer
                                         }
                                         else
                                         {
-                                            // create the image
-                                            Image _image = CommonRoutines.GenerateBitmapFromPallet(_pallet, "",_form.printOrientation);
-                                            _pdfPrinter.PrintPDFPage(new Image[] { _image }, _printOrientation);
+                                            //Image _image = CommonRoutines.GenerateBitmapFromPallet(_pallet, "", _form.printOrientation);
+                                            //// open in paint
+                                            //_image.Save("testimage.png");
+                                            //CommonRoutines.Shell("mspaint.exe", "testimage.png");
+                                            //_pdfPrinter.PrintPDFPage(new Image[] { _pallet.Image }, _printOrientation);
+
+                                            // see if a pdf was specified for the image file
+                                            string _imageName = _form.imageName;
+                                            _pdfPrinter.GeneratePdfPageFromPallet(_imageName, _pallet, "", _form.printOrientation, false);
                                         }
 
                                         _pageNo = _pageNo + 1;

@@ -706,6 +706,32 @@ namespace IGenFormsViewer
 
             try
             {
+                _status = DeleteFile(fileName, logicalDelete, askFirst, false);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".DeleteFile(s) > " + ex.Message);
+                _status = false;
+            }
+
+            return _status;
+
+        }
+
+
+
+        /// <summary>
+        /// bool DeleteFile(String fileName)
+        /// Delete a file
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static bool DeleteFile(String fileName, bool logicalDelete, bool askFirst, bool silentMode)
+        {
+            bool _status = true;
+
+            try
+            {
                 // make sure the from file exists...
                 if (FileExists(fileName))
                 {
@@ -732,7 +758,10 @@ namespace IGenFormsViewer
                 }
                 else
                 {
-                    DisplayMessage("Sorry but the file " + fileName + " does not exist");
+                    if (!silentMode)
+                    {
+                        DisplayMessage("Sorry but the file " + fileName + " does not exist");
+                    }
                     _status = false;
                 }
             }
@@ -1132,6 +1161,32 @@ namespace IGenFormsViewer
             catch (Exception ex)
             {
                 CommonRoutines.Log("$E:" + moduleName + ".FileExists > " + ex.Message);
+            }
+
+            return _exists;
+
+        }
+
+
+
+
+        /// <summary>
+        /// bool FolderExists(string folderName)
+        /// See if a file exists
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static bool FolderExists(string folderName)
+        {
+            bool _exists = false;
+
+            try
+            {
+                _exists = Directory.Exists(folderName);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".FolderExists > " + ex.Message);
             }
 
             return _exists;

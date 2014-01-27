@@ -303,6 +303,7 @@ namespace IGenFormsViewer
         {
             string _value = value;
             int _offset = 0;
+            string _function = "";
             int _formIndex = -1;
             int _fieldIndex = -1;
             string _fieldAttribute = "VALUE";
@@ -319,6 +320,11 @@ namespace IGenFormsViewer
                 string _fieldType = _field.dataType.ToUpper();
                 string _type = _field.type.ToUpper();
 
+                if (_field.name.ToUpper().IndexOf("TAX_DUE_PER_FUEL_PRODUCT") >= 0)
+                {
+                    int fdfd = 0;
+                }
+
                 // see if there are any expressions to resolve
                 if (_value.IndexOf('=') == 0)
                 {
@@ -333,6 +339,7 @@ namespace IGenFormsViewer
 
                 if (_value.ToUpper().IndexOf("IF") == 0)
                 {
+                    _function = "IF";
                     string _x = "";
                 }
 
@@ -368,7 +375,7 @@ namespace IGenFormsViewer
                         }
                         else
                         {
-                            _temp = _newField.text; // _newField.compiledValue.Trim();
+                            _temp = _newField.text;  // (_newField.compiledValue.Trim() == "" ? _newField.text : _newField.compiledValue.Trim());  // _newField.text;  <-- was this..
                             if ((_temp.IndexOf(',') >= 0 || _temp.IndexOf('$') >= 0) &&
                                         _temp.IndexOf("=SQL") < 0)
                             {
@@ -463,10 +470,10 @@ namespace IGenFormsViewer
 
                 _value = _tempValue.ToUpper();
 
-                if (_field.name.ToUpper() == "1.1.6.A")
-                {
-                    int x = 0;
-                }
+                //if (_field.name.ToUpper() == "1.1.6.A")
+                //{
+                //    int x = 0;
+                //}
 
                 // check the value to see if there is nothing to do (operators but no values to operate on)
                 string _checkValue = _value;
@@ -1781,11 +1788,12 @@ namespace IGenFormsViewer
                 // convert the quotes 
                 _expression = _expression.Replace("'", "");
 
-                // now parse it into 3 sections
+                // now parse it into 3 sections: expression, true, false
                 string[] _parts = _expression.Split('~');
 
                 // check the expression
-                string _firstPart = _parts[0];
+                string _firstPart = _parts[0].Trim();
+
                 // break it up into 3 parts (value,operator,value)
                 string[] _firstParts = { "", "", "" };
                 int _partNo = 0;
@@ -1802,7 +1810,18 @@ namespace IGenFormsViewer
                     }
                     else
                     {
-                        _firstParts[_partNo] = _firstParts[_partNo] + _firstPart.Substring(n, 1);
+                        if (_firstPart.Substring(n).IndexOf("IN") == 0)
+                        {
+                            // operator
+                            _firstParts[1] = "IN";
+                            _operatorFound = true;
+                            _partNo = 2;
+                            n = n + 2;
+                        }
+                        else
+                        {
+                            _firstParts[_partNo] = _firstParts[_partNo] + _firstPart.Substring(n, 1);
+                        }
                     }
                 }
 
@@ -1926,7 +1945,8 @@ namespace IGenFormsViewer
                     string _errMsg = "Field " + field.parentFormName + "!" + field.name + ": IF statement " + expression + " is malformed. ";
                     _errMsg = (!_operatorFound) ? _errMsg = _errMsg + " No Operator was found." : _errMsg;
                     _errMsg = (!_partsFound) ? _errMsg = _errMsg + " No true/false parts were found." : _errMsg;
-                    CommonRoutines.DisplayErrorMessage(_errMsg + "  Please check.");
+                    // move determination of the IF malformation to the compile routine.  just log here
+                    CommonRoutines.Log(_errMsg + "  Please check.");
                 }
 
             }

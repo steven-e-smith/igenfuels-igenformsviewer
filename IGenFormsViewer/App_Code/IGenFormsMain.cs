@@ -985,6 +985,7 @@ namespace IGenFormsViewer
                             case "VALUE":
                                 if (_fieldFlag)
                                 {
+                                    _field.value = _tagValue;
                                     // if it is not an expression
                                     if (_tagValue.IndexOf('=') < 0)
                                     {
@@ -994,10 +995,12 @@ namespace IGenFormsViewer
                                             _field.value = _checkValue.ToString();
                                             _field.checkedFlag = _checkValue;
                                         }
-                                    }
-                                    else
-                                    {
-                                        _field.value = _tagValue;
+                                        else
+                                        {
+                                            // also set the caption if not set
+                                            _field.caption = (_field.caption == "") ? _field.value : _field.caption;
+                                            _field.text = (_field.text == "") ? _field.value : _field.text;
+                                        }
                                     }
                                     _field.originalValue = _field.value;
                                     _field.compiledValue = _field.value;
@@ -1315,6 +1318,11 @@ namespace IGenFormsViewer
                         // put here to fix the first textbox not retaining entered values
                         _field = _form.formFields.fields[m];
 
+                        if (_field.name.ToUpper().IndexOf("FUEL_TAX_RATE_PER") >= 0)
+                        {
+                            int fdfd = 0;
+                        }
+
                         switch (_field.type.ToUpper())
                         {
                             case "TEXTBOX":
@@ -1352,6 +1360,11 @@ namespace IGenFormsViewer
                         {
                             // get the value
                             _field = _form.formFields.fields[m];
+
+                            if (_field.name.ToUpper().IndexOf("FUEL_TAX_RATE_PER") >= 0)
+                            {
+                                int fdfd = 0;
+                            }
 
                             _fieldToCompile = _fieldToCompile + 1;
                             DisplayProgress(_fieldToCompile, _totalFieldsToCompile);
@@ -2623,7 +2636,7 @@ namespace IGenFormsViewer
                             _imageName = _imageName.Substring(_imageName.LastIndexOf('\\') + 1);
                         }
 
-                        string _imagePath = ConfigRoutines.GetSetting("FormImages");
+                        string _imagePath = ConfigRoutines.GetSetting("FormImagesFolder");
                         if (_imagePath == "")
                         {
                             _imagePath = CommonRoutines.currentPath + "\\formimages";
@@ -2650,19 +2663,41 @@ namespace IGenFormsViewer
 
                         if (CommonRoutines.FileExists(_imageName))
                         {
-                            // load the image into the pallet
-                            _pallet.SizeMode = PictureBoxSizeMode.Normal;
-                            using (Image temp = Image.FromFile(_imageName))
+                            // replace the form imagename
+                            _form.imageName = _imageName;
+
+                            Image _tempImage = null;
+
+                            // is it a pdf?
+                            string _extension = _imageName.Substring(_imageName.LastIndexOf('.')).ToUpper();
+                            if (_extension == ".PDF")
                             {
-                                _pallet.Image = new Bitmap(temp);
-                                _form.originalImage = new Bitmap(temp);
-                                PictureBox _gridPallet = new PictureBox();
-                                _gridPallet.Image = new Bitmap(temp);
-                                _form.gridImage = CommonRoutines.DrawGrid(_gridPallet, 20);
+                                // load the image from the pdf first page
+                                IGenPDFGhostScript _pdfAPI = new IGenPDFGhostScript();
+                                _tempImage = _pdfAPI.CreateImageFromPDF(_imageName, "./tmpimage.png", "png16m", 1, 1, 96, 96);
+                                // delete the temp image
+                                CommonRoutines.DeleteFile("./tmpimage.png", false, false, true);
                             }
-                            //_pallet.Image = Image.FromFile(_imageName);
-                            _pallet.Refresh();
+                            else
+                            {
+                                _tempImage = Image.FromFile(_imageName);
+                            }
+
+                            if (_tempImage != null)
+                            {
+                                // load the image into the pallet
+                                _pallet.SizeMode = PictureBoxSizeMode.Normal;
+                                _pallet.Image = _tempImage;
+                                _form.originalImage = new Bitmap(_tempImage);
+                                PictureBox _gridPallet = new PictureBox();
+                                _gridPallet.Image = new Bitmap(_tempImage);
+                                _form.gridImage = CommonRoutines.DrawGrid(_gridPallet, 20);
+                                _pallet.Refresh();
+                                
+                            }
+
                             // free up the image file
+                            _tempImage = null;
                         }
 
                         _tabPage.Controls.Add(_pallet);
@@ -4570,6 +4605,7 @@ namespace IGenFormsViewer
                 }
                 else
                 {
+                    #region [Create IGenForms record]
                     // insert the igenforms record
                     _runDate = CommonRoutines.GetCurrentDateTime();
                     _fieldList = "Form_Group, Run_Date, Error_Flag, Filing_Id, Description, Status";
@@ -4602,6 +4638,7 @@ namespace IGenFormsViewer
                             igenFormsId = CommonRoutines.ConvertToInt(DatabaseRoutines.GetRowValue(_rows[0], _rows[1], "Id"));
                         }
                     }
+                    #endregion 
                 }
 
                 // was one found or was one successfully created?
@@ -4637,9 +4674,11 @@ namespace IGenFormsViewer
                                             "'" + _field.ediName + "'," +
                                             "'A'," +
                                             "'A'";
+
                             _sql = "Insert into IGenForm_Fields " +
                                             "(" + _fieldList + ") " +
                                             "Values(" + _fieldValues + ")";
+
                             _numRowsAffected = DatabaseRoutines.Execute(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
 
                         }
@@ -4655,7 +4694,7 @@ namespace IGenFormsViewer
             }
             catch (Exception ex)
             {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveForms > " + ex.Message);
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveFormToDatabase > " + ex.Message);
             }
 
             return;

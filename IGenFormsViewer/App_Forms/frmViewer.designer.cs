@@ -76,13 +76,14 @@
             this.mnuMainFileExit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainView = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainViewDatasets = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainViewRefresh = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainActions = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainActionsPrepare = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainTools = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainToolsOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMainViewRefresh = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMainActions = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMainActionsPrepare = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainActionsClearPrompts = new System.Windows.Forms.ToolStripMenuItem();
             this.tabForms.SuspendLayout();
             this.tbrMain.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -513,6 +514,31 @@
             this.mnuMainViewDatasets.Text = "&Datasets";
             this.mnuMainViewDatasets.Click += new System.EventHandler(this.mnuMainViewDatasets_Click);
             // 
+            // mnuMainViewRefresh
+            // 
+            this.mnuMainViewRefresh.Name = "mnuMainViewRefresh";
+            this.mnuMainViewRefresh.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
+            this.mnuMainViewRefresh.Size = new System.Drawing.Size(159, 22);
+            this.mnuMainViewRefresh.Text = "&Refresh";
+            this.mnuMainViewRefresh.Click += new System.EventHandler(this.mnuMainViewRefresh_Click);
+            // 
+            // mnuMainActions
+            // 
+            this.mnuMainActions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuMainActionsPrepare,
+            this.mnuMainActionsClearPrompts});
+            this.mnuMainActions.Name = "mnuMainActions";
+            this.mnuMainActions.Size = new System.Drawing.Size(62, 20);
+            this.mnuMainActions.Text = "&Actions ";
+            // 
+            // mnuMainActionsPrepare
+            // 
+            this.mnuMainActionsPrepare.Name = "mnuMainActionsPrepare";
+            this.mnuMainActionsPrepare.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.mnuMainActionsPrepare.Size = new System.Drawing.Size(152, 22);
+            this.mnuMainActionsPrepare.Text = "&Prepare";
+            this.mnuMainActionsPrepare.Click += new System.EventHandler(this.mnuMainActionsPrepare_Click);
+            // 
             // mnuMainTools
             // 
             this.mnuMainTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -539,33 +565,16 @@
             // mnuMainHelpAbout
             // 
             this.mnuMainHelpAbout.Name = "mnuMainHelpAbout";
-            this.mnuMainHelpAbout.Size = new System.Drawing.Size(152, 22);
+            this.mnuMainHelpAbout.Size = new System.Drawing.Size(107, 22);
             this.mnuMainHelpAbout.Text = "&About";
             this.mnuMainHelpAbout.Click += new System.EventHandler(this.mnuMainHelpAbout_Click);
             // 
-            // mnuMainViewRefresh
+            // mnuMainActionsClearPrompts
             // 
-            this.mnuMainViewRefresh.Name = "mnuMainViewRefresh";
-            this.mnuMainViewRefresh.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
-            this.mnuMainViewRefresh.Size = new System.Drawing.Size(159, 22);
-            this.mnuMainViewRefresh.Text = "&Refresh";
-            this.mnuMainViewRefresh.Click += new System.EventHandler(this.mnuMainViewRefresh_Click);
-            // 
-            // mnuMainActions
-            // 
-            this.mnuMainActions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuMainActionsPrepare});
-            this.mnuMainActions.Name = "mnuMainActions";
-            this.mnuMainActions.Size = new System.Drawing.Size(62, 20);
-            this.mnuMainActions.Text = "&Actions ";
-            // 
-            // mnuMainActionsPrepare
-            // 
-            this.mnuMainActionsPrepare.Name = "mnuMainActionsPrepare";
-            this.mnuMainActionsPrepare.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.mnuMainActionsPrepare.Size = new System.Drawing.Size(152, 22);
-            this.mnuMainActionsPrepare.Text = "&Prepare";
-            this.mnuMainActionsPrepare.Click += new System.EventHandler(this.mnuMainActionsPrepare_Click);
+            this.mnuMainActionsClearPrompts.Name = "mnuMainActionsClearPrompts";
+            this.mnuMainActionsClearPrompts.Size = new System.Drawing.Size(152, 22);
+            this.mnuMainActionsClearPrompts.Text = "&Clear Prompts";
+            this.mnuMainActionsClearPrompts.Click += new System.EventHandler(this.mnuMainActionsClearPrompts_Click);
             // 
             // frmViewer
             // 
@@ -648,6 +657,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuMainViewRefresh;
         private System.Windows.Forms.ToolStripMenuItem mnuMainActions;
         private System.Windows.Forms.ToolStripMenuItem mnuMainActionsPrepare;
+        private System.Windows.Forms.ToolStripMenuItem mnuMainActionsClearPrompts;
     }
 }
 

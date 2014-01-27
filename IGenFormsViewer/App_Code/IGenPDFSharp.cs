@@ -306,34 +306,27 @@ namespace IGenFormsViewer
                     // load the first page
                     // Open the document to import pages from it.
                     PdfDocument inputDocument = PdfReader.Open(_imageName, PdfDocumentOpenMode.Import);
+                    //PdfDocument inputDocument = CompatiblePdfReader.Open(_imageName);  //, PdfDocumentOpenMode.Import);
 
                     // Iterate pages
                     int count = inputDocument.PageCount;
                     if (count > 0)
                     {
                         _pdfPage = pdfDoc.AddPage(inputDocument.Pages[0]);
+                        _pdfGraphics = XGraphics.FromPdfPage(_pdfPage);
+//                        _pdfPage.Orientation = (orientation.ToUpper().IndexOf('L') == 0) ? PdfSharp.PageOrientation.Landscape : _pdfPage.Orientation = PdfSharp.PageOrientation.Portrait;
                     }
-                    _pdfGraphics = XGraphics.FromPdfPage(_pdfPage);
                 }
                 else
                 {
                     _pdfPage = pdfDoc.AddPage();
+                    _pdfPage.Orientation = (orientation.ToUpper().IndexOf('L') == 0) ? PdfSharp.PageOrientation.Landscape : _pdfPage.Orientation = PdfSharp.PageOrientation.Portrait;
                     _pdfGraphics = XGraphics.FromPdfPage(_pdfPage);
                     pdfImages.DrawPng(_pdfGraphics, 1, pallet.Image);
                 }
 
                 if (_pdfPage != null)
                 {
-                    if (orientation.ToUpper().IndexOf('L') == 0)
-                    {
-                        _pdfPage.Orientation = PdfSharp.PageOrientation.Landscape;
-                        //_pdfImagesPage.Size = PdfSharp.PageSize.Legal;
-                    }
-                    else
-                    {
-                        _pdfPage.Orientation = PdfSharp.PageOrientation.Portrait;
-                        //_pdfImagesPage.Size = PdfSharp.PageSize.A4;
-                    }
 
                     XPdfFontOptions options = new XPdfFontOptions(PdfFontEncoding.WinAnsi, PdfFontEmbedding.Default);
                     XFont _pdfFont = new XFont("Times New Roman", 9, XFontStyle.Regular, options);
@@ -370,7 +363,7 @@ namespace IGenFormsViewer
                                 if (_igenFieldObject.visible)
                                 {
                                     _fontSize = (float)(_control.Font.Size);
-                                    _font = _defaultFont;  // _control.Font.Name;
+                                    _font = _control.Font.Name;
                                     _value = _control.Text;
 
                                     // create a rect of where the control sits
@@ -409,6 +402,8 @@ namespace IGenFormsViewer
                                             break;
 
                                     }
+
+                                    _pdfFont = new XFont(_font, _fontSize, XFontStyle.Regular, options);
 
                                     //_value = (n * 1000).ToString();
                                     _pdfGraphics.DrawString(_value, _pdfFont, XBrushes.Black, _rect, _format);

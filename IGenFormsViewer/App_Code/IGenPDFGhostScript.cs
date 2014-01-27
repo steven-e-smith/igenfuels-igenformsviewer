@@ -101,7 +101,10 @@ namespace IGenFormsViewer
                 // now if the file exists, load it as an image
                 if (System.IO.File.Exists(_imageFileName))
                 {
-                    _image = Image.FromFile(_imageFileName);
+                    using (var _imgTemp = Image.FromFile(_imageFileName))
+                    {
+                        _image = (Image)new Bitmap(_imgTemp);
+                    }
                 }
 
                 result = true;

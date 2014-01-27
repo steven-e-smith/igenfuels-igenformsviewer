@@ -303,6 +303,7 @@ namespace IGenFormsViewer
         {
             string _value = value;
             int _offset = 0;
+            string _function = "";
             int _formIndex = -1;
             int _fieldIndex = -1;
             string _fieldAttribute = "VALUE";
@@ -338,6 +339,7 @@ namespace IGenFormsViewer
 
                 if (_value.ToUpper().IndexOf("IF") == 0)
                 {
+                    _function = "IF";
                     string _x = "";
                 }
 
@@ -1786,11 +1788,12 @@ namespace IGenFormsViewer
                 // convert the quotes 
                 _expression = _expression.Replace("'", "");
 
-                // now parse it into 3 sections
+                // now parse it into 3 sections: expression, true, false
                 string[] _parts = _expression.Split('~');
 
                 // check the expression
-                string _firstPart = _parts[0];
+                string _firstPart = _parts[0].Trim();
+
                 // break it up into 3 parts (value,operator,value)
                 string[] _firstParts = { "", "", "" };
                 int _partNo = 0;
@@ -1807,7 +1810,18 @@ namespace IGenFormsViewer
                     }
                     else
                     {
-                        _firstParts[_partNo] = _firstParts[_partNo] + _firstPart.Substring(n, 1);
+                        if (_firstPart.Substring(n).IndexOf("IN") == 0)
+                        {
+                            // operator
+                            _firstParts[1] = "IN";
+                            _operatorFound = true;
+                            _partNo = 2;
+                            n = n + 2;
+                        }
+                        else
+                        {
+                            _firstParts[_partNo] = _firstParts[_partNo] + _firstPart.Substring(n, 1);
+                        }
                     }
                 }
 

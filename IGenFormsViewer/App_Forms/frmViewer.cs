@@ -655,6 +655,7 @@ namespace IGenFormsViewer
                     _field.text = _checkBox.Checked.ToString();
                     _field.value = _checkBox.Checked.ToString();
                     _field.checkedFlag = _checkBox.Checked;
+                    _checkBox.Tag = _field;
 
                 }
             }
@@ -696,6 +697,8 @@ namespace IGenFormsViewer
             {
                 tbrMainStop.Visible = true;
                 displayIGenForms.cancelFlag = false;
+
+                // save off prompts 
 
                 // now process the forms
 
@@ -1871,6 +1874,58 @@ namespace IGenFormsViewer
             catch (Exception ex)
             {
                 CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainActionsPrepare_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+
+        private void mnuMainActionsClearPrompts_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                // walk the fields and controls and clear the prompts
+                for (int n=0;n<currentForm.formFields.fields.Count;n++)
+                {
+                    IGenField _field = currentForm.formFields.fields[n];
+                    _field.text = "";
+                    _field.checkedFlag = false;
+                    currentForm.formFields.fields[n] = _field;
+                }
+
+                // now clear the controls
+                TabPage _currentTabPage = tabForms.SelectedTab;
+                PictureBox _currentPallet = (PictureBox) _currentTabPage.Controls[0];
+
+                for (int n=0;n<_currentPallet.Controls.Count;n++)
+                {
+                    Control _control = _currentPallet.Controls[n];
+                    switch (_control.GetType().Name.ToUpper())
+                    {
+                        case "TEXTBOX":
+                        case "COMBOBOX":
+                            _control.Text = "";
+                            break;
+
+                        case "CHECKBOX":
+                            CheckBox _checkBox = (CheckBox)_control;
+                            _checkBox.Checked = false;
+                            break;
+
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainActionsClearPrompts_Click > " + ex.Message);
             }
 
             return;

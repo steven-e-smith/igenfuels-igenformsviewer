@@ -26,7 +26,8 @@ namespace IGenFormsViewer
                             "1.1.6.3    SES     Added capability to add variables that can be used as %VARIABLENAME% in forms",
                             "1.1.6.4    SES     FB-14267 - Fields not resolving",
                             "1.1.6.5    SES     Added ONLASTPAGE, ONPAGEBREAK and DSSUMFIELD functions",
-                            "1.1.6.6    SES     FB-14541 - Odd issues in IGenForms/Viewer"
+                            "1.1.6.6    SES     FB-14541 - Odd issues in IGenForms/Viewer",
+                            "1.1.6.7    SES     FB - Fuzzy printing of forms - converted printing to PDF from composite bitmap"
                         };
 
 

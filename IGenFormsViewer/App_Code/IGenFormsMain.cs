@@ -2714,6 +2714,7 @@ namespace IGenFormsViewer
                                 _field.SetHandles();
                             }
                         }
+
                     }
                 }
 
@@ -3138,6 +3139,11 @@ namespace IGenFormsViewer
 
                     DisplayProgress((m + 1), _form.formFields.fields.Count);
 
+                    if (_field.type.ToUpper() == "PICTURE")
+                    {
+                        int xyz = 0;
+                    }
+
                     _field.text = _field.compiledValue;
 
                     // if the value is blank, then give it a few chars to allow to select it
@@ -3194,6 +3200,7 @@ namespace IGenFormsViewer
                             }
 
                             _control.Text = _field.text;
+                            _control.Visible = _field.visible;
                         }
                     }
                 }
@@ -3415,13 +3422,16 @@ namespace IGenFormsViewer
                             }
                             if (CommonRoutines.FileExists(_fileName))
                             {
-                                using (Image temp = Image.FromFile(_fileName))
+                                using (Image _tempImage = Image.FromFile(_fileName))
                                 {
-                                    _pic.Image = new Bitmap(temp);
+                                    Bitmap _tempBitmap = new Bitmap(_tempImage);
+                                    _tempBitmap.MakeTransparent();
+                                    _pic.Image = _tempBitmap;
                                 }
                                 //_pic.ImageLocation = _fileName;
                             }
                             _pic.SizeMode = PictureBoxSizeMode.StretchImage;
+                            _pic.BackColor = Color.Transparent;
                             break;
 
                         case "COMBOBOX":
@@ -4920,6 +4930,7 @@ namespace IGenFormsViewer
         public int processingOrder = 0;
 
         public Image originalImage = null;
+        public List<Control> originalControls = new List<Control>(); 
         public Image gridImage = null;
         public bool gridShowing = false;
         public bool deleteForm = false;

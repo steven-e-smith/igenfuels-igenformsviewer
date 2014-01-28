@@ -1934,6 +1934,152 @@ namespace IGenFormsViewer
 
 
 
+        private void mnuMainViewZoom50Pct_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ZoomPage(50);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewZoom50Pct_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+        private void mnuMainViewZoom100Pct_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ZoomPage(100);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewZoom100Pct_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+        private void mnuMainViewZoom150Pct_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ZoomPage(150);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewZoom150Pct_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+        private void mnuMainViewZoom200Pct_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ZoomPage(200);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewZoom200Pct_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+        private void mnuMainViewZoom300Pct_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ZoomPage(300);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewZoom300Pct_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+        private void ZoomPage(int percentage)
+        {
+            int _multiplier = percentage;
+
+            try
+            {
+                // get the current page
+                TabPage _tabPage = tabForms.SelectedTab;
+
+                if (_tabPage.Controls.Count > 0 && _tabPage.Controls[0].GetType().Name.ToUpper().IndexOf("PICTUREBOX") >= 0)
+                {
+                    PictureBox _pallet = (PictureBox)_tabPage.Controls[0];
+
+                    // get the image and increase it by that percentage
+                    IGenForm _form = (IGenForm)_pallet.Tag;
+                    Image _image = _form.originalImage;
+                    Size _imageSize = _image.Size;
+                    _imageSize.Width = _imageSize.Width * _multiplier / 100;
+                    _imageSize.Height = _imageSize.Height * _multiplier / 100;
+                    _image = CommonRoutines.ResizeImage(_image, _imageSize);
+                    // check the pallet size
+                    _pallet.Width = _image.Width + 1500;
+                    _pallet.Height = _image.Height + 1500;
+                    _pallet.Image = _image;
+
+                    // now increase the controls size
+                    for (int n=0;n<_pallet.Controls.Count;n++)
+                    {
+                        Control _control = _pallet.Controls[n];
+                        IGenField _field = (IGenField)_control.Tag;
+                        _control.Left = _field.left * _multiplier / 100;
+                        _control.Top = _field.top * _multiplier / 100;
+                        _control.Width = _field.width * _multiplier / 100;
+                        _control.Height = _field.height * _multiplier / 100;
+                        Font _font = new Font(_field.fontName, (_field.fontSize * _multiplier / 100));
+                        _control.Font = _font;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".ZoomPage > " + ex.Message);
+            }
+
+            return;
+
+        }
 
 
 

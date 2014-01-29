@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmViewer));
             this.tabForms = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -77,6 +78,12 @@
             this.mnuMainView = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainViewDatasets = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainViewRefresh = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainViewZoom = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainViewZoom50Pct = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainViewZoom100Pct = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainViewZoom150Pct = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainViewZoom200Pct = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainViewZoom300Pct = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainActions = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainActionsPrepare = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainActionsClearPrompts = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,12 +91,8 @@
             this.mnuMainToolsOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMainViewZoom = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMainViewZoom50Pct = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMainViewZoom100Pct = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMainViewZoom150Pct = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMainViewZoom200Pct = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMainViewZoom300Pct = new System.Windows.Forms.ToolStripMenuItem();
+            this.tmrClock = new System.Windows.Forms.Timer(this.components);
+            this.mnuMainActionsClearAllPrompts = new System.Windows.Forms.ToolStripMenuItem();
             this.tabForms.SuspendLayout();
             this.tbrMain.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -424,7 +427,7 @@
             // 
             this.statusStripMessage.AutoSize = false;
             this.statusStripMessage.Name = "statusStripMessage";
-            this.statusStripMessage.Size = new System.Drawing.Size(713, 17);
+            this.statusStripMessage.Size = new System.Drawing.Size(513, 17);
             this.statusStripMessage.Spring = true;
             this.statusStripMessage.Text = "Ready";
             this.statusStripMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -435,7 +438,7 @@
             this.userLoggedOnStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)));
             this.userLoggedOnStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
             this.userLoggedOnStatusLabel.Name = "userLoggedOnStatusLabel";
-            this.userLoggedOnStatusLabel.Size = new System.Drawing.Size(150, 17);
+            this.userLoggedOnStatusLabel.Size = new System.Drawing.Size(250, 17);
             this.userLoggedOnStatusLabel.Text = "User";
             // 
             // baseDBMSStatusLabel
@@ -443,7 +446,7 @@
             this.baseDBMSStatusLabel.AutoSize = false;
             this.baseDBMSStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)));
             this.baseDBMSStatusLabel.Name = "baseDBMSStatusLabel";
-            this.baseDBMSStatusLabel.Size = new System.Drawing.Size(200, 17);
+            this.baseDBMSStatusLabel.Size = new System.Drawing.Size(400, 17);
             this.baseDBMSStatusLabel.Text = "DBConnection";
             // 
             // customerDBMSStatusLabel
@@ -451,7 +454,7 @@
             this.customerDBMSStatusLabel.AutoSize = false;
             this.customerDBMSStatusLabel.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)));
             this.customerDBMSStatusLabel.Name = "customerDBMSStatusLabel";
-            this.customerDBMSStatusLabel.Size = new System.Drawing.Size(200, 17);
+            this.customerDBMSStatusLabel.Size = new System.Drawing.Size(100, 17);
             this.customerDBMSStatusLabel.Text = "CustConnection";
             // 
             // clockStatusLabel
@@ -529,11 +532,59 @@
             this.mnuMainViewRefresh.Text = "&Refresh";
             this.mnuMainViewRefresh.Click += new System.EventHandler(this.mnuMainViewRefresh_Click);
             // 
+            // mnuMainViewZoom
+            // 
+            this.mnuMainViewZoom.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuMainViewZoom50Pct,
+            this.mnuMainViewZoom100Pct,
+            this.mnuMainViewZoom150Pct,
+            this.mnuMainViewZoom200Pct,
+            this.mnuMainViewZoom300Pct});
+            this.mnuMainViewZoom.Name = "mnuMainViewZoom";
+            this.mnuMainViewZoom.Size = new System.Drawing.Size(159, 22);
+            this.mnuMainViewZoom.Text = "&Zoom";
+            // 
+            // mnuMainViewZoom50Pct
+            // 
+            this.mnuMainViewZoom50Pct.Name = "mnuMainViewZoom50Pct";
+            this.mnuMainViewZoom50Pct.Size = new System.Drawing.Size(102, 22);
+            this.mnuMainViewZoom50Pct.Text = "50%";
+            this.mnuMainViewZoom50Pct.Click += new System.EventHandler(this.mnuMainViewZoom50Pct_Click);
+            // 
+            // mnuMainViewZoom100Pct
+            // 
+            this.mnuMainViewZoom100Pct.Name = "mnuMainViewZoom100Pct";
+            this.mnuMainViewZoom100Pct.Size = new System.Drawing.Size(102, 22);
+            this.mnuMainViewZoom100Pct.Text = "100%";
+            this.mnuMainViewZoom100Pct.Click += new System.EventHandler(this.mnuMainViewZoom100Pct_Click);
+            // 
+            // mnuMainViewZoom150Pct
+            // 
+            this.mnuMainViewZoom150Pct.Name = "mnuMainViewZoom150Pct";
+            this.mnuMainViewZoom150Pct.Size = new System.Drawing.Size(102, 22);
+            this.mnuMainViewZoom150Pct.Text = "150%";
+            this.mnuMainViewZoom150Pct.Click += new System.EventHandler(this.mnuMainViewZoom150Pct_Click);
+            // 
+            // mnuMainViewZoom200Pct
+            // 
+            this.mnuMainViewZoom200Pct.Name = "mnuMainViewZoom200Pct";
+            this.mnuMainViewZoom200Pct.Size = new System.Drawing.Size(102, 22);
+            this.mnuMainViewZoom200Pct.Text = "200%";
+            this.mnuMainViewZoom200Pct.Click += new System.EventHandler(this.mnuMainViewZoom200Pct_Click);
+            // 
+            // mnuMainViewZoom300Pct
+            // 
+            this.mnuMainViewZoom300Pct.Name = "mnuMainViewZoom300Pct";
+            this.mnuMainViewZoom300Pct.Size = new System.Drawing.Size(102, 22);
+            this.mnuMainViewZoom300Pct.Text = "300%";
+            this.mnuMainViewZoom300Pct.Click += new System.EventHandler(this.mnuMainViewZoom300Pct_Click);
+            // 
             // mnuMainActions
             // 
             this.mnuMainActions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuMainActionsPrepare,
-            this.mnuMainActionsClearPrompts});
+            this.mnuMainActionsClearPrompts,
+            this.mnuMainActionsClearAllPrompts});
             this.mnuMainActions.Name = "mnuMainActions";
             this.mnuMainActions.Size = new System.Drawing.Size(62, 20);
             this.mnuMainActions.Text = "&Actions ";
@@ -542,14 +593,14 @@
             // 
             this.mnuMainActionsPrepare.Name = "mnuMainActionsPrepare";
             this.mnuMainActionsPrepare.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.mnuMainActionsPrepare.Size = new System.Drawing.Size(149, 22);
+            this.mnuMainActionsPrepare.Size = new System.Drawing.Size(171, 22);
             this.mnuMainActionsPrepare.Text = "&Prepare";
             this.mnuMainActionsPrepare.Click += new System.EventHandler(this.mnuMainActionsPrepare_Click);
             // 
             // mnuMainActionsClearPrompts
             // 
             this.mnuMainActionsClearPrompts.Name = "mnuMainActionsClearPrompts";
-            this.mnuMainActionsClearPrompts.Size = new System.Drawing.Size(149, 22);
+            this.mnuMainActionsClearPrompts.Size = new System.Drawing.Size(171, 22);
             this.mnuMainActionsClearPrompts.Text = "&Clear Prompts";
             this.mnuMainActionsClearPrompts.Click += new System.EventHandler(this.mnuMainActionsClearPrompts_Click);
             // 
@@ -583,52 +634,17 @@
             this.mnuMainHelpAbout.Text = "&About";
             this.mnuMainHelpAbout.Click += new System.EventHandler(this.mnuMainHelpAbout_Click);
             // 
-            // mnuMainViewZoom
+            // tmrClock
             // 
-            this.mnuMainViewZoom.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuMainViewZoom50Pct,
-            this.mnuMainViewZoom100Pct,
-            this.mnuMainViewZoom150Pct,
-            this.mnuMainViewZoom200Pct,
-            this.mnuMainViewZoom300Pct});
-            this.mnuMainViewZoom.Name = "mnuMainViewZoom";
-            this.mnuMainViewZoom.Size = new System.Drawing.Size(159, 22);
-            this.mnuMainViewZoom.Text = "&Zoom";
+            this.tmrClock.Enabled = true;
+            this.tmrClock.Tick += new System.EventHandler(this.tmrClock_Tick);
             // 
-            // mnuMainViewZoom50Pct
+            // mnuMainActionsClearAllPrompts
             // 
-            this.mnuMainViewZoom50Pct.Name = "mnuMainViewZoom50Pct";
-            this.mnuMainViewZoom50Pct.Size = new System.Drawing.Size(152, 22);
-            this.mnuMainViewZoom50Pct.Text = "50%";
-            this.mnuMainViewZoom50Pct.Click += new System.EventHandler(this.mnuMainViewZoom50Pct_Click);
-            // 
-            // mnuMainViewZoom100Pct
-            // 
-            this.mnuMainViewZoom100Pct.Name = "mnuMainViewZoom100Pct";
-            this.mnuMainViewZoom100Pct.Size = new System.Drawing.Size(152, 22);
-            this.mnuMainViewZoom100Pct.Text = "100%";
-            this.mnuMainViewZoom100Pct.Click += new System.EventHandler(this.mnuMainViewZoom100Pct_Click);
-            // 
-            // mnuMainViewZoom150Pct
-            // 
-            this.mnuMainViewZoom150Pct.Name = "mnuMainViewZoom150Pct";
-            this.mnuMainViewZoom150Pct.Size = new System.Drawing.Size(152, 22);
-            this.mnuMainViewZoom150Pct.Text = "150%";
-            this.mnuMainViewZoom150Pct.Click += new System.EventHandler(this.mnuMainViewZoom150Pct_Click);
-            // 
-            // mnuMainViewZoom200Pct
-            // 
-            this.mnuMainViewZoom200Pct.Name = "mnuMainViewZoom200Pct";
-            this.mnuMainViewZoom200Pct.Size = new System.Drawing.Size(152, 22);
-            this.mnuMainViewZoom200Pct.Text = "200%";
-            this.mnuMainViewZoom200Pct.Click += new System.EventHandler(this.mnuMainViewZoom200Pct_Click);
-            // 
-            // mnuMainViewZoom300Pct
-            // 
-            this.mnuMainViewZoom300Pct.Name = "mnuMainViewZoom300Pct";
-            this.mnuMainViewZoom300Pct.Size = new System.Drawing.Size(152, 22);
-            this.mnuMainViewZoom300Pct.Text = "300%";
-            this.mnuMainViewZoom300Pct.Click += new System.EventHandler(this.mnuMainViewZoom300Pct_Click);
+            this.mnuMainActionsClearAllPrompts.Name = "mnuMainActionsClearAllPrompts";
+            this.mnuMainActionsClearAllPrompts.Size = new System.Drawing.Size(171, 22);
+            this.mnuMainActionsClearAllPrompts.Text = "Clear _All Prompts";
+            this.mnuMainActionsClearAllPrompts.Click += new System.EventHandler(this.mnuMainActionsClearAllPrompts_Click);
             // 
             // frmViewer
             // 
@@ -718,6 +734,8 @@
         private System.Windows.Forms.ToolStripMenuItem mnuMainViewZoom150Pct;
         private System.Windows.Forms.ToolStripMenuItem mnuMainViewZoom200Pct;
         private System.Windows.Forms.ToolStripMenuItem mnuMainViewZoom300Pct;
+        private System.Windows.Forms.Timer tmrClock;
+        private System.Windows.Forms.ToolStripMenuItem mnuMainActionsClearAllPrompts;
     }
 }
 

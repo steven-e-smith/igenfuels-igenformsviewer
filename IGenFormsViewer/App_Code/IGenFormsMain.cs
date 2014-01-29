@@ -2939,9 +2939,16 @@ namespace IGenFormsViewer
                                 break;
 
                             default:
-                                _field.text = _field.compiledValue;
-                                // if the value is blank, then give it a few chars to allow to select it
-                                _value = _field.compiledValue.Trim();
+                                if (_field.value == "")
+                                {
+                                    _field.text = _field.caption;
+                                }
+                                else
+                                {
+                                    _field.text = _field.compiledValue;
+                                    // if the value is blank, then give it a few chars to allow to select it
+                                    _value = _field.compiledValue.Trim();
+                                }
                                 break;
 
                         }
@@ -3194,12 +3201,19 @@ namespace IGenFormsViewer
                                     break;
 
                                 default:
-                                    _control.Text = _field.text;
+                                    // if the value is blank, show the caption
+                                    if (_field.text == "" && _field.value == "")
+                                    {
+                                        _control.Text = _field.caption;
+                                    }
+                                    else
+                                    {
+                                        _control.Text = _field.text;
+                                    }
                                     break;
 
                             }
 
-                            _control.Text = _field.text;
                             _control.Visible = _field.visible;
                         }
                     }
@@ -5076,33 +5090,42 @@ namespace IGenFormsViewer
                         // get the rows in the dataset
                         if (_dataset.dataTable != null)
                         {
+                            IGenPage _page = new IGenPage();
+                            
                             int _dsRows = _dataset.numRows;
 
                             string _breakValues = "";
 
                             // split the fields to check
                             string[] _pageBreakFields = { };
+                            string[] _pageBreakFieldOrdinals = { };
                             string[] _prevBreakFieldValues = { };
                             string[] _currentBreakFieldValues = { };
 
                             if (pageBreaks.Trim() != "")
                             {
                                 _pageBreakFields = pageBreaks.Split(',');
-                            }
 
-                            _prevBreakFieldValues = (string[])_pageBreakFields.Clone();
-                            _currentBreakFieldValues = (string[])_pageBreakFields.Clone();
+                                _pageBreakFieldOrdinals = (string[])_pageBreakFields.Clone();
+                                _prevBreakFieldValues = (string[])_pageBreakFields.Clone();
+                                _currentBreakFieldValues = (string[])_pageBreakFields.Clone();
 
-                            if (_pageBreakFields.Length > 0)
-                            {
-                                // change them to ordinals
-                                for (int m = 0; m < _pageBreakFields.Length; m++)
+                                // resolve the break fields to ordinals for reference
+                                if (_pageBreakFields.Length > 0)
                                 {
-                                    for (int n = 0; n < _dataset.fieldNames.Length; n++)
+                                    // fill in the ordinals
+                                    // change them to ordinals
+                                    for (int m = 0; m < _pageBreakFields.Length; m++)
                                     {
-                                        if (_pageBreakFields[m].Trim().ToUpper() == _dataset.fieldNames[n].Trim().ToUpper())
+                                        // add the variable entry
+                                        _page.SetPageBreakVariable(_pageBreakFields[m], "TRUE", "FALSE", "", "", "");
+
+                                        for (int n = 0; n < _dataset.fieldNames.Length; n++)
                                         {
-                                            _pageBreakFields[m] = n.ToString();
+                                            if (_pageBreakFields[m].Trim().ToUpper() == _dataset.fieldNames[n].Trim().ToUpper())
+                                            {
+                                                _pageBreakFieldOrdinals[m] = n.ToString();
+                                            }
                                         }
                                     }
                                 }
@@ -5121,6 +5144,13 @@ namespace IGenFormsViewer
                                     _endingRow = _dataset.dataTable.Rows.Count;
                                 }
 
+                                string _breakFieldName = "";
+                                string _atBeginning = null;
+                                string _atEnd = null;
+                                string _currentValue = null;
+                                string _prevValue = null;
+                                string _nextValue = null;
+
                                 // see if there are any page breaks defined
                                 if (_pageBreakFields.Length > 0)
                                 {
@@ -5132,7 +5162,7 @@ namespace IGenFormsViewer
                                         // init prev values for first time thru
                                         for (int n = 0; n < _pageBreakFields.Length; n++)
                                         {
-                                            int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFields[n]);
+                                            int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFieldOrdinals[n]);
                                             _prevBreakFieldValues[n] = _rows[1][_colIndex];
                                         }
 
@@ -5152,14 +5182,19 @@ namespace IGenFormsViewer
                                             for (int m = 0; m < _pageBreakFields.Length; m++)
                                             {
                                                 // get the field value
-                                                int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFields[m]);
-                                                string _currentValue = _rows[n][_colIndex];
-                                                _breakValues = _breakValues + _currentValue + ";";
-                                                if (_currentValue.ToUpper() != _prevBreakFieldValues[m].ToUpper())
+                                                int _colIndex = CommonRoutines.ConvertToInt(_pageBreakFieldOrdinals[m]);
+                                                string _currentFieldValue = _rows[n][_colIndex];
+                                                _breakValues = _breakValues + _currentFieldValue + ";";
+                                                if (_currentFieldValue.ToUpper() != _prevBreakFieldValues[m].ToUpper())
                                                 {
-                                                    // failed, exit
+                                                    // page break criteria met, exit
                                                     _endingRow = _startingRow + _breakRow - 1;
                                                     _pageBreak = true;
+                                                    _breakFieldName = _pageBreakFields[m];
+                                                    _currentValue = _prevBreakFieldValues[m];
+                                                    _prevValue = _currentValue;
+                                                    _atEnd = "True";
+                                                    _nextValue = _currentFieldValue;
                                                     _failed = true;
                                                     break;
                                                 }
@@ -5176,12 +5211,23 @@ namespace IGenFormsViewer
 
                                 }
                                 
-                                IGenPage _page = new IGenPage(_ds, _pageNo, _startingRow, _endingRow);
-
+                                // set the page values
+                                _page.datasetOrdinal = _ds;
+                                _page.pageNo = _pageNo;
+                                _page.startingRow = _startingRow;
+                                _page.endingRow = _endingRow;
                                 _page.pageBreak = _failed;
                                 _page.breakValues = _breakValues;
                                 _page.pageBreak = _pageBreak;
+                                _page.breakCriteria = pageBreaks;
 
+                                // was there a page break?
+                                if (_breakFieldName != "")
+                                {
+                                    _page.SetPageBreakVariable(_breakFieldName, _atBeginning, _atEnd, _currentValue, _prevValue, _nextValue);
+                                }
+
+                                // add the page
                                 _formDataset.pages.Add(_page);
 
                                 _startingRow = _endingRow + 1;
@@ -7033,15 +7079,19 @@ namespace IGenFormsViewer
 
     public class IGenPage
     {
-        private static string moduleName = "IGenPage";
+        private string moduleName = "IGenPage";
 
         public int datasetOrdinal = 0;
         public int pageNo = 0;
         public int startingRow = 0;
         public int endingRow = 0;
+        public string breakCriteria = "";
         public string breakValues = "";
         public bool pageBreak = false;
         public bool lastPage = false;
+
+        public List<IGenBreakFieldVariables> breakFieldVariables = new List<IGenBreakFieldVariables>();
+
 
         public IGenPage()
         {
@@ -7065,27 +7115,199 @@ namespace IGenFormsViewer
 
 
 
-        public IGenPage(int pdatasetOrdinal, int pno, int srow, int erow)
+        public void SetPageBreakVariable(IGenBreakFieldVariables breakFieldVariable)
         {
 
             try
             {
-                datasetOrdinal = pdatasetOrdinal;
-                pageNo = pno;
-                startingRow = srow;
-                endingRow = erow;
+                SetPageBreakVariable(breakFieldVariable.breakFieldName,
+                                     breakFieldVariable.atBegin.ToString(),
+                                     breakFieldVariable.atEnd.ToString(),
+                                     breakFieldVariable.current,
+                                     breakFieldVariable.prev,
+                                     breakFieldVariable.next);
             }
             catch (Exception ex)
             {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".IGenPage(i,i,i,i) > " + ex.Message);
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SetPageBreakVariable(udt) > " + ex.Message);
             }
 
             return;
 
         }
 
+
+
+
+
+        public void SetPageBreakVariable(string breakVariableName, string atBeginningOfBreak, string atEndOfBreak, string currentValue, string prevValue, string nextValue)
+        {
+            bool _found = false;
+
+            try
+            {
+                // find the variable in the pool
+                for (int n = 0; n < breakFieldVariables.Count;n++)
+                {
+                    if (breakFieldVariables[n].breakFieldName.ToUpper().Equals(breakVariableName.ToUpper()))
+                    {
+                        IGenBreakFieldVariables _breakFieldVariable = breakFieldVariables[n];
+
+                        // set the values
+                        _breakFieldVariable.atBegin = (atBeginningOfBreak != null) ? CommonRoutines.ConvertToBool(atBeginningOfBreak) : false;
+                        _breakFieldVariable.atEnd = (atEndOfBreak != null) ? CommonRoutines.ConvertToBool(atEndOfBreak) : false;
+                        _breakFieldVariable.current = (currentValue != null) ? currentValue : "";
+                        _breakFieldVariable.prev = (prevValue != null) ? prevValue : "";
+                        _breakFieldVariable.next = (nextValue != null) ? nextValue : "";
+
+                        breakFieldVariables[n] = _breakFieldVariable;
+                        _found = true;
+
+                    }
+                }
+
+                // if not found, add
+                if (!_found)
+                {
+                    IGenBreakFieldVariables _breakFieldVariable = new IGenBreakFieldVariables();
+                    _breakFieldVariable.breakFieldName = breakVariableName;
+
+                    // set the values
+                    _breakFieldVariable.atBegin = (atBeginningOfBreak != null) ? CommonRoutines.ConvertToBool(atBeginningOfBreak) : false;
+                    _breakFieldVariable.atEnd = (atEndOfBreak != null) ? CommonRoutines.ConvertToBool(atEndOfBreak) : false;
+                    _breakFieldVariable.current = (currentValue != null) ? currentValue : "";
+                    _breakFieldVariable.prev = (prevValue != null) ? prevValue : "";
+                    _breakFieldVariable.next = (nextValue != null) ? nextValue : "";
+
+                    breakFieldVariables.Add(_breakFieldVariable);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SetPageBreakVariable(s,b,b,s,s,s) > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+        public IGenBreakFieldVariables GetPageBreakVariable(string breakVariableName)
+        {
+            IGenBreakFieldVariables _breakFieldVariable = null;
+
+            try
+            {
+                // find the variable in the pool
+                for (int n = 0; n < breakFieldVariables.Count; n++)
+                {
+                    if (breakFieldVariables[n].breakFieldName.ToUpper().Equals(breakVariableName.ToUpper()))
+                    {
+                        _breakFieldVariable = breakFieldVariables[n];
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".GetPageBreakVariable(s) > " + ex.Message);
+            }
+
+            return _breakFieldVariable;
+
+        }
+
+
+
+
+        public void GetPageBreakVariable(string breakVariableName, ref bool atBeginningOfBreak, ref bool atEndOfBreak, ref string currentValue, ref string prevValue, ref string nextValue)
+        {
+            IGenBreakFieldVariables _breakFieldVariable = null;
+
+            try
+            {
+                // find the variable in the pool
+                for (int n = 0; n < breakFieldVariables.Count; n++)
+                {
+                    if (breakFieldVariables[n].breakFieldName.ToUpper().Equals(breakVariableName.ToUpper()))
+                    {
+                        _breakFieldVariable = breakFieldVariables[n];
+                        atBeginningOfBreak = _breakFieldVariable.atBegin;
+                        atEndOfBreak = _breakFieldVariable.atEnd;
+                        currentValue = _breakFieldVariable.current;
+                        prevValue = _breakFieldVariable.prev;
+                        nextValue = _breakFieldVariable.next;
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".GetPageBreakVariable(s,b,b,s,s,s) > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+        public void UpdateCSAProperties()
+        {
+
+            try
+            {
+                // update the csa settings with the current values
+                CSA.SetProperty("","PAGEDATASETORDINAL%", datasetOrdinal.ToString());
+                CSA.SetProperty("","PAGENO", pageNo.ToString());
+                CSA.SetProperty("","PAGESTARTINGROW", startingRow.ToString());
+                CSA.SetProperty("","PAGEENDINGROW", endingRow.ToString());
+                CSA.SetProperty("", "PAGEBREAKCRITERIA", breakCriteria);
+                CSA.SetProperty("", "PAGEBREAKVALUES", breakValues);
+                CSA.SetProperty("","PAGEPAGEBREAK", pageBreak.ToString());
+                CSA.SetProperty("", "PAGELASTPAGE", lastPage.ToString());
+
+                foreach (IGenBreakFieldVariables _breakFieldVariable in breakFieldVariables)
+                {
+                    CSA.SetProperty("", _breakFieldVariable.breakFieldName + "_AT_BEGIN", _breakFieldVariable.atBegin.ToString());
+                    CSA.SetProperty("", _breakFieldVariable.breakFieldName + "_AT_END", _breakFieldVariable.atEnd.ToString());
+                    CSA.SetProperty("", _breakFieldVariable.breakFieldName + "_CURRENT", _breakFieldVariable.current);
+                    CSA.SetProperty("", _breakFieldVariable.breakFieldName + "_PREV", _breakFieldVariable.prev);
+                    CSA.SetProperty("", _breakFieldVariable.breakFieldName + "_NEXT", _breakFieldVariable.next);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".UpdateCSAProperties > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+    
     }
 
+
+    // break field variables
+    public class IGenBreakFieldVariables
+    {
+        public string breakFieldName;  // the name of the field to break on
+        public bool atBegin;       // is this the beginning of the break variable set?
+        public bool atEnd;         // is this the end of the break variable set?
+        public string current;     // current value of the variable
+        public string prev;        // last value of the variable
+        public string next;        // next value of the variable
+
+    }
 
 
 }

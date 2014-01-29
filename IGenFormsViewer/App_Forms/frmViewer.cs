@@ -188,6 +188,10 @@ namespace IGenFormsViewer
 
                 ResizeControls();
 
+                baseDBMSStatusLabel.Text = DatabaseRoutines.MainDBMS + "-" + DatabaseRoutines.GetConnectionServer(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS);
+                userLoggedOnStatusLabel.Text = CommonRoutines.GetCurrentUser();
+
+
             }
             catch (Exception ex)
             {
@@ -1297,18 +1301,6 @@ namespace IGenFormsViewer
                         // see if the page number sent is valid for the number of pages determined
                         if (_form.pages.Count > 0)
                         {
-                            //if (_pageNo < 1)
-                            //{
-                            //    _pageNo = 1;
-                            //}
-                            //else
-                            //{
-                            //    if (_pageNo > _form.pages.Count)
-                            //    {
-                            //        _pageNo = _form.pages.Count;
-                            //    }
-                            //}
-
                             _form.currentPage = _pageNo;
 
                             // offset the row
@@ -1319,10 +1311,13 @@ namespace IGenFormsViewer
 
                             if (_pageNo < _form.pages.Count)
                             {
+                                IGenPage _page = _form.pages[_pageNo];
+                                _page.UpdateCSAProperties();
+
                                 // get the starting and ending values 
-                                int _startingRow = _form.pages[_pageNo].startingRow;
-                                int _endingRow = _form.pages[_pageNo].endingRow;
-                                bool _pageBreak = _form.pages[_pageNo].pageBreak;
+                                int _startingRow = _page.startingRow;
+                                int _endingRow = _page.endingRow;
+                                bool _pageBreak = _page.pageBreak;
                                 int _numRows = _endingRow - _startingRow + 1;
 
                                 tbrMainPageNo.Text = _form.currentPage.ToString();
@@ -1886,42 +1881,235 @@ namespace IGenFormsViewer
 
 
 
+        private void ClearPrompts(TabPage tabPage)
+        {
+
+            try
+            {
+                // get the current form (current tab)
+                if (tabPage != null)
+                {
+                    if (tabPage.Controls.Count > 0)
+                    {
+                        // now clear the controls
+                        TabPage _currentTabPage = tabPage;
+                        PictureBox _currentPallet = (PictureBox)_currentTabPage.Controls[0];
+                        IGenForm _currentForm = (IGenForm)_currentPallet.Tag;
+
+                        // walk the fields and controls and clear the prompts
+                        for (int n = 0; n < _currentForm.formFields.fields.Count; n++)
+                        {
+                            IGenField _field = _currentForm.formFields.fields[n];
+                            _field.text = "";
+                            _field.checkedFlag = false;
+                            _currentForm.formFields.fields[n] = _field;
+                        }
+
+                        for (int n = 0; n < _currentPallet.Controls.Count; n++)
+                        {
+                            Control _control = _currentPallet.Controls[n];
+                            switch (_control.GetType().Name.ToUpper())
+                            {
+                                case "TEXTBOX":
+                                case "COMBOBOX":
+                                    _control.Text = "";
+                                    break;
+
+                                case "CHECKBOX":
+                                    CheckBox _checkBox = (CheckBox)_control;
+                                    _checkBox.Checked = false;
+                                    break;
+
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".ClearPrompts > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+        private void mnuMainViewZoom50Pct_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ZoomPage(50);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewZoom50Pct_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+        private void mnuMainViewZoom100Pct_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ZoomPage(100);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewZoom100Pct_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+        private void mnuMainViewZoom150Pct_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ZoomPage(150);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewZoom150Pct_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+        private void mnuMainViewZoom200Pct_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ZoomPage(200);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewZoom200Pct_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+        private void mnuMainViewZoom300Pct_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ZoomPage(300);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainViewZoom300Pct_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+        private void ZoomPage(int percentage)
+        {
+            int _multiplier = percentage;
+
+            try
+            {
+                // get the current page
+                TabPage _tabPage = tabForms.SelectedTab;
+
+                if (_tabPage.Controls.Count > 0 && _tabPage.Controls[0].GetType().Name.ToUpper().IndexOf("PICTUREBOX") >= 0)
+                {
+                    PictureBox _pallet = (PictureBox)_tabPage.Controls[0];
+
+                    // get the image and increase it by that percentage
+                    IGenForm _form = (IGenForm)_pallet.Tag;
+                    Image _image = _form.originalImage;
+                    Size _imageSize = _image.Size;
+                    _imageSize.Width = _imageSize.Width * _multiplier / 100;
+                    _imageSize.Height = _imageSize.Height * _multiplier / 100;
+                    _image = CommonRoutines.ResizeImage(_image, _imageSize);
+                    // check the pallet size
+                    _pallet.Width = _image.Width + 1500;
+                    _pallet.Height = _image.Height + 1500;
+                    _pallet.Image = _image;
+
+                    // now increase the controls size
+                    for (int n=0;n<_pallet.Controls.Count;n++)
+                    {
+                        Control _control = _pallet.Controls[n];
+                        IGenField _field = (IGenField)_control.Tag;
+                        _control.Left = _field.left * _multiplier / 100;
+                        _control.Top = _field.top * _multiplier / 100;
+                        _control.Width = _field.width * _multiplier / 100;
+                        _control.Height = _field.height * _multiplier / 100;
+                        Font _font = new Font(_field.fontName, (_field.fontSize * _multiplier / 100));
+                        _control.Font = _font;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".ZoomPage > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+        private void tmrClock_Tick(object sender, EventArgs e)
+        {
+
+            try
+            {
+                clockStatusLabel.Text = CommonRoutines.GetCurrentDateTime();
+                customerDBMSStatusLabel.Text = CommonRoutines.GetHandleCount().ToString();
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tmrClock_Tick > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
         private void mnuMainActionsClearPrompts_Click(object sender, EventArgs e)
         {
 
             try
             {
-                // walk the fields and controls and clear the prompts
-                for (int n=0;n<currentForm.formFields.fields.Count;n++)
-                {
-                    IGenField _field = currentForm.formFields.fields[n];
-                    _field.text = "";
-                    _field.checkedFlag = false;
-                    currentForm.formFields.fields[n] = _field;
-                }
-
-                // now clear the controls
-                TabPage _currentTabPage = tabForms.SelectedTab;
-                PictureBox _currentPallet = (PictureBox) _currentTabPage.Controls[0];
-
-                for (int n=0;n<_currentPallet.Controls.Count;n++)
-                {
-                    Control _control = _currentPallet.Controls[n];
-                    switch (_control.GetType().Name.ToUpper())
-                    {
-                        case "TEXTBOX":
-                        case "COMBOBOX":
-                            _control.Text = "";
-                            break;
-
-                        case "CHECKBOX":
-                            CheckBox _checkBox = (CheckBox)_control;
-                            _checkBox.Checked = false;
-                            break;
-
-                    }
-                }
-
+                ClearPrompts(tabForms.SelectedTab);
             }
             catch (Exception ex)
             {
@@ -1934,6 +2122,28 @@ namespace IGenFormsViewer
 
 
 
+
+
+
+        
+        private void mnuMainActionsClearAllPrompts_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                foreach (TabPage _tabPage in tabForms.TabPages)
+                {
+                    ClearPrompts(_tabPage);
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainActionsClearAllPrompts_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
 
 
 

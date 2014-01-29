@@ -1202,64 +1202,33 @@ namespace IGenFormsViewer
 
                     #endregion
 
-                    #region [Process PAGEBREAK requests]
-
-                    if (_value.ToUpper().IndexOf("PAGEBREAK(") == 0)
-                    {
-                        // now evaluate the PAGEBREAK expression 
-                        _value = _value.Substring("PAGEBREAK(".Length);
-                        _endIndex = _value.LastIndexOf(')');
-                        if (_endIndex > 0)
-                        {
-                            _value = _value.Substring(0, _endIndex);
-                        }
-                        string[] _parts = _value.Split(',');
-
-                        string _temp = "Err:" + _value;
-
-                        // must have 3 parts
-                        if (_parts.Length > 2)
-                        {
-                            // ds ordinal is first part
-                            int _dsOrdinal = CommonRoutines.ConvertToInt(_parts[0]);
-                            if (currentIGenForms.datasets[_dsOrdinal].pageBreak)
-                            {
-                                // set value to the true part (1)
-                                _temp = _parts[1];
-                            }
-                            else
-                            {
-                                _temp = _parts[2];
-                            }
-                        }
-                        _value = _temp;
-                    }
-
-                    #endregion
-
                     #region [Process SETVISIBLE requests]
 
                     if (_value.ToUpper().IndexOf("SETVISIBLE(") == 0)
                     {
-                        // now evaluate the SETVISIBLE expression 
-                        _value = _value.Substring("SETVISIBLE(".Length);
-                        _endIndex = _value.LastIndexOf(')');
-                        if (_endIndex > 0)
+                        if (_value.ToUpper().IndexOf("SETVISIBLE(") == 0)
                         {
-                            _value = _value.Substring(0, _endIndex);
+                            // now evaluate the conditional part expression 
+                            _value = _value.Substring("SETVISIBLE(".Length);
+                            _endIndex = _value.LastIndexOf(')');
+                            if (_endIndex > 0)
+                            {
+                                _value = _value.Substring(0, _endIndex);
+                            }
+                            string _temp = EvaluateIfExpression(field, _value);
+                            _value = _temp;
+
+                            // check the value
+                            if (_value.ToUpper().IndexOf('T') == 0)
+                            {
+                                _field.visible = true;
+                            }
+                            else
+                            {
+                                _field.visible = false;
+                            }
                         }
 
-                        // if value true, set visible, else set false
-                        if (_value.ToUpper() == "TRUE")
-                        {
-                            _field.visible = true;
-                        }
-                        else
-                        {
-                            _field.visible = false;
-                        }
-
-                        _value = _field.text;
                     }
 
                     #endregion

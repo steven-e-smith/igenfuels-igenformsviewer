@@ -107,6 +107,12 @@
             this.dgvSymbolics = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnFindFormImagesFolder = new System.Windows.Forms.Button();
+            this.label15 = new System.Windows.Forms.Label();
+            this.txtFormImagesFolder = new System.Windows.Forms.TextBox();
+            this.btnFindFormsFolder = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
+            this.txtFormsFolder = new System.Windows.Forms.TextBox();
             this.tbrMain.SuspendLayout();
             this.tabPageIGenForms.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumberOfDecimalPlaces)).BeginInit();
@@ -172,6 +178,12 @@
             // 
             // tabPageIGenForms
             // 
+            this.tabPageIGenForms.Controls.Add(this.btnFindFormImagesFolder);
+            this.tabPageIGenForms.Controls.Add(this.label15);
+            this.tabPageIGenForms.Controls.Add(this.txtFormImagesFolder);
+            this.tabPageIGenForms.Controls.Add(this.btnFindFormsFolder);
+            this.tabPageIGenForms.Controls.Add(this.label11);
+            this.tabPageIGenForms.Controls.Add(this.txtFormsFolder);
             this.tabPageIGenForms.Controls.Add(this.chkFormsCompileOnLoad);
             this.tabPageIGenForms.Controls.Add(this.chkFormsPersistValues);
             this.tabPageIGenForms.Controls.Add(this.chkShowSpaceInsteadOfPeriod);
@@ -192,7 +204,7 @@
             // 
             this.chkFormsCompileOnLoad.AutoSize = true;
             this.chkFormsCompileOnLoad.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkFormsCompileOnLoad.Location = new System.Drawing.Point(201, 264);
+            this.chkFormsCompileOnLoad.Location = new System.Drawing.Point(584, 110);
             this.chkFormsCompileOnLoad.Name = "chkFormsCompileOnLoad";
             this.chkFormsCompileOnLoad.Size = new System.Drawing.Size(170, 22);
             this.chkFormsCompileOnLoad.TabIndex = 6;
@@ -202,7 +214,7 @@
             // chkFormsPersistValues
             // 
             this.chkFormsPersistValues.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkFormsPersistValues.Location = new System.Drawing.Point(18, 225);
+            this.chkFormsPersistValues.Location = new System.Drawing.Point(401, 71);
             this.chkFormsPersistValues.Name = "chkFormsPersistValues";
             this.chkFormsPersistValues.Size = new System.Drawing.Size(353, 22);
             this.chkFormsPersistValues.TabIndex = 5;
@@ -222,7 +234,7 @@
             // chkMakeLabelsOpaque
             // 
             this.chkMakeLabelsOpaque.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkMakeLabelsOpaque.Location = new System.Drawing.Point(212, 187);
+            this.chkMakeLabelsOpaque.Location = new System.Drawing.Point(595, 33);
             this.chkMakeLabelsOpaque.Name = "chkMakeLabelsOpaque";
             this.chkMakeLabelsOpaque.Size = new System.Drawing.Size(159, 22);
             this.chkMakeLabelsOpaque.TabIndex = 4;
@@ -1078,6 +1090,68 @@
             this.dataGridViewTextBoxColumn2.HeaderText = "Value";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             // 
+            // btnFindFormImagesFolder
+            // 
+            this.btnFindFormImagesFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFindFormImagesFolder.Location = new System.Drawing.Point(738, 258);
+            this.btnFindFormImagesFolder.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnFindFormImagesFolder.Name = "btnFindFormImagesFolder";
+            this.btnFindFormImagesFolder.Size = new System.Drawing.Size(60, 34);
+            this.btnFindFormImagesFolder.TabIndex = 30;
+            this.btnFindFormImagesFolder.Text = "Find";
+            this.btnFindFormImagesFolder.UseVisualStyleBackColor = true;
+            this.btnFindFormImagesFolder.Visible = false;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F);
+            this.label15.Location = new System.Drawing.Point(20, 268);
+            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(133, 17);
+            this.label15.TabIndex = 31;
+            this.label15.Text = "Form images folder:";
+            // 
+            // txtFormImagesFolder
+            // 
+            this.txtFormImagesFolder.Location = new System.Drawing.Point(160, 264);
+            this.txtFormImagesFolder.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtFormImagesFolder.Name = "txtFormImagesFolder";
+            this.txtFormImagesFolder.Size = new System.Drawing.Size(570, 24);
+            this.txtFormImagesFolder.TabIndex = 29;
+            // 
+            // btnFindFormsFolder
+            // 
+            this.btnFindFormsFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFindFormsFolder.Location = new System.Drawing.Point(738, 214);
+            this.btnFindFormsFolder.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnFindFormsFolder.Name = "btnFindFormsFolder";
+            this.btnFindFormsFolder.Size = new System.Drawing.Size(60, 34);
+            this.btnFindFormsFolder.TabIndex = 27;
+            this.btnFindFormsFolder.Text = "Find";
+            this.btnFindFormsFolder.UseVisualStyleBackColor = true;
+            this.btnFindFormsFolder.Visible = false;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F);
+            this.label11.Location = new System.Drawing.Point(62, 224);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(91, 17);
+            this.label11.TabIndex = 28;
+            this.label11.Text = "Forms folder:";
+            // 
+            // txtFormsFolder
+            // 
+            this.txtFormsFolder.Location = new System.Drawing.Point(160, 220);
+            this.txtFormsFolder.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtFormsFolder.Name = "txtFormsFolder";
+            this.txtFormsFolder.Size = new System.Drawing.Size(570, 24);
+            this.txtFormsFolder.TabIndex = 26;
+            // 
             // frmOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
@@ -1212,6 +1286,12 @@
         private System.Windows.Forms.DataGridView dgvSymbolics;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.Button btnFindFormImagesFolder;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox txtFormImagesFolder;
+        private System.Windows.Forms.Button btnFindFormsFolder;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox txtFormsFolder;
 
     }
 }

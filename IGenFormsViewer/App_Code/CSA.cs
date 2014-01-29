@@ -27,7 +27,14 @@ namespace IGenFormsViewer
                             "1.1.6.4    SES     FB-14267 - Fields not resolving",
                             "1.1.6.5    SES     Added ONLASTPAGE, ONPAGEBREAK and DSSUMFIELD functions",
                             "1.1.6.6    SES     FB-14541 - Odd issues in IGenForms/Viewer",
-                            "1.1.6.7    SES     FB - Fuzzy printing of forms - converted printing to PDF from composite bitmap"
+                            "1.1.6.7    SES     FB - Fuzzy printing of forms - converted printing to PDF from composite bitmap",
+                            "1.1.6.8    SES     FB-9624 - Added circle capability",
+                            "                   Added zoom feature (50% - 300%)",
+                            "1.1.6.9    SES     Added all of the page values from the IGenPage to the CSA properties collection",
+                            "                   Added new features to the IGenPage class for doing break determination",
+                            "                   Fixed Action/Clear Prompts for the current page",
+                            "                   FB-14671 - Fields with captions not showing but impact calculations"
+        
                         };
 
 

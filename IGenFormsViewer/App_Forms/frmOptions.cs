@@ -420,6 +420,12 @@ namespace IGenFormsViewer
 
                 chkWrapSumWithCoalesce.Checked = (ConfigRoutines.GetSetting("WrapSumWithCoalesce").ToUpper().IndexOf('T') == 0) ? true : false;
 
+                // get the forms folders
+                txtFormsFolder.Text = ConfigRoutines.GetSetting("FormsFolder");
+                txtFormImagesFolder.Text = ConfigRoutines.GetSetting("FormImagesFolder");
+                txtFormImagesFolder.Enabled = false;
+                txtFormsFolder.Enabled = false;
+
                 // default schema
                 string _defaultSchema = ConfigRoutines.GetSetting("DefaultSchema");
                 if (_defaultSchema == "")
@@ -845,6 +851,9 @@ namespace IGenFormsViewer
             return;
 
         }
+
+
+
 
 
 

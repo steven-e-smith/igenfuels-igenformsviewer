@@ -287,6 +287,10 @@ namespace IGenFormsViewer
             string _value = "";
             string _font = "";
             float _fontSize = 0;
+            int _left = 0;
+            int _top = 0;
+            int _width = 0;
+            int _height = 0;
             float _factorX = 1.35F;
             float _factorY = 1.20F;
             Pen _pen = new Pen(Brushes.Black);
@@ -346,56 +350,69 @@ namespace IGenFormsViewer
                             _igenFieldObject = (IGenField)_control.Tag;
                         }
 
-                        string strType = _control.GetType().Name.ToUpper();
-
-                        switch (strType)
+                        if (_igenFieldObject != null && _igenFieldObject.visible)
                         {
-                            case "PICTUREBOX":
-                                // draw the image at the location
-                                PictureBox _pic = (PictureBox)_control;
-                                break;
+                            string _type = _igenFieldObject.type.ToUpper();
+                            _left = (int)(_igenFieldObject.left * .745);
+                            _top = (int)(_igenFieldObject.top * .755);
+                            _width = (int)(_igenFieldObject.width * .745);
+                            _height = (int)(_igenFieldObject.height * .755);
+                            _fontSize = (float)(_igenFieldObject.fontSize);
+                            _font = _igenFieldObject.fontName;
+                            _value = _igenFieldObject.text;
 
-                            case "BUTTON":
-                            case "IMAGEBUTTON":
-                                break;
+                            switch (_type)
+                            {
+                                case "PICTURE":
+                                    // draw the image at the location
+                                    _left = _left + 1;
+                                    _top = _top - 2;
+                                    XImage _image = _igenFieldObject.img;
+                                    if (_igenFieldObject.img == null)
+                                    {
+                                        PictureBox _pic = (PictureBox)_control;
+                                        if (_pic.Image != null)
+                                        {
+                                            Image _picImage = CommonRoutines.ResizeImage(_pic.Image, new Size(_width, _height));
+                                            _image = _picImage;
+                                        }
+                                    }
 
-                            default:
-                                if (_igenFieldObject.visible)
-                                {
-                                    _fontSize = (float)(_control.Font.Size);
-                                    _font = _control.Font.Name;
-                                    _value = _control.Text;
+                                    if (_image != null)
+                                    {
+                                        _pdfGraphics.DrawImage(_image, new Rectangle(_left, _top, _width, _height));
+                                    }
+                                    break;
+
+                                case "BUTTON":
+                                case "IMAGEBUTTON":
+                                    break;
+
+                                default:
 
                                     // create a rect of where the control sits
-                                    Rectangle _rect = new Rectangle((int)(_control.Left * .745), 
-                                                    (int)(_control.Top * .755), 
-                                                    (int)(_control.Width * .745), 
-                                                    (int) (_control.Height * .755));
                                     XStringFormat _format = new XStringFormat();
                                     _format.LineAlignment = XLineAlignment.Far;
 
-                                    if (_igenFieldObject != null)
+                                    // check alignment
+                                    switch (_igenFieldObject.alignment.ToUpper())
                                     {
-                                        // check alignment
-                                        switch (_igenFieldObject.alignment.ToUpper())
-                                        {
-                                            case "LEFT":
-                                                _format.Alignment = XStringAlignment.Near;
-                                                break;
+                                        case "LEFT":
+                                            _format.Alignment = XStringAlignment.Near;
+                                            break;
 
-                                            case "CENTER":
-                                                _format.Alignment = XStringAlignment.Center;
-                                                break;
+                                        case "CENTER":
+                                            _format.Alignment = XStringAlignment.Center;
+                                            break;
 
-                                            case "RIGHT":
-                                                _format.Alignment = XStringAlignment.Far;
-                                                break;
-                                        }
-
+                                        case "RIGHT":
+                                            _format.Alignment = XStringAlignment.Far;
+                                            break;
                                     }
+                                    Rectangle _rect = new Rectangle(_left, _top, _width, _height);
 
                                     // see if any special processing on the value...
-                                    switch (strType.ToUpper())
+                                    switch (_type.ToUpper())
                                     {
                                         case "CHECKBOX":
                                             _value = _value.ToUpper().IndexOf("TRUE") == 0 ? "X" : "";
@@ -405,14 +422,10 @@ namespace IGenFormsViewer
 
                                     _pdfFont = new XFont(_font, _fontSize, XFontStyle.Regular, options);
 
-                                    //_value = (n * 1000).ToString();
                                     _pdfGraphics.DrawString(_value, _pdfFont, XBrushes.Black, _rect, _format);
 
-                                    //int _left = (int)(_control.Left * .795);
-                                    //int _top = (int)(_control.Top * .765);
-                                    //_pdfGraphics.DrawString(_value, _pdfFont, XBrushes.Black, _left, _top);
-                                }
-                                break;
+                                    break;
+                            }
                         }
                     }
                 }

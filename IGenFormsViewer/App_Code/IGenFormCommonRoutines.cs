@@ -1094,15 +1094,19 @@ namespace IGenFormsViewer
                                     // split the parms
                                     string[] _parms = _onpagebreakValue.Split(',');
 
-                                    if (_parms.Length == 2)
+                                    if (_parms.Length >= 2)
                                     {
                                         string _dseofOrdinal = _parms[0];
                                         string _dseofCriteria = _parms[1];
+                                        string _dseofFlag = (_parms.Length > 2 ? _parms[2] : "ANY");   // could be ANY or ALL
 
                                         // strip off the field ordinal
+                                        int _columnIndex = -1;
                                         int _colonIndex = _dseofOrdinal.IndexOf(':');
+                                        string _columnOrdinal = "";
                                         if (_colonIndex > 0)
                                         {
+                                            _columnOrdinal = _dseofOrdinal.Substring(_colonIndex + 1);
                                             _dseofOrdinal = _dseofOrdinal.Substring(0, _colonIndex);
                                         }
 
@@ -1110,8 +1114,39 @@ namespace IGenFormsViewer
                                         IGenDataset _dseofDS = currentIGenForms.datasets[_ordinal];
                                         if (_dseofDS.pageBreak)
                                         {
-                                            // set the value = criteria
-                                            _value = _dseofCriteria;
+                                            // see if field(s) were specified
+                                            if (_columnOrdinal != "")
+                                            {
+                                                int _pageNo = form.currentPage - 1;
+                                                if (form.dataset.pages.Count > 0 && (_pageNo >= 0 && _pageNo < form.dataset.pages.Count))
+                                                {
+                                                    IGenPage _page = form.pages[_pageNo];
+                                                    if (_page.lastPage)
+                                                    {
+                                                        _value = _dseofCriteria;
+                                                    }
+                                                    else
+                                                    {
+                                                        // check to see if the field that caused the break is one of the fields specified
+                                                        // get the fields
+                                                        string[] _checkForBreakOnFields = _columnOrdinal.Split('|');
+                                                        _value = "";
+                                                        for (int k = 0; k < _checkForBreakOnFields.Length; k++)
+                                                        {
+                                                            if (_page.breakFieldName.ToUpper().IndexOf((";" + _checkForBreakOnFields[k].ToUpper() + ";")) >= 0)
+                                                            {
+                                                                _value = _dseofCriteria;
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                // set the value = criteria
+                                                _value = _dseofCriteria;
+                                            }
                                         }
                                         else
                                         {

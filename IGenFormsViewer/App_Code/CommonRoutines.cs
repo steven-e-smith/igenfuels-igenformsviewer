@@ -963,7 +963,6 @@ namespace IGenFormsViewer
 
 
 
-
         /// <summary>
         /// int WriteFile(string fileName, List<string> records)
         /// Save a file from an array of records
@@ -973,8 +972,34 @@ namespace IGenFormsViewer
         /// <returns></returns>
         public static int WriteFile(string fileName, List<string> records)
         {
+            int _recordsWritten = 0;
+
+            try
+            {
+                _recordsWritten = WriteFile(fileName, records, true);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".WriteFile(s,L<s>) > " + ex.Message);
+                _recordsWritten = -1;
+            }
+
+            return _recordsWritten;
+
+        }
+
+
+        /// <summary>
+        /// int WriteFile(string fileName, List<string> records)
+        /// Save a file from an array of records
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="records"></param>
+        /// <returns></returns>
+        public static int WriteFile(string fileName, List<string> records, bool overwrite)
+        {
             String _fileName = "";
-            bool _overWrite = true;
+            bool _overWrite = overwrite;
             int _recordsWritten = 0;
 
             _fileName = fileName;
@@ -985,17 +1010,17 @@ namespace IGenFormsViewer
                 _fileName = currentPath + "\\" + _fileName;
             }
 
-            // Check to see if the file exists
-            if (System.IO.File.Exists(_fileName))
-            {
-                // overwrite it?
-                _overWrite = true;
-            }
+            //// Check to see if the file exists
+            //if (System.IO.File.Exists(_fileName))
+            //{
+            //    // overwrite it?
+            //    _overWrite = true;
+            //}
 
-            if (_overWrite)
+            // Open the file and write the records.
+            try
             {
-                // Open the file and write the records.
-                try
+                if (_overWrite)
                 {
                     using (System.IO.FileStream _fileStream = System.IO.File.Create(_fileName))
                     {
@@ -1017,11 +1042,33 @@ namespace IGenFormsViewer
                         _fileStream.Close();
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    CommonRoutines.Log("$E:" + moduleName + ".WriteFile > " + ex.Message);
-                    _recordsWritten = -1;
+                    using (System.IO.FileStream _fileStream = System.IO.File.Open(_fileName,FileMode.Append))
+                    {
+                        for (int n = 0; n < records.Count; n++)
+                        {
+                            char[] achrChars = records[n].ToCharArray();
+
+                            for (int m = 0; m < achrChars.Length; m++)
+                            {
+                                _fileStream.WriteByte((byte)achrChars[m]);
+                            }
+
+                            _fileStream.WriteByte((byte)'\r');
+                            _fileStream.WriteByte((byte)'\n');
+
+                            _recordsWritten++;
+                        }
+
+                        _fileStream.Close();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".WriteFile(s, L<s>, b) > " + ex.Message);
+                _recordsWritten = -1;
             }
 
             return _recordsWritten;

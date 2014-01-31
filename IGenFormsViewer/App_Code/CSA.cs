@@ -33,7 +33,8 @@ namespace IGenFormsViewer
                             "1.1.6.9    SES     Added all of the page values from the IGenPage to the CSA properties collection",
                             "                   Added new features to the IGenPage class for doing break determination",
                             "                   Fixed Action/Clear Prompts for the current page",
-                            "                   FB-14671 - Fields with captions not showing but impact calculations"
+                            "                   FB-14671 - Fields with captions not showing but impact calculations",
+                            "1.1.6.10   SES     FB-14701 - Add capability to the OnPageBreak event" 
         
                         };
 

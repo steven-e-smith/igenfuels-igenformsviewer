@@ -26,6 +26,7 @@ namespace IGenFormsViewer
         bool isDirty = false;
 
         bool initialDisplay = true;
+        bool runPrepare = true;
 
 
         public frmViewer()
@@ -153,6 +154,7 @@ namespace IGenFormsViewer
                 // set events for the form
                 this.Resize += new EventHandler(frmViewer_Resize);
                 this.FormClosing += frmViewer_FormClosing;
+                this.Load += frmViewer_Load;
 
                 // add the navigation button events
                 tbrMainFirstPage.Click += new EventHandler(btnFirst_Click);
@@ -199,6 +201,29 @@ namespace IGenFormsViewer
             }
 
             DisplayStatus("Ready");
+
+            return;
+
+        }
+
+
+
+
+
+        void frmViewer_Load(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (runPrepare)
+                {
+                    //DisplayForms();
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".frmViewer_Load > " + ex.Message);
+            }
 
             return;
 
@@ -380,6 +405,11 @@ namespace IGenFormsViewer
             {
                 //DisplayStatus("Loading form definitions...");
 
+                // add the form name to the caption
+                string _formName = IGenFormCommonRoutines.currentIGenForms.fileName;
+                _formName = (_formName.LastIndexOf('\\') > 0) ? _formName.Substring(_formName.LastIndexOf('\\') + 1) : _formName;
+                this.Text = "IGenForms Viewer Version " + CommonRoutines.strVersion + "   (" + _formName + ")";
+
                 if (initialDisplay)
                 {
                     #region [Initial Time Starting]
@@ -431,6 +461,7 @@ namespace IGenFormsViewer
                 }
                 else
                 {
+                    // prepare the returns...
                     DisplayStatus("Processing form rules...");
                     displayIGenForms.ProcessForms();
 
@@ -451,6 +482,7 @@ namespace IGenFormsViewer
                             displayIGenForms.RedisplaySelectedForm(_pallet, _form.name,true);
                         }
                     }
+
                 }
 
                 // set an event for the textboxes and checkboxes
@@ -701,6 +733,12 @@ namespace IGenFormsViewer
             {
                 tbrMainStop.Visible = true;
                 displayIGenForms.cancelFlag = false;
+
+                // clean up stuff...
+                if (CommonRoutines.FileExists("./pageinfo.txt"))
+                {
+                    CommonRoutines.DeleteFile("./pageinfo.txt", false, false);
+                }
 
                 // save off prompts 
 

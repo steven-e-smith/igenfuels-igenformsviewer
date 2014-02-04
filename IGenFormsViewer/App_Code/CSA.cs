@@ -34,7 +34,8 @@ namespace IGenFormsViewer
                             "                   Added new features to the IGenPage class for doing break determination",
                             "                   Fixed Action/Clear Prompts for the current page",
                             "                   FB-14671 - Fields with captions not showing but impact calculations",
-                            "1.1.6.10   SES     FB-14701 - Add capability to the OnPageBreak event" 
+                            "1.1.6.10   SES     FB-14701 - Add capability to the OnPageBreak event",
+                            "1.1.6.11   SES     FB-14762 - Only First Page of Multipage Forms Printing and Other Printing Issues"
         
                         };
 

@@ -16,7 +16,7 @@ namespace IGenFormsViewer
         private string moduleName = "frmPrintDialog";
 
         TabControl tabFormsToPrint = new TabControl();
-        private int maxPages = 1;
+        private int maxPages = 0;
 
         public frmPrintDialog(TabControl tabForms)
         {
@@ -179,7 +179,9 @@ namespace IGenFormsViewer
                                         _totalPages = 1;
                                     }
 
-                                    if (_totalPages > maxPages)
+                                    maxPages = CommonRoutines.ConvertToInt(ConfigRoutines.GetSetting("PDFMaxPages"));
+
+                                    if (_totalPages > maxPages && maxPages > 0)
                                     {
                                         _totalPages = maxPages;
 

@@ -142,6 +142,8 @@ namespace IGenFormsViewer
 //                dgvFormsToPrint.UpdateCellValue(_row, _col);
                 dgvFormsToPrint.EndEdit();
 
+                maxPages = CommonRoutines.ConvertToInt(ConfigRoutines.GetSetting("PDFMaxPages"));
+
                 // do they want to save to a file?
                 string _printerSelected = cboPrinterSelected.Text;
 
@@ -158,6 +160,17 @@ namespace IGenFormsViewer
                     if (dgvFormsToPrint.Rows[n].Cells["PrintForm"].Value != null)
                     {
                         bool _selected = CommonRoutines.ConvertToBool(dgvFormsToPrint.Rows[n].Cells["PrintForm"].Value.ToString());
+                        int _pagesToPrint = 1;
+                        if (dgvFormsToPrint.Rows[n].Cells["Pages"].Value != null)
+                        {
+                            _pagesToPrint = CommonRoutines.ConvertToInt(dgvFormsToPrint.Rows[n].Cells["Pages"].Value.ToString());
+                        }
+
+                        if (maxPages > 0 && _pagesToPrint > maxPages)
+                        {
+                            _pagesToPrint = maxPages;
+                        }
+
                         if (_selected)
                         {
                             if (dgvFormsToPrint.Rows[n].Cells["FormName"].Value != null)
@@ -179,11 +192,9 @@ namespace IGenFormsViewer
                                         _totalPages = 1;
                                     }
 
-                                    maxPages = CommonRoutines.ConvertToInt(ConfigRoutines.GetSetting("PDFMaxPages"));
-
-                                    if (_totalPages > maxPages && maxPages > 0)
+                                    if (_totalPages > _pagesToPrint && _pagesToPrint > 0)
                                     {
-                                        _totalPages = maxPages;
+                                        _totalPages = _pagesToPrint;
 
                                     }
 
@@ -233,6 +244,7 @@ namespace IGenFormsViewer
                                                     List<string[]> _results = _dataset.GetRows(_startingRow, _numRows);
 
                                                     _formDataset.results = _results;
+                                                    _form.dataset.pages = _pages;
                                                     _form.dataset.results = _results;
                                                     _dataset.results = _results;
                                                 }

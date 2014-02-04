@@ -1374,9 +1374,11 @@ namespace IGenFormsViewer
 
                                     _ds.results = _results;
 
-                                    _ds.pageBreak = _pageBreak;
+                                    _ds.pageBreak = _pageBreak || _page.lastPage;
 
                                     _form.dataset.results = _results;
+
+                                    _form.dataset.pageBreak = _pageBreak || _page.lastPage;
 
                                     if (_results != null && _results.Count > 0)
                                     {
@@ -1389,10 +1391,14 @@ namespace IGenFormsViewer
                                 }
 
                                 // if this is the last page for this dataset, then set the eof flag
-                                if (_pageNo == (_form.pages.Count - 1))
+                                if (_pageNo >= (_form.pages.Count - 1))
                                 {
                                     _ds.eof = true;
                                     _ds.bof = false;
+                                    _ds.pageBreak = true;
+                                    _form.dataset.eof = true;
+                                    _form.dataset.bof = false;
+                                    _form.dataset.pageBreak = true;
                                 }
                                 else
                                 {
@@ -1400,11 +1406,15 @@ namespace IGenFormsViewer
                                     {
                                         _ds.eof = false;
                                         _ds.bof = true;
+                                        _form.dataset.eof = false;
+                                        _form.dataset.bof = true;
                                     }
                                     else
                                     {
                                         _ds.eof = false;
                                         _ds.bof = false;
+                                        _form.dataset.eof = false;
+                                        _form.dataset.bof = false;
                                     }
                                 }
                                 //DisplayStatus("S=" + _startingRow + ", E=" + _endingRow + ", N=" + _numRows);
@@ -1415,8 +1425,12 @@ namespace IGenFormsViewer
                                 _ds.eof = false;
                                 _ds.bof = false;
                                 _ds.results.Clear();
+                                _form.dataset.eof = false;
+                                _form.dataset.bof = false;
                                 _form.dataset.results.Clear();
                             }
+
+                            //displayIGenForms.datasets[_dsOrdinal] = _ds;
                         }
                     }
                 }

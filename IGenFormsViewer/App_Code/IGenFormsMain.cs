@@ -3158,7 +3158,7 @@ namespace IGenFormsViewer
 
                     DisplayProgress((m + 1), _form.formFields.fields.Count);
 
-                    if (_field.type.ToUpper() == "PICTURE")
+                    if (_field.name.ToUpper() == "Total_Description".ToUpper())
                     {
                         int xyz = 0;
                     }

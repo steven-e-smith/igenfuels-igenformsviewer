@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("IGenForms Viewer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("IGenForms Viewer Application")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("IGenFuels L.L.C.")]
 [assembly: AssemblyProduct("IGenFormsViewer")]

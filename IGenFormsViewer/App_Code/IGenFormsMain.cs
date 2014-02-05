@@ -523,6 +523,8 @@ namespace IGenFormsViewer
                                 if (_variableName != "")
                                 {
                                     formVariables.Add(new string[] { _variableName, _variableValue });
+                                    // add to the csa area
+                                    CSA.AddProperty("FORM",_variableName, _variableValue);
                                 }
                                 break;
 
@@ -1201,6 +1203,9 @@ namespace IGenFormsViewer
                 {
                     if (_ds.sql != "")
                     {
+                        // resolve symbolics 
+                        _ds.sql = IGenFormCommonRoutines.ResolveSymbolics(_ds.sql);
+
                         // is this a WSTF table reference or a vw_WSTF view reference?
                         string _overrideSchema = ConfigRoutines.GetSetting("OverrideSchema").ToUpper();
                         if (_overrideSchema.IndexOf('T') == 0)

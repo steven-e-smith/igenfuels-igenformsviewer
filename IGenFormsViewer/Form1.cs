@@ -89,7 +89,7 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "Alabama Forms Group";
             //_interface.FormFileName = "Supplier.frm";
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\OH";
+            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\OH\\Aaron";
             _interface.FormGroup = "Ohio_MF2";
             _interface.FormFileName = "Ohio_MF2.frm";
 

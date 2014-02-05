@@ -1112,7 +1112,8 @@ namespace IGenFormsViewer
 
                                         int _ordinal = CommonRoutines.ConvertToInt(_dseofOrdinal);
                                         IGenDataset _dseofDS = currentIGenForms.datasets[_ordinal];
-                                        if (_dseofDS.pageBreak)
+
+                                        if (form.dataset.pageBreak || form.dataset.eof)
                                         {
                                             // see if field(s) were specified
                                             if (_columnOrdinal != "")

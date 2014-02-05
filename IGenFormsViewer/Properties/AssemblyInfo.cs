@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IGenForms")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("IGenForms Viewer")]
+[assembly: AssemblyDescription("IGenForms Viewer Application")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("IGenForms")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCompany("IGenFuels L.L.C.")]
+[assembly: AssemblyProduct("IGenFormsViewer")]
+[assembly: AssemblyCopyright("Copyright © IGenFuels L.L.C.  2013, 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.6.10")]
-[assembly: AssemblyFileVersion("1.1.6.10")]
+[assembly: AssemblyVersion("1.1.6.12")]
+[assembly: AssemblyFileVersion("1.1.6.12")]

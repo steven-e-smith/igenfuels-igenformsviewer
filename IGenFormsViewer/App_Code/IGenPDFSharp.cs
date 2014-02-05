@@ -31,7 +31,10 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Text;
 using PdfSharp.Drawing;
+using PdfSharp.Drawing.Layout;
+using PdfSharp.Drawing.Pdf;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using PdfGraphics;
@@ -301,6 +304,21 @@ namespace IGenFormsViewer
 
             try
             {
+                // get the offsets from the config settings
+                string _temp = ConfigRoutines.GetSetting("PDFPrintLeftOffset");
+                if (_temp == "")
+                {
+                    _temp = "5";
+                }
+                _printLeftOffset = CommonRoutines.ConvertToInt(_temp);
+
+                _temp = ConfigRoutines.GetSetting("PDFPrintTopOffset");
+                if (_temp == "")
+                {
+                    _temp = "3";
+                }
+                _printTopOffset = CommonRoutines.ConvertToInt(_temp);
+
                 PdfPage _pdfPage = null;
                 XGraphics _pdfGraphics = null;
 
@@ -353,8 +371,8 @@ namespace IGenFormsViewer
                         if (_igenFieldObject != null && _igenFieldObject.visible)
                         {
                             string _type = _igenFieldObject.type.ToUpper();
-                            _left = (int)(_igenFieldObject.left * .745);
-                            _top = (int)(_igenFieldObject.top * .755);
+                            _left = (int)(_igenFieldObject.left * .745) + _printLeftOffset;
+                            _top = (int)(_igenFieldObject.top * .755) + _printTopOffset;
                             _width = (int)(_igenFieldObject.width * .745);
                             _height = (int)(_igenFieldObject.height * .755);
                             _fontSize = (float)(_igenFieldObject.fontSize);
@@ -392,6 +410,7 @@ namespace IGenFormsViewer
 
                                     // create a rect of where the control sits
                                     XStringFormat _format = new XStringFormat();
+                                    XTextFormatter _textFormatter = new XTextFormatter(_pdfGraphics);
                                     _format.LineAlignment = XLineAlignment.Far;
 
                                     // check alignment
@@ -399,14 +418,17 @@ namespace IGenFormsViewer
                                     {
                                         case "LEFT":
                                             _format.Alignment = XStringAlignment.Near;
+                                            _textFormatter.Alignment = XParagraphAlignment.Left;
                                             break;
 
                                         case "CENTER":
                                             _format.Alignment = XStringAlignment.Center;
+                                            _textFormatter.Alignment = XParagraphAlignment.Center;
                                             break;
 
                                         case "RIGHT":
                                             _format.Alignment = XStringAlignment.Far;
+                                            _textFormatter.Alignment = XParagraphAlignment.Right;
                                             break;
                                     }
                                     Rectangle _rect = new Rectangle(_left, _top, _width, _height);
@@ -422,7 +444,7 @@ namespace IGenFormsViewer
 
                                     _pdfFont = new XFont(_font, _fontSize, XFontStyle.Regular, options);
 
-                                    _pdfGraphics.DrawString(_value, _pdfFont, XBrushes.Black, _rect, _format);
+                                    _textFormatter.DrawString(_value, _pdfFont, XBrushes.Black, _rect, XStringFormats.TopLeft);
 
                                     break;
                             }

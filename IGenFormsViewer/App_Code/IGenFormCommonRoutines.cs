@@ -332,10 +332,10 @@ namespace IGenFormsViewer
                     _value = _value.Substring(1);
                 }
 
-                #region [Resolve Field References]
-
-                // first any symbolic variables?
+                // resolve any symbolics 
                 _value = ResolveSymbolics(_value);
+
+                #region [Resolve Field References]
 
                 if (_value.ToUpper().IndexOf("IF") == 0)
                 {
@@ -469,6 +469,9 @@ namespace IGenFormsViewer
                 #endregion 
 
                 _value = _tempValue.ToUpper();
+
+                // resolve any symbolics that may have cropped up...
+                _value = ResolveSymbolics(_value);
 
                 //if (_field.name.ToUpper() == "1.1.6.A")
                 //{
@@ -883,6 +886,9 @@ namespace IGenFormsViewer
                     // evaluate the sql statements
                     if (_value.ToUpper().IndexOf("SQL(") >= 0)
                     {
+                        // first any symbolic variables?
+                        _value = ResolveSymbolics(_value);
+
                         string _dataSource = igenForms.dataSource;
                         _tempValue = _value.ToUpper();
                         string _sql = "";
@@ -958,6 +964,7 @@ namespace IGenFormsViewer
                                     if (_endParen > 5)
                                     {
                                         _sql = _sql.Substring(0, _endParen);
+                                        //_sql = IGenFormCommonRoutines.ResolveSymbolics(_sql);
                                         List<string[]> _rows = DatabaseRoutines.Select(_dataSource, "SQLServer", _sql);
                                         if (_rows.Count > 0)
                                         {
@@ -972,6 +979,7 @@ namespace IGenFormsViewer
                                 }
                                 else
                                 {
+                                   // _sql = IGenFormCommonRoutines.ResolveSymbolics(_sql);
                                     _sqlResults = DatabaseRoutines.EvaluateSQL(_dataSource, "SQLServer", _sql);
                                     // if the field is a numeric and it is blank, then make it a 0
                                     if (_sqlResults.Trim() == "")

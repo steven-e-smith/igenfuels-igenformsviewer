@@ -2048,6 +2048,7 @@ namespace IGenFormsViewer
             {
                 // get the sql out
                 string _sql = sql.ToUpper();
+
                 int _offset = _sql.IndexOf('(');
                 if (_offset > 0)
                 {

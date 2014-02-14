@@ -89,9 +89,9 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "Alabama Forms Group";
             //_interface.FormFileName = "Supplier.frm";
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\OH\\Aaron";
-            _interface.FormGroup = "Ohio_MF2";
-            _interface.FormFileName = "Ohio_MF2.frm";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\OH\\Aaron";
+            //_interface.FormGroup = "Ohio_MF2";
+            //_interface.FormFileName = "Ohio_MF2.frm";
 
             //_interface.FormFilesFolder = _interface.FormFilesFolder + "/USOil/IA";
             //_interface.FormGroup = "Iowa Supplier/Distributor";
@@ -100,6 +100,10 @@ namespace IGenFormsViewer
             //_interface.FormFilesFolder = _interface.FormFilesFolder + "/GOOD FORMS/NE";
             //_interface.FormGroup = "Nebraska73";
             //_interface.FormFileName = "FORM_73.frm";
+
+            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\LA";
+            _interface.FormGroup = "LA_UST-MFDR-1";
+            _interface.FormFileName = "LA_UST-MFDR-1.frm";
 
             _interface.GenerateForms();
 

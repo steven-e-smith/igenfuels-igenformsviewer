@@ -101,9 +101,13 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "Nebraska73";
             //_interface.FormFileName = "FORM_73.frm";
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\LA";
-            _interface.FormGroup = "LA_UST-MFDR-1";
-            _interface.FormFileName = "LA_UST-MFDR-1.frm";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\LA";
+            //_interface.FormGroup = "LA_UST-MFDR-1";
+            //_interface.FormFileName = "LA_UST-MFDR-1.frm";
+
+            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\NC";
+            _interface.FormGroup = "GAS-1264";
+            _interface.FormFileName = "NC_GAS-1264.frm";
 
             _interface.GenerateForms();
 

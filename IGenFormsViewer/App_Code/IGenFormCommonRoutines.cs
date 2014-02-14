@@ -385,11 +385,16 @@ namespace IGenFormsViewer
                                     case "DECIMAL":
                                     case "CURRENCY":
                                     case "INTEGER":
-                                        _temp = _temp.Replace(",", "");
-                                        _temp = _temp.Replace("$", "");
-                                        if (_temp == "")
+                                        string _checkTemp = _temp.Replace(",", "");
+                                        _checkTemp = _checkTemp.Replace("$", "");
+                                        if (_checkTemp == "")
                                         {
-                                            _temp = "0";
+                                            _checkTemp = "0";
+                                        }
+                                        // now is it numeric?
+                                        if (CommonRoutines.IsNumeric(_checkTemp))
+                                        {
+                                            _temp = _checkTemp;
                                         }
                                         break;
                                 }

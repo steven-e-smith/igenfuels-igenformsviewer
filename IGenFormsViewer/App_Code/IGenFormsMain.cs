@@ -1837,6 +1837,11 @@ namespace IGenFormsViewer
                 // check for DS columns
                 _value = _value.ToUpper();
 
+                if (_field.name == "1.1.5.C")
+                {
+                    int xxx = 0;
+                }
+
                 // format can be 
                 //      DS(field):row 
                 //      DS(cursorOrdinal!field):row
@@ -1850,13 +1855,37 @@ namespace IGenFormsViewer
                 {
                     while (_openBracket >= 0)
                     {
-                        int _closeBracket = _value.IndexOf(")", _openBracket);
+                        if (_field.name == "1.1.5.C")
+                        {
+                            int xxx = 0;
+                        }
+
+                        int _closeBracket = _value.LastIndexOf(")");
                         string[] _fieldNames = { };
 
                         if (_closeBracket > _openBracket)
                         {
                             int _lenReference =  _closeBracket - _openBracket - prefix.Length;
-                            string _fieldReference = _value.Substring(_openBracket + prefix.Length, _lenReference).ToUpper();
+                            string _fieldReference = _value.Substring(_openBracket + prefix.Length, _lenReference).ToUpper().Trim();
+
+                            // get rid of enclosing parens...
+                            bool _enclosedParens = true;
+                            while (_enclosedParens)
+                            {
+                                _enclosedParens = false;
+                                if (_fieldReference.Substring(0,1) == "(")
+                                {
+                                    _enclosedParens = true;
+                                    _fieldReference = _fieldReference.Substring(1);
+                                }
+                                if (_fieldReference.Substring(_fieldReference.Length - 1) == ")" && _enclosedParens)
+                                {
+                                    _fieldReference = _fieldReference.Substring(0,_fieldReference.Length - 1);
+                                }
+                            }
+
+                            _fieldReference = _fieldReference.Trim();
+
                             string _dsName = "";
                             string _fieldName = _fieldReference;
                             string _fieldOrdinal = "-1";
@@ -1879,8 +1908,8 @@ namespace IGenFormsViewer
                                     if (_dsParts.Length > 1)
                                     {
                                         // a dsname or ordinal was specified
-                                        _datasetName = _dsParts[0];
-                                        _fieldName = _dsParts[1];
+                                        _datasetName = _dsParts[0].Trim();
+                                        _fieldName = _dsParts[1].Trim();
                                         if (prefix.ToUpper().IndexOf("ONLASTPAGE") == 0 || prefix.ToUpper().IndexOf("ONPAGEBREAK") == 0)
                                         {
                                             _fieldName = _dsParts[1];

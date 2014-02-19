@@ -325,6 +325,11 @@ namespace IGenFormsViewer
                     int fdfd = 0;
                 }
 
+                if (_field.name == "1.1.5.C")
+                {
+                    int xxx = 0;
+                }
+
                 // see if there are any expressions to resolve
                 if (_value.IndexOf('=') == 0)
                 {
@@ -385,11 +390,16 @@ namespace IGenFormsViewer
                                     case "DECIMAL":
                                     case "CURRENCY":
                                     case "INTEGER":
-                                        _temp = _temp.Replace(",", "");
-                                        _temp = _temp.Replace("$", "");
-                                        if (_temp == "")
+                                        string _checkTemp = _temp.Replace(",", "");
+                                        _checkTemp = _checkTemp.Replace("$", "");
+                                        if (_checkTemp == "")
                                         {
-                                            _temp = "0";
+                                            _checkTemp = "0";
+                                        }
+                                        // now is it numeric?
+                                        if (CommonRoutines.IsNumeric(_checkTemp))
+                                        {
+                                            _temp = _checkTemp;
                                         }
                                         break;
                                 }
@@ -815,9 +825,13 @@ namespace IGenFormsViewer
                         // syntax is DSLOOKUP(ds:column,criteria)
                         // will return the first row found that matches the criteria and set the current position of the ds
                         _form = currentIGenForm;
+
                         if (_form != null)
                         {
                             _formName = _form.name;
+
+                            string _firstOfValueChars = "";
+                            string _lastOfValueChars = "";
 
                             string _column = "";
                             string _criteria = "";
@@ -828,7 +842,38 @@ namespace IGenFormsViewer
 
                             // get the function
                             _startIndex = _value.ToUpper().IndexOf("DSLOOKUP(");
-                            _endIndex = _value.ToUpper().IndexOf(")", _startIndex);
+
+                            if (_startIndex > 0)
+                            {
+                                _firstOfValueChars = _value.Substring(0, _startIndex);
+                                _value = _value.Substring(_startIndex);
+                                _startIndex = _value.ToUpper().IndexOf("DSLOOKUP(");
+                            }
+
+                            // find the last ) in the DSLOOKUP command
+                            int _level = 0;
+                            _endIndex = _startIndex;
+                            for (int n = _startIndex; n < _value.Length;n++)
+                            {
+                                if (_value.Substring(n,1) == "(")
+                                {
+                                    _level = _level + 1;
+                                }
+
+                                if (_value.Substring(n,1) == ")")
+                                {
+                                    _level = _level - 1;
+                                    if (_level < 0)
+                                    {
+                                        break;
+                                    }
+
+                                    _endIndex = n;
+                                }
+
+                            }
+
+                            //_endIndex = _value.ToUpper().IndexOf(")", _startIndex);
                             if (_endIndex > _startIndex)
                             {
                                 int _length = _endIndex - _startIndex - "DSLOOKUP(".Length;
@@ -836,6 +881,26 @@ namespace IGenFormsViewer
                                 // get the part between the DSFIND( and )
                                 string _parms = _value.Substring(_startIndex + "DSLOOKUP(".Length, _length);
 
+                                // find the first non (
+                                for (int n=0;n<_parms.Length;n++)
+                                {
+                                    if (_parms.Substring(n,1) != "(")
+                                    {
+                                        _parms = _parms.Substring(n);
+                                        break;
+                                    }
+                                }
+
+                                // find the last non )
+                                for (int n = _parms.Length - 1; n > 0; n--)
+                                {
+                                    if (_parms.Substring(n, 1) != ")")
+                                    {
+                                        _parms = _parms.Substring(0, n + 1);
+                                        break;
+                                    }
+                                }
+                                
                                 string[] _parts = _parms.Split(',');
                                 _column = _parts[0];
 
@@ -870,7 +935,12 @@ namespace IGenFormsViewer
                                     _columnValue = _row[_colIndex];
                                 }
 
-                                _value = _columnValue;
+                                if (_endIndex < _value.Length - 1)
+                                {
+                                    _lastOfValueChars = _value.Substring(_endIndex + 1);
+                                }
+
+                                _value = (_firstOfValueChars + " " + _columnValue + _lastOfValueChars).Trim();
                             }
                         }
                         else

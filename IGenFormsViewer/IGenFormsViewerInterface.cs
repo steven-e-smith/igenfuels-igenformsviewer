@@ -77,7 +77,7 @@ namespace IGenFormsViewer
 
 
         private string formImagesFolder = "";
-        public string FormImagesFolder
+        public string FormImagesFolderso
         {
             get { return formImagesFolder; }
             set { formImagesFolder = value; }

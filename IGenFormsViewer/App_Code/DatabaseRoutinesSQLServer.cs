@@ -686,9 +686,8 @@ namespace IGenFormsViewer
                 {
                     _connection.Open();
                     // get the tables
-                    SqlCommand _cmd = _connection.CreateCommand();
-                    _cmd.CommandText = spName;
-                    _cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    SqlCommand _cmd = new SqlCommand(spName, _connection);
+                    _cmd.CommandType = CommandType.StoredProcedure;
 
                     // now add a return code parameter
                     SqlParameter _rcParm = new SqlParameter("@rc", SqlDbType.Int);
@@ -713,37 +712,50 @@ namespace IGenFormsViewer
                             case "INT":
                                 _parm = new SqlParameter(_parmValues[0], SqlDbType.Int);
                                 _parm.Value = CommonRoutines.ConvertToInt(_parmValues[1]);
-                                _parm.Direction = ParameterDirection.Input;
                                 break;
 
                             case "NUMERIC":
                                 _parm = new SqlParameter(_parmValues[0], SqlDbType.Decimal);
                                 _parm.Value = CommonRoutines.ConvertToDouble(_parmValues[1]);
-                                _parm.Direction = ParameterDirection.Input;
+                                _parm.Precision = 20;
+                                _parm.Scale = 6;
                                 break;
 
                             case "VARCHAR":
                                 _parm = new SqlParameter(_parmValues[0], SqlDbType.VarChar);
                                 _parm.Value = _parmValues[1];
-                                _parm.Direction = ParameterDirection.Input;
                                 break;
 
                             case "NVARCHAR":
                                 _parm = new SqlParameter(_parmValues[0], SqlDbType.NVarChar);
                                 _parm.Value = _parmValues[1];
-                                _parm.Direction = ParameterDirection.Input;
                                 break;
 
                             case "DATETIME":
                                 _parm = new SqlParameter(_parmValues[0], SqlDbType.DateTime);
                                 _parm.Value = CommonRoutines.ConvertToDate(_parmValues[1]);
-                                _parm.Direction = ParameterDirection.Input;
                                 break;
 
                         }
 
                         if (_parm != null)
                         {
+                            switch (_parmValues[3].ToUpper())
+                            {
+                                case "IN":
+                                    _parm.Direction = ParameterDirection.Input;
+                                    break;
+
+                                case "OUT":
+                                    _parm.Direction = ParameterDirection.Output;
+                                    break;
+
+                                case "INOUT":
+                                    _parm.Direction = ParameterDirection.InputOutput;
+                                    break;
+
+                            }
+
                             _cmd.Parameters.Add(_parm);
                         }
 
@@ -752,7 +764,7 @@ namespace IGenFormsViewer
                     _sdr = _cmd.ExecuteReader();
                     //_cmd.ExecuteNonQuery();
 
-                    if (_sdr.HasRows)
+                    if (_sdr != null && _sdr.HasRows)
                     {
                         while (_sdr.Read())
                         {
@@ -775,6 +787,24 @@ namespace IGenFormsViewer
                             }
                             _rows.Add(_fields.ToArray());
                         }
+                    }
+                    else
+                    {
+                        // go thru the parms and see if there are any return values
+                        _rows.Clear();
+                        string _fieldList = "";
+                        string _fieldValues = "";
+                        for (int n = 0; n < _cmd.Parameters.Count; n++)
+                        {
+                            SqlParameter _parm = _cmd.Parameters[n];
+                            if (_parm.Direction == ParameterDirection.InputOutput || _parm.Direction == ParameterDirection.Output)
+                            {
+                                _fieldList = _fieldList + _parm.ParameterName + ";";
+                                _fieldValues = _fieldValues + _parm.Value.ToString() + ";";
+                            }
+                        }
+                        _rows.Add(_fieldList.Split(';'));
+                        _rows.Add(_fieldValues.Split(';'));
                     }
                     _connection.Close();
 
@@ -803,7 +833,6 @@ namespace IGenFormsViewer
             return _rows;
 
         }
-
 
 
 

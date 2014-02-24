@@ -1860,7 +1860,15 @@ namespace IGenFormsViewer
                             int xxx = 0;
                         }
 
-                        int _closeBracket = _value.LastIndexOf(")");
+                        // find the end of the DS(
+                        int _closeBracket = _value.LastIndexOf(")", _openBracket);
+
+                        // if there is no opening paren, then get the first closing paren
+                        if (_value.Substring(0,1) != "(")
+                        {
+                            _closeBracket = _value.IndexOf(")", _openBracket);
+                        }
+
                         string[] _fieldNames = { };
 
                         if (_closeBracket > _openBracket)
@@ -1878,10 +1886,12 @@ namespace IGenFormsViewer
                                     _enclosedParens = true;
                                     _fieldReference = _fieldReference.Substring(1);
                                 }
+
                                 if (_fieldReference.Substring(_fieldReference.Length - 1) == ")" && _enclosedParens)
                                 {
                                     _fieldReference = _fieldReference.Substring(0,_fieldReference.Length - 1);
                                 }
+
                             }
 
                             _fieldReference = _fieldReference.Trim();

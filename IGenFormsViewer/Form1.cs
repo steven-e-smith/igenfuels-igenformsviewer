@@ -77,9 +77,9 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "PT100-102";
             //_interface.FormFileName = "PT100-102-TEST.frm";
 
-            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil/SC";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms/SC/Supplier";
             //_interface.FormGroup = "South_Carolina_Tax";
-            //_interface.FormFileName = "SC Supplier.frm";
+            //_interface.FormFileName = "South_Carolina_Tax.frm";
 
             //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\IGen\\NJ\\SMF 10";
             //_interface.FormGroup = "SMF10 Supplier";
@@ -105,9 +105,13 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "LA_UST-MFDR-1";
             //_interface.FormFileName = "LA_UST-MFDR-1.frm";
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\NC\\TOR";
-            _interface.FormGroup = "NC_Terminal_Operator";
-            _interface.FormFileName = "Terminal_Operator_GAS1204.frm";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\NC\\TOR";
+            //_interface.FormGroup = "NC_Terminal_Operator";
+            //_interface.FormFileName = "Terminal_Operator_GAS1204.frm";
+
+            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\OR\\735-1302";
+            _interface.FormGroup = "OR_735-1302";
+            _interface.FormFileName = "735_1302.frm";
 
             _interface.GenerateForms();
 

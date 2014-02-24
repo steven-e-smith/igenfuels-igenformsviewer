@@ -320,7 +320,7 @@ namespace IGenFormsViewer
                 string _fieldType = _field.dataType.ToUpper();
                 string _type = _field.type.ToUpper();
 
-                if (_field.name.ToUpper().IndexOf("TAX_DUE_PER_FUEL_PRODUCT") >= 0)
+                if (_field.name.ToUpper().IndexOf("GAS") >= 0)
                 {
                     int fdfd = 0;
                 }
@@ -1826,6 +1826,11 @@ namespace IGenFormsViewer
                 bool _openParen = false;
                 bool _closeParen = false;
 
+                if (expression.IndexOf("IN") > 0)
+                {
+                    int xxxx = 0;
+                }
+
                 // parse the 3 sections by hand 
                 for (int n = 0; n < expression.Length; n++)
                 {
@@ -1897,7 +1902,7 @@ namespace IGenFormsViewer
                         {
                             // operator
                             _firstParts[1] = "IN";
-                            _operatorFound = true;
+                            _operatorFound = false;
                             _partNo = 2;
                             n = n + 2;
                         }
@@ -1953,15 +1958,15 @@ namespace IGenFormsViewer
                 else
                 {
                     // check to see if there is an IN in the expression
-                    if (_firstParts[0].Trim() != "" && _firstParts[1].Trim() == "" && _firstParts[2].Trim() == "")
+                    if (_firstParts[0].Trim() != "" && _firstParts[1].Trim() != "" && _firstParts[2].Trim() != "")
                     {
                         string _inExpression = _firstParts[0].Trim().ToUpper();
-                        if (_inExpression.IndexOf(" IN ") > 0)
+                        if (_firstParts[1].Trim().ToUpper() == "IN")
                         {
-                            int _offset = _inExpression.IndexOf(" IN ");
-                            _leftValue = "\"" + _inExpression.Substring(0, _offset) + "\"";
+                            int _offset = _firstParts[1].Trim().ToUpper().IndexOf("IN");
+                            _leftValue = "\"" + _firstParts[0].Trim().ToUpper() + "\"";
                             _operator = "IN";
-                            _rightValue = _inExpression.Substring(_offset + 4);
+                            _rightValue = _firstParts[2].Trim().ToUpper();
                             _operatorFound = true;
 
                             // parse out the right value into separate conditions

@@ -141,6 +141,34 @@ namespace IGenFormsViewer
 
 
 
+        /// <summary>
+        /// DialogResult AskYesNo(string question, string prompt) 
+        /// Ask a yes/no question
+        /// </summary>
+        /// <param name="question"></param>
+        /// <returns></returns>
+        public static DialogResult AskYesNo(string question, string prompt, MessageBoxButtons buttons = MessageBoxButtons.YesNo)
+        {
+            bool _status = true;
+            DialogResult _result = new DialogResult();
+
+            try
+            {
+                _result = MessageBox.Show(question, prompt, buttons, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".Ask(s,s) > " + ex.Message);
+            }
+
+            return _result;
+
+        }
+
+
+
+
+
 
         /// <summary>
         /// decimal ConvertToDecimal(String value) 
@@ -3420,6 +3448,101 @@ namespace IGenFormsViewer
             }
 
             return;
+
+        }
+
+
+
+
+        /// <summary>
+        /// void LoadComboBox(string sql, string fields, ComboBox combo, string defaultValue)
+        /// Load the passed combo with the results from the passed SQL using the passed field(s)
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="combo"></param>
+        /// <param name="defaultValue"></param>
+        public static bool LoadComboBox(string sql, string fields, ComboBox combo, string defaultValue)
+        {
+            bool _result = true;
+
+            try
+            {
+                LoadComboBox(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, sql, fields, combo, defaultValue);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".LoadComboBox(s,c,s) > " + ex.Message);
+                _result = false;
+            }
+
+            return _result;
+
+        }
+
+
+
+
+
+
+        /// <summary>
+        /// void LoadComboBox(string connectionString, string dbms, string sql, ComboBox combo, string defaultValue)
+        /// Load the passed combo with the results from the passed SQL using the passed field(s)
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="dbms"></param>
+        /// <param name="sql"></param>
+        /// <param name="combo"></param>
+        /// <param name="defaultValue"></param>
+        public static bool LoadComboBox(string connectionString, string dbms, string sql, string fields, ComboBox combo, string defaultValue)
+        {
+            bool _result = true;
+
+            try
+            {
+
+                // clear the combo
+                combo.Items.Clear();
+
+                // get the rows for the sql passed
+                List<string[]> _rows = DatabaseRoutines.Select(connectionString, dbms, sql);
+                if (_rows.Count > 0)
+                {
+                    for (int n = 1; n < _rows.Count; n++)
+                    {
+                        string _value = "";
+                        // get the fields specified
+                        string[] _fields = fields.Split(',');
+                        for (int m = 0; m < _fields.Length; m++)
+                        {
+                            _value = _value + DatabaseRoutines.GetRowValue(_rows[0], _rows[n], _fields[m]) + " ";
+                        }
+
+
+                        combo.Items.Add(_value);
+
+                        // if the passed value is the same as the one just added, set the selected index
+                        if (_value.ToUpper().IndexOf(defaultValue.ToUpper()) == 0)
+                        {
+                            combo.SelectedIndex = n - 1;
+                        }
+                    }
+
+                    if (defaultValue == "")
+                    {
+                        combo.SelectedIndex = -1;
+                    }
+
+                    // save the rows to the combo tag for future reference
+                    combo.Tag = _rows;
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".LoadComboBox(s,s,s,c,s) > " + ex.Message);
+                _result = false;
+            }
+
+            return _result;
 
         }
 

@@ -479,7 +479,7 @@ namespace IGenFormsViewer
                         else
                         {
                             PictureBox _pallet = (PictureBox)tabForms.SelectedTab.Controls[0];
-                            displayIGenForms.RedisplaySelectedForm(_pallet, _form.name,true);
+                            displayIGenForms.RedisplaySelectedForm(_pallet, _form.name, true, false);
                         }
                     }
 
@@ -1440,7 +1440,7 @@ namespace IGenFormsViewer
                 {
                     string _formName = _form.name;
                     PictureBox _pallet = (PictureBox)tabForms.SelectedTab.Controls[0];
-                    displayIGenForms.RedisplaySelectedForm(_pallet, _formName);
+                    displayIGenForms.RedisplaySelectedForm(_pallet, _formName,true, true);
                 }
 
             }

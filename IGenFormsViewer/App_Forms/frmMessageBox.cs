@@ -30,6 +30,10 @@ namespace IGenFormsViewer
             {
                 InitializeComponent();
 
+                this.Text = "(" + CommonRoutines.GetEXEName() + ") " + this.Text;
+
+                btnEndProgram.Visible = false;
+
                 msgText = msg;
 
                 // call the appropriate routine
@@ -56,6 +60,8 @@ namespace IGenFormsViewer
                 }
 
                 txtMessage.Text = msgText.Trim();
+
+                this.Text = "(" + CommonRoutines.GetEXEName() + ") " + this.Text;
 
             }
             catch (Exception ex)
@@ -204,6 +210,8 @@ namespace IGenFormsViewer
                         {
                             picImage.Image = Image.FromFile(CommonRoutines.currentPath + "\\images\\ErrorMessage.jpg");
                         }
+                        // set the endprogram button visible
+                        btnEndProgram.Visible = true;
                         break;
 
                     case "WARNING":
@@ -230,6 +238,37 @@ namespace IGenFormsViewer
             }
 
             return;
+
+        }
+
+
+
+
+
+        private void btnEndProgram_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                DialogResult _answer = CommonRoutines.AskYesNo("Do you wish to end the IGenFuels program?\r\nThis will end your program and any non-saved configuration or results will be lost.", "End the Program");
+                if (_answer == System.Windows.Forms.DialogResult.Yes)
+                {
+                    // ask again...
+                    _answer = CommonRoutines.AskYesNo("Are you really sure?", "Last chance!!");
+                    if (_answer == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        CommonRoutines.DisplayInformationalMessage("Bye!");
+                        Application.Exit();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".btnEndProgram_Click > " + ex.Message);
+            }
+
+            return;
+
 
         }
 

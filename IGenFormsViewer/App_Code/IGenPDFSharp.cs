@@ -354,7 +354,7 @@ namespace IGenFormsViewer
                     XFont _pdfFont = new XFont("Times New Roman", 9, XFontStyle.Regular, options);
 
                     //pdfText.DrawText(_pdfGraphics, "Test Text", 10, 20);
-                    _pdfGraphics.DrawString("Test Text", _pdfFont, XBrushes.Black, 10, 20);
+                    //_pdfGraphics.DrawString("Test Text", _pdfFont, XBrushes.Black, 10, 20);
 
                     // walk the controls and draw to the image
                     //foreach (Control _control in pallet.Controls)

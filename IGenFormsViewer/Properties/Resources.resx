@@ -127,20 +127,14 @@
   <data name="REDO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\REDO.BMP;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="link_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\link_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="properties" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\properties.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WidgetIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WidgetIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SAVE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SAVE.BMP;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="CLOSED" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CLOSED.BMP;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="PASTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PASTE.BMP;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ARW06DN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ARW06DN.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -154,17 +148,17 @@
   <data name="OpenLock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OpenLock.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="sorted_asc" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sorted_asc.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="COPY" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\COPY.BMP;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CUT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CUT.BMP;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Excel2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Excel2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="logical_grouping" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\logical_grouping.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="taxpic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\taxpic.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Signing" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Signing.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -175,8 +169,8 @@
   <data name="ARW08RT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ARW08RT.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="pointer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pointer.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="pallet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pallet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ARW03RT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ARW03RT.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -196,11 +190,11 @@
   <data name="DELETE1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DELETE.BMP;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="pallet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pallet.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="PASTE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PASTE.BMP;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="taxpic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\taxpic.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Excel2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Excel2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="fyi" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\fyi.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -208,11 +202,11 @@
   <data name="ARW06UP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ARW06UP.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="properties" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\properties.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="pointer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pointer.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="lock" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\lock.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="logical_grouping" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logical_grouping.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ClosedLock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ClosedLock.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -226,14 +220,20 @@
   <data name="sql" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sql.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ARW08DN" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ARW08DN.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="goto" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\goto.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Execute" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Execute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ARW08LT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ARW08LT.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ARW08DN" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ARW08DN.ICO;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="SAVE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SAVE.BMP;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\warning.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -241,14 +241,14 @@
   <data name="logical_grouping1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logical_grouping1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="sorted_asc" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\sorted_asc.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lock.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Process" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Process.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="bill_nick_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\bill_nick_1.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="link_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\link_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="OPEN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OPEN.BMP;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -256,10 +256,13 @@
   <data name="Options" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Options.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="bill_nick_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bill_nick_1.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="oops" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\oops.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="goto" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\goto.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Stop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Stop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

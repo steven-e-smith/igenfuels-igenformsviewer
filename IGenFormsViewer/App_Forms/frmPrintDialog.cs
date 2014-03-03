@@ -18,6 +18,10 @@ namespace IGenFormsViewer
         TabControl tabFormsToPrint = new TabControl();
         private int maxPages = 0;
 
+        bool keepPrinting = false;
+        bool cancelPrinting = false;
+
+
         public frmPrintDialog(TabControl tabForms)
         {
             InitializeComponent();
@@ -54,6 +58,8 @@ namespace IGenFormsViewer
                 cboPrinterSelected.Items.Add(_defaultPrinter);
 
                 cboPrinterSelected.Text = _defaultPrinter;
+
+                tbrMainStop.Enabled = false;
 
                 LoadFormsGrid();
             }
@@ -153,6 +159,10 @@ namespace IGenFormsViewer
                     _printForm = false;
                 }
 
+                // enable the stop button
+                tbrMainStop.Enabled = true;
+                Application.DoEvents();
+
                 // print the selected forms
                 for (int n = 0; n < dgvFormsToPrint.Rows.Count; n++)
                 {
@@ -198,16 +208,23 @@ namespace IGenFormsViewer
 
                                     }
 
-                                    bool _keepPrinting = true;
-
                                     int _pageNo = 0;
 
-                                    while (_keepPrinting)
+                                    keepPrinting = true;
+                                    cancelPrinting = false;
+
+                                    while (keepPrinting)
                                     {
                                         if (_pageNo >= _totalPages)
                                         {
                                             break;
 
+                                        }
+
+                                        if (cancelPrinting)
+                                        {
+                                            CommonRoutines.DisplayInformationalMessage("Printing cancelled by user");
+                                            break;
                                         }
 
                                         _form.currentPage = _pageNo + 1;
@@ -298,15 +315,21 @@ namespace IGenFormsViewer
                                         _pageNo = _pageNo + 1;
 
                                         #endregion
-                                        
 
+                                        Application.DoEvents();
                                     }
 
                                     #endregion
 
                                 }
                             }
+                            dgvFormsToPrint.Rows[n].Cells["PrintForm"].Value = false;
                         }
+                    }
+
+                    if (cancelPrinting)
+                    {
+                        break;
                     }
                 }
 
@@ -322,6 +345,8 @@ namespace IGenFormsViewer
             }
 
             tbrMainPrintStatus.Text = "Done";
+
+            tbrMainStop.Enabled = false;
 
             return;
 
@@ -408,6 +433,30 @@ namespace IGenFormsViewer
             catch (Exception ex)
             {
                 CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tbrMainPrint_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+        private void tbrMainStop_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                DialogResult _answer = CommonRoutines.AskYesNo("Do you wish to stop printing?", "Stop Printing");
+                if (_answer == System.Windows.Forms.DialogResult.Yes)
+                {
+                    keepPrinting = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tbrMainStop_Click > " + ex.Message);
             }
 
             return;

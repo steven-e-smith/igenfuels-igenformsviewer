@@ -35,7 +35,9 @@
             this.dgvFormsToPrint = new System.Windows.Forms.DataGridView();
             this.tbrMain = new System.Windows.Forms.ToolStrip();
             this.tbrMainPrint = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparatorPrint = new System.Windows.Forms.ToolStripSeparator();
+            this.tbrMainStop = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparatorStop = new System.Windows.Forms.ToolStripSeparator();
             this.tbrMainClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
@@ -92,7 +94,9 @@
             this.tbrMain.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.tbrMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tbrMainPrint,
-            this.toolStripSeparator2,
+            this.toolStripSeparatorPrint,
+            this.tbrMainStop,
+            this.toolStripSeparatorStop,
             this.tbrMainClose,
             this.toolStripLabel1,
             this.toolStripLabel2,
@@ -114,10 +118,26 @@
             this.tbrMainPrint.ToolTipText = "Run";
             this.tbrMainPrint.Click += new System.EventHandler(this.tbrMainPrint_Click);
             // 
-            // toolStripSeparator2
+            // toolStripSeparatorPrint
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 38);
+            this.toolStripSeparatorPrint.Name = "toolStripSeparatorPrint";
+            this.toolStripSeparatorPrint.Size = new System.Drawing.Size(6, 38);
+            // 
+            // tbrMainStop
+            // 
+            this.tbrMainStop.Enabled = false;
+            this.tbrMainStop.Image = global::IGenFormsViewer.Properties.Resources.Stop;
+            this.tbrMainStop.ImageTransparentColor = System.Drawing.Color.White;
+            this.tbrMainStop.Name = "tbrMainStop";
+            this.tbrMainStop.Size = new System.Drawing.Size(35, 35);
+            this.tbrMainStop.Text = "Stop";
+            this.tbrMainStop.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainStop.Click += new System.EventHandler(this.tbrMainStop_Click);
+            // 
+            // toolStripSeparatorStop
+            // 
+            this.toolStripSeparatorStop.Name = "toolStripSeparatorStop";
+            this.toolStripSeparatorStop.Size = new System.Drawing.Size(6, 38);
             // 
             // tbrMainClose
             // 
@@ -205,12 +225,14 @@
         private System.Windows.Forms.DataGridView dgvFormsToPrint;
         private System.Windows.Forms.ToolStrip tbrMain;
         private System.Windows.Forms.ToolStripButton tbrMainPrint;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorPrint;
         private System.Windows.Forms.ToolStripButton tbrMainClose;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
         private System.Windows.Forms.RadioButton optPrintToPDF;
         private System.Windows.Forms.RadioButton optPrintToPrinter;
         private System.Windows.Forms.ToolStripLabel tbrMainPrintStatus;
+        private System.Windows.Forms.ToolStripButton tbrMainStop;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorStop;
     }
 }

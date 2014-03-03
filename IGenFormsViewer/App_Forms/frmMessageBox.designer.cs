@@ -34,6 +34,7 @@
             this.txtMessage = new System.Windows.Forms.TextBox();
             this.btnCopyToClipboard = new System.Windows.Forms.Button();
             this.picImage = new System.Windows.Forms.PictureBox();
+            this.btnEndProgram = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,7 +50,7 @@
             // btnOK
             // 
             this.btnOK.Location = new System.Drawing.Point(491, 249);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(2);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(56, 26);
             this.btnOK.TabIndex = 6;
@@ -60,7 +61,7 @@
             // btnCancel
             // 
             this.btnCancel.Location = new System.Drawing.Point(603, 249);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(56, 26);
             this.btnCancel.TabIndex = 7;
@@ -82,7 +83,7 @@
             // btnCopyToClipboard
             // 
             this.btnCopyToClipboard.Location = new System.Drawing.Point(715, 251);
-            this.btnCopyToClipboard.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCopyToClipboard.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnCopyToClipboard.Name = "btnCopyToClipboard";
             this.btnCopyToClipboard.Size = new System.Drawing.Size(110, 26);
             this.btnCopyToClipboard.TabIndex = 8;
@@ -93,7 +94,7 @@
             // picImage
             // 
             this.picImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.picImage.Image = global::IGenFormsViewer.Properties.Resources.oops;
+            this.picImage.Image = global::IGenFormsViewer.Properties.Resources.fyi;
             this.picImage.Location = new System.Drawing.Point(12, 1);
             this.picImage.Name = "picImage";
             this.picImage.Size = new System.Drawing.Size(242, 245);
@@ -102,12 +103,27 @@
             this.picImage.TabStop = false;
             this.picImage.Visible = false;
             // 
+            // btnEndProgram
+            // 
+            this.btnEndProgram.BackColor = System.Drawing.Color.Red;
+            this.btnEndProgram.ForeColor = System.Drawing.Color.White;
+            this.btnEndProgram.Location = new System.Drawing.Point(12, 251);
+            this.btnEndProgram.Margin = new System.Windows.Forms.Padding(2);
+            this.btnEndProgram.Name = "btnEndProgram";
+            this.btnEndProgram.Size = new System.Drawing.Size(168, 26);
+            this.btnEndProgram.TabIndex = 9;
+            this.btnEndProgram.Text = "End Program";
+            this.btnEndProgram.UseVisualStyleBackColor = false;
+            this.btnEndProgram.Visible = false;
+            this.btnEndProgram.Click += new System.EventHandler(this.btnEndProgram_Click);
+            // 
             // frmMessageBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(834, 284);
+            this.Controls.Add(this.btnEndProgram);
             this.Controls.Add(this.btnCopyToClipboard);
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.btnCancel);
@@ -132,5 +148,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.TextBox txtMessage;
         private System.Windows.Forms.Button btnCopyToClipboard;
+        private System.Windows.Forms.Button btnEndProgram;
     }
 }

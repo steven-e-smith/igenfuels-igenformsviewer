@@ -42,7 +42,9 @@ namespace IGenFormsViewer
                             "                   commas and dollar signs if the field was a numeric type.  checked to make sure doing that resulted in a numeric value, if not " +
                             "                   the value was not changed and was let thru to the resolve symbolics routine",
                             "1.1.6.14   SES     FB-15368 - Fixed DSLOOKUP when multiple parens were specified and where the DSLOOKUP was embedded or had additional expressions after it",
-                            "1.1.6.15   SES     FB-15359 - Issues with IGenForms (=IF logic not working)"
+                            "1.1.6.15   SES     FB-15359 - Issues with IGenForms (=IF logic not working)",
+                            "1.1.6.16   SES     FB-15429 - Odd calcs for IGenForms.  Numeric display values truncating on display",
+                            "1.1.6.17   SES     Added stop menu button for prints"
                         };
 
 

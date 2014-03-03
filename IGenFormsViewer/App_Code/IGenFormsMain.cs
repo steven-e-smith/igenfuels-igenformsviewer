@@ -102,6 +102,9 @@ namespace IGenFormsViewer
         public ToolStripLabel progressPercentage = null;
 
 
+        frmShowMessage genericMessage = null;
+
+
         public IGenFormsMain()
         {
 
@@ -2764,6 +2767,10 @@ namespace IGenFormsViewer
                             IGenField _field = _form.formFields.fields[n];
                             if (_field.name.ToUpper().IndexOf("$HANDLE") < 0)
                             {
+                                if (_field.name == "1.5.19.0")
+                                {
+                                    int xxxxy = 0;
+                                }
                                 Control _control = CreateFieldControl(_pallet, _field, runMode);
                                 _control.KeyUp += new KeyEventHandler(Control_KeyUp);
                                 _field.controlContainer = _control;
@@ -3158,7 +3165,7 @@ namespace IGenFormsViewer
 
             try
             {
-                _result = RedisplaySelectedForm(pallet, formName, true);
+                _result = RedisplaySelectedForm(pallet, formName, true, true);
             }
             catch (Exception ex)
             {
@@ -3177,7 +3184,7 @@ namespace IGenFormsViewer
         /// string RedisplaySelectedForm()
         /// Reisplay the current form
         /// </summary>
-        public string RedisplaySelectedForm(PictureBox pallet, string formName, bool displayForm)
+        public string RedisplaySelectedForm(PictureBox pallet, string formName, bool displayForm, bool resolveFields)
         {
             string _result = "";
 
@@ -3200,6 +3207,11 @@ namespace IGenFormsViewer
                 {
                     IGenField _field = _form.formFields.fields[m];
 
+                    if (_field.name.ToUpper() == "1.5.22.0")
+                    {
+                        int xxxxxx = 0;
+                    }
+
                     DisplayProgress((m + 1), _form.formFields.fields.Count);
 
                     if (_field.name.ToUpper() == "Total_Description".ToUpper())
@@ -3207,16 +3219,29 @@ namespace IGenFormsViewer
                         int xyz = 0;
                     }
 
-                    _field.text = _field.compiledValue;
+                    string _value = _field.text;
 
-                    // if the value is blank, then give it a few chars to allow to select it
-                    string _value = _field.compiledValue.Trim();
-
-                    _value = IGenFormCommonRoutines.ResolveValue(this, _form.name, _field.name, _value);
-                    // if this is a numeric field then set to zero if blank
-
-                    if (_value == "")
+                    if (_field.value != "")
                     {
+                        string _fieldText = _field.text;
+
+                        if (resolveFields)
+                        {
+                            _field.text = _field.compiledValue;
+
+                            // if the value is blank, then give it a few chars to allow to select it
+                            _value = _field.compiledValue.Trim();
+
+                            _value = IGenFormCommonRoutines.ResolveValue(this, _form.name, _field.name, _value);
+                            // if this is a numeric field then set to zero if blank
+                        }
+                    }
+                    else
+                    {
+                        if (_field.caption != "")
+                        {
+                            _value = _field.caption;
+                        }
                     }
 
                     _field.text = IGenFormCommonRoutines.FormatValue(_value, _field.dataType);
@@ -3930,12 +3955,18 @@ namespace IGenFormsViewer
             
             try
             {
+
+                ShowMessage("Loading form, please wait...");
+
                 // load the viewer form
                 IGenFormCommonRoutines.runMode = true;
                 frmViewer _viewer = new frmViewer();
                 _viewer.WindowState = FormWindowState.Maximized;
                 _viewer.displayIGenForms = this;
                 _viewer.DisplayForms();
+
+                ShowMessage("");
+
                 _viewer.ShowDialog();
                 IGenFormCommonRoutines.runMode = false;
                 _viewer.Dispose();
@@ -3948,6 +3979,47 @@ namespace IGenFormsViewer
 
             return _result;
         }
+
+
+
+
+        /// <summary>
+        /// string Execute()
+        /// Execute
+        /// </summary>
+        /// <returns></returns>
+        public void ShowMessage(string msg)
+        {
+
+            try
+            {
+                if (msg == "")
+                {
+                    if (genericMessage != null)
+                    {
+                        genericMessage.Close();
+                        genericMessage = null;
+                    }
+                }
+                else
+                {
+                    genericMessage = new frmShowMessage();
+                    genericMessage.Text = "Load Form";
+                    genericMessage.SetMessage = msg;
+                    genericMessage.Visible = true;
+                    genericMessage.Show();
+                    genericMessage.BringToFront();
+                    Application.DoEvents();
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".Execute > " + ex.Message);
+            }
+
+            return;
+        }
+
 
 
 

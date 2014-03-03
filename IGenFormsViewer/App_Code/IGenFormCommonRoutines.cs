@@ -320,12 +320,12 @@ namespace IGenFormsViewer
                 string _fieldType = _field.dataType.ToUpper();
                 string _type = _field.type.ToUpper();
 
-                if (_field.name.ToUpper().IndexOf("GAS") >= 0)
+                if (_field.name.ToUpper().IndexOf("tbrControlsLabel_288".ToUpper()) >= 0)
                 {
                     int fdfd = 0;
                 }
 
-                if (_field.name == "1.1.5.C")
+                if (_field.name == "1.5.23.0")
                 {
                     int xxx = 0;
                 }
@@ -1215,6 +1215,10 @@ namespace IGenFormsViewer
                                                             if (_page.breakFieldName.ToUpper().IndexOf((";" + _checkForBreakOnFields[k].ToUpper() + ";")) >= 0)
                                                             {
                                                                 _value = _dseofCriteria;
+                                                                if (_value == "")
+                                                                {
+                                                                    _value = "XX";
+                                                                }
                                                                 break;
                                                             }
                                                         }

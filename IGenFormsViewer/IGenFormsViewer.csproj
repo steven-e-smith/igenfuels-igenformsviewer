@@ -144,6 +144,12 @@
     <Compile Include="App_Forms\frmProgress.designer.cs">
       <DependentUpon>frmProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="App_Forms\frmShowMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="App_Forms\frmShowMessage.Designer.cs">
+      <DependentUpon>frmShowMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="App_Forms\frmViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -188,6 +194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="App_Forms\frmProgress.resx">
       <DependentUpon>frmProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_Forms\frmShowMessage.resx">
+      <DependentUpon>frmShowMessage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="App_Forms\frmViewer.resx">
       <DependentUpon>frmViewer.cs</DependentUpon>
@@ -328,6 +337,7 @@
     <Content Include="Resources\pointer.ico" />
     <Content Include="Resources\Signing.ICO" />
     <Content Include="Resources\sql.png" />
+    <None Include="Resources\Stop.png" />
     <Content Include="Resources\WidgetIcon.png" />
     <None Include="Resources\warning.jpg" />
     <None Include="Resources\taxpic.jpg" />

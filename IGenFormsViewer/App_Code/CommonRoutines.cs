@@ -34,8 +34,18 @@ namespace IGenFormsViewer
         public static bool writeLogToDatabase = true;
         public static bool debugFlag = false;
         public static bool writeLogToFile = true;
-        public static string basePath = AppDomain.CurrentDomain.BaseDirectory; // + GetEXEName() + "\\";
-        public static string logFileName = basePath + "\\IGenForms.log";
+
+        //public static string basePath = AppDomain.CurrentDomain.BaseDirectory; // + GetEXEName() + "\\";
+        //public static string logFileName = basePath + "\\IGenForms.log";
+
+        public static string basePath = Application.StartupPath + "\\";
+        // Each app has {BasePath}\Logs\<AppName>.log
+        public static string logFileName = basePath + "Logs\\IGenTool.log";
+        // All apps use {BasePath}\Config\IGenFuels.config
+        public static string configFileName = basePath + "Config\\IGenFuels.config";
+
+
+
         public static bool refreshFlag = false;
         public static string errorStatus = "";
         public static string errorMessages = "";
@@ -5157,6 +5167,45 @@ namespace IGenFormsViewer
 
         }
 
+
+
+
+
+        public static Image LoadTransparentImage(string imageFileName)
+        {
+            Image _img = null;
+
+            try
+            {
+                string _fileName = imageFileName;
+
+                if (_fileName.IndexOf('\\') >= 0)
+                {
+                    // strip and assign
+                    _fileName = _fileName.Substring(_fileName.LastIndexOf('\\') + 1);
+                    _fileName = CommonRoutines.currentPath + "\\images\\" + _fileName;
+                }
+
+                if (CommonRoutines.FileExists(_fileName))
+                {
+                    using (Image _tempImage = Image.FromFile(_fileName))
+                    {
+                        Bitmap _tempBitmap = new Bitmap(_tempImage);
+                        _tempBitmap.MakeTransparent();
+                        _img = _tempBitmap;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".LoadTransparentImage > " + ex.Message);
+            }
+
+            return _img;
+
+
+
+        }
 
 
 

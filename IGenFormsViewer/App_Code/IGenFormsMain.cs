@@ -3207,6 +3207,11 @@ namespace IGenFormsViewer
                 {
                     IGenField _field = _form.formFields.fields[m];
 
+                    if (cancelFlag)
+                    {
+                        break;
+                    }
+
                     if (_field.name.ToUpper() == "1.5.22.0")
                     {
                         int xxxxxx = 0;
@@ -3267,6 +3272,11 @@ namespace IGenFormsViewer
                     // now add the fields
                     for (int n = 0; n < _pallet.Controls.Count; n++)
                     {
+                        if (cancelFlag)
+                        {
+                            break;
+                        }
+
                         Control _control = _pallet.Controls[n];
                         if (_control.Tag != null && _control.Tag.GetType().Name.ToUpper().IndexOf("IGENFIELD") >= 0)
                         {
@@ -3279,6 +3289,15 @@ namespace IGenFormsViewer
                                         CheckBox _checkBox = (CheckBox)_control;
                                         _checkBox.Checked = CommonRoutines.ConvertToBool(_field.text);
                                     }
+                                    break;
+
+                                case "PICTURE":
+                                    // if the text var is not filled in, prompt for the image
+                                    PictureBox _pic = (PictureBox)_control;
+                                    string _fileName = _field.imageName;
+                                    _pic.Image = CommonRoutines.LoadTransparentImage(_fileName);
+                                    _pic.SizeMode = PictureBoxSizeMode.StretchImage;
+                                    _pic.BackColor = Color.Transparent;
                                     break;
 
                                 default:
@@ -3511,20 +3530,7 @@ namespace IGenFormsViewer
                             // if the text var is not filled in, prompt for the image
                             PictureBox _pic = (PictureBox)_control;
                             string _fileName = field.imageName;
-                            if (_fileName.IndexOf('\\') < 0)
-                            {
-                                _fileName = CommonRoutines.currentPath + "\\images\\" + _fileName;
-                            }
-                            if (CommonRoutines.FileExists(_fileName))
-                            {
-                                using (Image _tempImage = Image.FromFile(_fileName))
-                                {
-                                    Bitmap _tempBitmap = new Bitmap(_tempImage);
-                                    _tempBitmap.MakeTransparent();
-                                    _pic.Image = _tempBitmap;
-                                }
-                                //_pic.ImageLocation = _fileName;
-                            }
+                            _pic.Image = CommonRoutines.LoadTransparentImage(_fileName);
                             _pic.SizeMode = PictureBoxSizeMode.StretchImage;
                             _pic.BackColor = Color.Transparent;
                             break;
@@ -4725,9 +4731,29 @@ namespace IGenFormsViewer
 
 
 
-
-
         public void SaveFormsToDatabase()
+        {
+
+            try
+            {
+                SaveFormsToDatabase(0);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveFormToDatabase() > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+
+        public void SaveFormsToDatabase(int filingId)
         {
             string _formFileName = "";
             string _sql = "";
@@ -4739,6 +4765,8 @@ namespace IGenFormsViewer
 
             try
             {
+                // get the info for the submission return sent
+
                 // save the form to the database
 
                 // if the IGenForms header has been created, get the id otherwise create one
@@ -4846,7 +4874,7 @@ namespace IGenFormsViewer
             }
             catch (Exception ex)
             {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveFormToDatabase > " + ex.Message);
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveFormToDatabase(i) > " + ex.Message);
             }
 
             return;

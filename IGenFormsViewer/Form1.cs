@@ -81,7 +81,7 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "South_Carolina_Tax";
             //_interface.FormFileName = "South_Carolina_Tax.frm";
 
-            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\IGen\\NJ\\SMF 10";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\UAT Ready Forms\\NJ\\SMF 10";
             //_interface.FormGroup = "SMF10 Supplier";
             //_interface.FormFileName = "SMF10 Supplier.frm";
 
@@ -89,9 +89,13 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "Alabama Forms Group";
             //_interface.FormFileName = "Supplier.frm";
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\OH\\Aaron";
-            _interface.FormGroup = "Ohio_MF2";
-            _interface.FormFileName = "Ohio_MF2.frm";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\UAT Ready Forms\\OH";
+            //_interface.FormGroup = "Ohio_MF2";
+            //_interface.FormFileName = "Ohio_MF2.frm";
+
+            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\UAT Ready Forms\\SC\\Supplier";
+            _interface.FormGroup = "L-2119";
+            _interface.FormFileName = "SC Supplier.frm";
 
             //_interface.FormFilesFolder = _interface.FormFilesFolder + "/USOil/IA";
             //_interface.FormGroup = "Iowa Supplier/Distributor";

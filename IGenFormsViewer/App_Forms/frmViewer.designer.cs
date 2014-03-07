@@ -87,12 +87,14 @@
             this.mnuMainActions = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainActionsPrepare = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainActionsClearPrompts = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainActionsClearAllPrompts = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainTools = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainToolsOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tmrClock = new System.Windows.Forms.Timer(this.components);
-            this.mnuMainActionsClearAllPrompts = new System.Windows.Forms.ToolStripMenuItem();
+            this.tbrMainLoad = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tabForms.SuspendLayout();
             this.tbrMain.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -136,6 +138,8 @@
             this.tbrMain.BackColor = System.Drawing.Color.Silver;
             this.tbrMain.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.tbrMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tbrMainLoad,
+            this.toolStripSeparator5,
             this.tbrMainSave,
             this.toolStripSeparator1,
             this.tbrMainRun,
@@ -177,8 +181,8 @@
             this.tbrMainSave.Image = ((System.Drawing.Image)(resources.GetObject("tbrMainSave.Image")));
             this.tbrMainSave.ImageTransparentColor = System.Drawing.Color.White;
             this.tbrMainSave.Name = "tbrMainSave";
-            this.tbrMainSave.Size = new System.Drawing.Size(70, 35);
-            this.tbrMainSave.Text = "Save To DB";
+            this.tbrMainSave.Size = new System.Drawing.Size(35, 35);
+            this.tbrMainSave.Text = "Save";
             this.tbrMainSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.tbrMainSave.Click += new System.EventHandler(this.tbrMainSave_Click);
             // 
@@ -604,6 +608,13 @@
             this.mnuMainActionsClearPrompts.Text = "&Clear Prompts";
             this.mnuMainActionsClearPrompts.Click += new System.EventHandler(this.mnuMainActionsClearPrompts_Click);
             // 
+            // mnuMainActionsClearAllPrompts
+            // 
+            this.mnuMainActionsClearAllPrompts.Name = "mnuMainActionsClearAllPrompts";
+            this.mnuMainActionsClearAllPrompts.Size = new System.Drawing.Size(171, 22);
+            this.mnuMainActionsClearAllPrompts.Text = "Clear _All Prompts";
+            this.mnuMainActionsClearAllPrompts.Click += new System.EventHandler(this.mnuMainActionsClearAllPrompts_Click);
+            // 
             // mnuMainTools
             // 
             this.mnuMainTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -639,12 +650,20 @@
             this.tmrClock.Enabled = true;
             this.tmrClock.Tick += new System.EventHandler(this.tmrClock_Tick);
             // 
-            // mnuMainActionsClearAllPrompts
+            // tbrMainLoad
             // 
-            this.mnuMainActionsClearAllPrompts.Name = "mnuMainActionsClearAllPrompts";
-            this.mnuMainActionsClearAllPrompts.Size = new System.Drawing.Size(171, 22);
-            this.mnuMainActionsClearAllPrompts.Text = "Clear _All Prompts";
-            this.mnuMainActionsClearAllPrompts.Click += new System.EventHandler(this.mnuMainActionsClearAllPrompts_Click);
+            this.tbrMainLoad.Image = ((System.Drawing.Image)(resources.GetObject("tbrMainLoad.Image")));
+            this.tbrMainLoad.ImageTransparentColor = System.Drawing.Color.White;
+            this.tbrMainLoad.Name = "tbrMainLoad";
+            this.tbrMainLoad.Size = new System.Drawing.Size(37, 35);
+            this.tbrMainLoad.Text = "Load";
+            this.tbrMainLoad.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainLoad.Click += new System.EventHandler(this.tbrMainLoad_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 38);
             // 
             // frmViewer
             // 
@@ -736,6 +755,8 @@
         private System.Windows.Forms.ToolStripMenuItem mnuMainViewZoom300Pct;
         private System.Windows.Forms.Timer tmrClock;
         private System.Windows.Forms.ToolStripMenuItem mnuMainActionsClearAllPrompts;
+        private System.Windows.Forms.ToolStripButton tbrMainLoad;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
 }
 

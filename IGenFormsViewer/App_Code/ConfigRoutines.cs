@@ -145,7 +145,7 @@ namespace IGenFormsViewer
         /// <returns></returns>
         public static int ReadConfigFile()
         {
-            String _fileName = "";
+            String _fileName = CommonRoutines.configFileName;
             string _originalFileName = "";
             int _numberOfLinesRead = 0;
             string _key = "";
@@ -161,48 +161,50 @@ namespace IGenFormsViewer
             {
                 dbConfigSettingsFound = false;
 
-                // remove the exe name
-                _offset = CommonRoutines.basePath.LastIndexOf("\\");
-
                 // get the logged on user
                 string _userId = CommonRoutines.GetCurrentUser();
                 CSA.currentUser = CommonRoutines.GetCurrentUser();
 
-                // strip any prefix from the user
-                if (_userId.IndexOf('\\') > 0)
-                {
-                    int _prefixOffset = _userId.LastIndexOf('\\');
-                    if (_prefixOffset >= 0)
-                    {
-                        _userId = _userId.Substring(_prefixOffset + 1);
-                    }
-                }
-                // get the IGenForms.config
-                _fileName = CommonRoutines.GetEXEName() + ".config";
+                //// remove the exe name
+                //_offset = CommonRoutines.basePath.LastIndexOf("\\");
+
+                //// strip any prefix from the user
+                //if (_userId.IndexOf('\\') > 0)
+                //{
+                //    int _prefixOffset = _userId.LastIndexOf('\\');
+                //    if (_prefixOffset >= 0)
+                //    {
+                //        _userId = _userId.Substring(_prefixOffset + 1);
+                //    }
+                //}
+                //// get the IGenForms.config
+                //_fileName = CommonRoutines.GetEXEName() + ".config";
                 
-                string _userFileName = (_userId != "")? _userId + "_" + _fileName:_fileName;
+                //string _userFileName = (_userId != "")? _userId + "_" + _fileName:_fileName;
 
-                // if user logged in, attach the userid and see if there is a file for it
-                if (CommonRoutines.FileExists(CommonRoutines.basePath + "\\" + _userFileName))
-                {
-                    // set the filename to the user file name
-                    _fileName = _userFileName;
-                }
-                // get the full path for the config file
-                _fileName = CommonRoutines.basePath + "\\" + _fileName;
+                //// if user logged in, attach the userid and see if there is a file for it
+                //if (CommonRoutines.FileExists(CommonRoutines.basePath + "\\" + _userFileName))
+                //{
+                //    // set the filename to the user file name
+                //    _fileName = _userFileName;
+                //}
+                //// get the full path for the config file
+                //_fileName = CommonRoutines.basePath + "\\" + _fileName;
 
-                _originalFileName = _fileName;
+                //_originalFileName = _fileName;
 
                 // clear the array
                 configSettings.Clear();
 
                 //configRecords = CommonRoutines.ReadFile(_userFileName);
-                configRecords = CommonRoutines.ReadFile(_fileName);
+                //configRecords = CommonRoutines.ReadFile(_fileName);
 
-                // set (maybe again...) the filename so that if a new user comes in it will take the default config and then
-                // when saved (upon exit) the new user config will be created.
-                //_fileName = CommonRoutines.basePath + "\\" + _userFileName;
-                _fileName = CommonRoutines.basePath + _userFileName;
+                configRecords = CommonRoutines.ReadFile(CommonRoutines.configFileName);
+
+                //// set (maybe again...) the filename so that if a new user comes in it will take the default config and then
+                //// when saved (upon exit) the new user config will be created.
+                ////_fileName = CommonRoutines.basePath + "\\" + _userFileName;
+                //_fileName = CommonRoutines.basePath + _userFileName;
 
                 currentConfigFile = _fileName;
 

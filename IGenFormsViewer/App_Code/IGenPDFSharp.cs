@@ -233,16 +233,18 @@ namespace IGenFormsViewer
                     if (_pdfFileName == "")
                     {
                         // Create a temporary file
-                        pdfFileName = String.Format("{0}_tempfile.pdf", Guid.NewGuid().ToString("D").ToUpper());
+                        _pdfFileName = String.Format("{0}_tempfile.pdf", Guid.NewGuid().ToString("D").ToUpper());
+                        // add the temp folder to it...
+                        _pdfFileName = CommonRoutines.currentPath + "\\temp\\" + _pdfFileName;
                     }
 
                     // now save to the pdf
-                    pdfDoc.Save(pdfFileName);
+                    pdfDoc.Save(_pdfFileName);
 
                     if (display)
                     {
                         // start a viewer
-                        Process.Start(pdfFileName);
+                        Process.Start(_pdfFileName);
                     }
                 }
 
@@ -290,6 +292,8 @@ namespace IGenFormsViewer
             string _value = "";
             string _font = "";
             float _fontSize = 0;
+            string _type = "";
+            int _fontHeight = 0;
             int _left = 0;
             int _top = 0;
             int _width = 0;
@@ -301,6 +305,9 @@ namespace IGenFormsViewer
             int _printLeftOffset = 0;
             int _printTopOffset = 0;
             string _imageName = pdfFileName;
+            XStringFormat _format = new XStringFormat();
+            XTextFormatter _textFormatter = null;
+            int _controlIndex = 0;
 
             try
             {
@@ -360,6 +367,13 @@ namespace IGenFormsViewer
                     //foreach (Control _control in pallet.Controls)
                     for (int n = 0; n < pallet.Controls.Count;n++ )
                     {
+                        _controlIndex = n;
+
+                        if (_controlIndex > 148)
+                        {
+                            int yyyy = 0;
+                        }
+
                         Control _control = pallet.Controls[n];
 
                         IGenField _igenFieldObject = null;
@@ -370,35 +384,82 @@ namespace IGenFormsViewer
 
                         if (_igenFieldObject != null && _igenFieldObject.visible)
                         {
-                            string _type = _igenFieldObject.type.ToUpper();
-                            _left = (int)(_igenFieldObject.left * .745) + _printLeftOffset;
-                            _top = (int)(_igenFieldObject.top * .755) + _printTopOffset;
-                            _width = (int)(_igenFieldObject.width * .745);
-                            _height = (int)(_igenFieldObject.height * .755);
                             _fontSize = (float)(_igenFieldObject.fontSize);
                             _font = _igenFieldObject.fontName;
+                            _pdfFont = new XFont(_font, _fontSize, XFontStyle.Regular, options);
+
+                            _type = _igenFieldObject.type.ToUpper();
+
+                            _left = _igenFieldObject.left;
+                            _top = _igenFieldObject.top;
+                            _height = _igenFieldObject.height;
+                            _width = _igenFieldObject.width;
                             _value = _igenFieldObject.text;
+
+                            _fontHeight = _pdfFont.Height;
+                            int _valueWidth = _value.Length * _fontHeight;
+
+                            if (_fontHeight > 0)
+                            {
+                                // if the total length of the field greater than the width of the rectangle, then truncate it.
+                                // adjust the top to put the value at the bottom of the rectangle
+                                if (_height > _fontHeight)
+                                {
+                                    if (_valueWidth < (_width + _fontHeight))
+                                    {
+                                        _top = _top + _height - _fontHeight - 1;
+                                    }
+                                    else
+                                    {
+                                        int x = 0;
+                                        // break it up into parts...
+                                        string[] _parts = _value.Split(' ');
+                                        string _newValue = "";
+                                        int _maxChars = (int)(_width / _fontHeight) + 2;
+                                        for (int m = 0; m < _parts.Length;m++)
+                                        {
+                                            if (_parts[m].Length > _maxChars)
+                                            {
+                                                _parts[m] = _parts[m].Substring(0, _maxChars);
+                                            }
+                                            _newValue = _newValue + _parts[m] + " ";
+                                        }
+                                        _value = _newValue;
+                                    }
+                                }
+                            }
+
+
+                            _left = (int)(_left * .745) + _printLeftOffset;
+                            _top = (int)(_top * .745) + _printTopOffset;
+                            _width = (int)(_width * .745);
+                            _height = (int)(_height * .745);
 
                             switch (_type)
                             {
                                 case "PICTURE":
                                     // draw the image at the location
-                                    _left = _left + 1;
-                                    _top = _top - 2;
-                                    XImage _image = _igenFieldObject.img;
+                                    PictureBox _pic = (PictureBox)_control;
+                                    _left = _left - 1;
+                                    _top = _top - 10;
                                     if (_igenFieldObject.img == null)
                                     {
-                                        PictureBox _pic = (PictureBox)_control;
+                                        _igenFieldObject.img = CommonRoutines.LoadTransparentImage(_igenFieldObject.imageName);
+                                    }
+
+                                    if (_igenFieldObject.img != null)
+                                    {
+                                        XImage _image = _igenFieldObject.img;
                                         if (_pic.Image != null)
                                         {
                                             Image _picImage = CommonRoutines.ResizeImage(_pic.Image, new Size(_width, _height));
                                             _image = _picImage;
                                         }
-                                    }
 
-                                    if (_image != null)
-                                    {
-                                        _pdfGraphics.DrawImage(_image, new Rectangle(_left, _top, _width, _height));
+                                        if (_image != null)
+                                        {
+                                            _pdfGraphics.DrawImage(_image, new Rectangle(_left, _top, _width, _height));
+                                        }
                                     }
                                     break;
 
@@ -409,9 +470,10 @@ namespace IGenFormsViewer
                                 default:
 
                                     // create a rect of where the control sits
-                                    XStringFormat _format = new XStringFormat();
-                                    XTextFormatter _textFormatter = new XTextFormatter(_pdfGraphics);
-                                    _format.LineAlignment = XLineAlignment.Far;
+                                    _format = new XStringFormat();
+                                    _textFormatter = new XTextFormatter(_pdfGraphics);
+                                    _format.LineAlignment = XLineAlignment.Near;
+                                    XRect _rect = new XRect(_left, _top, _width, _height);
 
                                     // check alignment
                                     switch (_igenFieldObject.alignment.ToUpper())
@@ -431,7 +493,6 @@ namespace IGenFormsViewer
                                             _textFormatter.Alignment = XParagraphAlignment.Right;
                                             break;
                                     }
-                                    Rectangle _rect = new Rectangle(_left, _top, _width, _height);
 
                                     // see if any special processing on the value...
                                     switch (_type.ToUpper())
@@ -442,9 +503,7 @@ namespace IGenFormsViewer
 
                                     }
 
-                                    _pdfFont = new XFont(_font, _fontSize, XFontStyle.Regular, options);
-
-                                    _textFormatter.DrawString(_value, _pdfFont, XBrushes.Black, _rect, XStringFormats.TopLeft);
+                                    _textFormatter.DrawString(_value, _pdfFont, XBrushes.Black, _rect, XStringFormat.TopLeft);
 
                                     break;
                             }

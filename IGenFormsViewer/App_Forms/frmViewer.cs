@@ -467,6 +467,11 @@ namespace IGenFormsViewer
 
                     for (int m = 0; m < tabForms.TabCount; m++)
                     {
+                        if (displayIGenForms.cancelFlag)
+                        {
+                            break;
+                        }
+
                         //tabForms.SelectedIndex = m;
                         tabForms.SelectedTab = tabForms.TabPages[m];
                         string _currentForm = tabForms.SelectedTab.Name;
@@ -485,37 +490,40 @@ namespace IGenFormsViewer
 
                 }
 
-                // set an event for the textboxes and checkboxes
-                for (int n = 0; n < tabForms.TabCount; n++)
+                if (!displayIGenForms.cancelFlag)
                 {
-                    PictureBox _pallet = (PictureBox)tabForms.TabPages[n].Controls[0];
-                    foreach (Control _control in _pallet.Controls)
+                    // set an event for the textboxes and checkboxes
+                    for (int n = 0; n < tabForms.TabCount; n++)
                     {
-                        IGenField _field = (IGenField)_control.Tag;
+                        PictureBox _pallet = (PictureBox)tabForms.TabPages[n].Controls[0];
+                        foreach (Control _control in _pallet.Controls)
+                        {
+                            IGenField _field = (IGenField)_control.Tag;
 
-                        if (_field.type.ToUpper().IndexOf("TEXTBOX") >= 0)
-                        {
-                            _control.Click += TextBox_Click;
-                        }
-                        else
-                        {
-                            if (_control.GetType().Name.ToUpper().IndexOf("CHECKBOX") >= 0)
+                            if (_field.type.ToUpper().IndexOf("TEXTBOX") >= 0)
                             {
-                                CheckBox _checkBox = (CheckBox)_control;
-                                _checkBox.CheckedChanged += CheckBox_CheckedChanged;
+                                _control.Click += TextBox_Click;
                             }
                             else
                             {
-                                if (_control.GetType().Name.ToUpper().IndexOf("COMBOBOX") >= 0)
+                                if (_control.GetType().Name.ToUpper().IndexOf("CHECKBOX") >= 0)
                                 {
-                                    ComboBox _comboBox = (ComboBox)_control;
-                                    _comboBox.SelectedValueChanged += ComboBox_SelectedValueChanged;
+                                    CheckBox _checkBox = (CheckBox)_control;
+                                    _checkBox.CheckedChanged += CheckBox_CheckedChanged;
+                                }
+                                else
+                                {
+                                    if (_control.GetType().Name.ToUpper().IndexOf("COMBOBOX") >= 0)
+                                    {
+                                        ComboBox _comboBox = (ComboBox)_control;
+                                        _comboBox.SelectedValueChanged += ComboBox_SelectedValueChanged;
+                                    }
                                 }
                             }
+
+                            _control.MouseHover += _control_MouseHover;
+
                         }
-
-                        _control.MouseHover += _control_MouseHover;
-
                     }
                 }
 
@@ -1471,9 +1479,12 @@ namespace IGenFormsViewer
             {
                 if (displayIGenForms != null)
                 {
+                    // get the filing id
+                    int _filingId = CommonRoutines.ConvertToInt(CSA.GetProperty("","Filing_Id"));
+
                     this.Cursor = Cursors.WaitCursor;
                     DisplayStatus("Saving form values, please wait....");
-                    displayIGenForms.SaveFormsToDatabase();
+                    displayIGenForms.SaveFormsToDatabase(_filingId);
 
                     // get the last calced date
                     SetLastDatePrepared();
@@ -2198,6 +2209,49 @@ namespace IGenFormsViewer
         }
 
 
+
+
+
+
+        private void tbrMainLoad_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                // load the forms from the database
+                LoadForms();
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tbrMainLoad_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+        private void LoadForms()
+        {
+
+            try
+            {
+                if (displayIGenForms != null)
+                {
+                    displayIGenForms.LoadFormValues();
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".LoadForms > " + ex.Message);
+            }
+
+            return;
+
+        }
 
 
 

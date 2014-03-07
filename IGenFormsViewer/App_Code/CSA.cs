@@ -44,7 +44,9 @@ namespace IGenFormsViewer
                             "1.1.6.14   SES     FB-15368 - Fixed DSLOOKUP when multiple parens were specified and where the DSLOOKUP was embedded or had additional expressions after it",
                             "1.1.6.15   SES     FB-15359 - Issues with IGenForms (=IF logic not working)",
                             "1.1.6.16   SES     FB-15429 - Odd calcs for IGenForms.  Numeric display values truncating on display",
-                            "1.1.6.17   SES     Added stop menu button for prints"
+                            "1.1.6.17   SES     Added stop menu button for prints",
+                            "1.1.6.18   SES     Added a load from database button",
+                            "                   Fixed alignment issue with pdf printing"
                         };
 
 

@@ -34,6 +34,8 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tbrMain = new System.Windows.Forms.ToolStrip();
+            this.tbrMainLoad = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tbrMainSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tbrMainRun = new System.Windows.Forms.ToolStripButton();
@@ -93,8 +95,10 @@
             this.mnuMainHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMainHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tmrClock = new System.Windows.Forms.Timer(this.components);
-            this.tbrMainLoad = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuMainShowForms = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainShowReturns = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainShowSummaries = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMainShowSchedules = new System.Windows.Forms.ToolStripMenuItem();
             this.tabForms.SuspendLayout();
             this.tbrMain.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -175,6 +179,21 @@
             this.tbrMain.Size = new System.Drawing.Size(1428, 38);
             this.tbrMain.TabIndex = 53;
             this.tbrMain.Text = "toolStrip1";
+            // 
+            // tbrMainLoad
+            // 
+            this.tbrMainLoad.Image = ((System.Drawing.Image)(resources.GetObject("tbrMainLoad.Image")));
+            this.tbrMainLoad.ImageTransparentColor = System.Drawing.Color.White;
+            this.tbrMainLoad.Name = "tbrMainLoad";
+            this.tbrMainLoad.Size = new System.Drawing.Size(37, 35);
+            this.tbrMainLoad.Text = "Load";
+            this.tbrMainLoad.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.tbrMainLoad.Click += new System.EventHandler(this.tbrMainLoad_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 38);
             // 
             // tbrMainSave
             // 
@@ -516,6 +535,7 @@
             this.mnuMainView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuMainViewDatasets,
             this.mnuMainViewRefresh,
+            this.mnuMainShowForms,
             this.mnuMainViewZoom});
             this.mnuMainView.Name = "mnuMainView";
             this.mnuMainView.Size = new System.Drawing.Size(44, 20);
@@ -551,35 +571,35 @@
             // mnuMainViewZoom50Pct
             // 
             this.mnuMainViewZoom50Pct.Name = "mnuMainViewZoom50Pct";
-            this.mnuMainViewZoom50Pct.Size = new System.Drawing.Size(102, 22);
+            this.mnuMainViewZoom50Pct.Size = new System.Drawing.Size(152, 22);
             this.mnuMainViewZoom50Pct.Text = "50%";
             this.mnuMainViewZoom50Pct.Click += new System.EventHandler(this.mnuMainViewZoom50Pct_Click);
             // 
             // mnuMainViewZoom100Pct
             // 
             this.mnuMainViewZoom100Pct.Name = "mnuMainViewZoom100Pct";
-            this.mnuMainViewZoom100Pct.Size = new System.Drawing.Size(102, 22);
+            this.mnuMainViewZoom100Pct.Size = new System.Drawing.Size(152, 22);
             this.mnuMainViewZoom100Pct.Text = "100%";
             this.mnuMainViewZoom100Pct.Click += new System.EventHandler(this.mnuMainViewZoom100Pct_Click);
             // 
             // mnuMainViewZoom150Pct
             // 
             this.mnuMainViewZoom150Pct.Name = "mnuMainViewZoom150Pct";
-            this.mnuMainViewZoom150Pct.Size = new System.Drawing.Size(102, 22);
+            this.mnuMainViewZoom150Pct.Size = new System.Drawing.Size(152, 22);
             this.mnuMainViewZoom150Pct.Text = "150%";
             this.mnuMainViewZoom150Pct.Click += new System.EventHandler(this.mnuMainViewZoom150Pct_Click);
             // 
             // mnuMainViewZoom200Pct
             // 
             this.mnuMainViewZoom200Pct.Name = "mnuMainViewZoom200Pct";
-            this.mnuMainViewZoom200Pct.Size = new System.Drawing.Size(102, 22);
+            this.mnuMainViewZoom200Pct.Size = new System.Drawing.Size(152, 22);
             this.mnuMainViewZoom200Pct.Text = "200%";
             this.mnuMainViewZoom200Pct.Click += new System.EventHandler(this.mnuMainViewZoom200Pct_Click);
             // 
             // mnuMainViewZoom300Pct
             // 
             this.mnuMainViewZoom300Pct.Name = "mnuMainViewZoom300Pct";
-            this.mnuMainViewZoom300Pct.Size = new System.Drawing.Size(102, 22);
+            this.mnuMainViewZoom300Pct.Size = new System.Drawing.Size(152, 22);
             this.mnuMainViewZoom300Pct.Text = "300%";
             this.mnuMainViewZoom300Pct.Click += new System.EventHandler(this.mnuMainViewZoom300Pct_Click);
             // 
@@ -650,20 +670,45 @@
             this.tmrClock.Enabled = true;
             this.tmrClock.Tick += new System.EventHandler(this.tmrClock_Tick);
             // 
-            // tbrMainLoad
+            // mnuMainShowForms
             // 
-            this.tbrMainLoad.Image = ((System.Drawing.Image)(resources.GetObject("tbrMainLoad.Image")));
-            this.tbrMainLoad.ImageTransparentColor = System.Drawing.Color.White;
-            this.tbrMainLoad.Name = "tbrMainLoad";
-            this.tbrMainLoad.Size = new System.Drawing.Size(37, 35);
-            this.tbrMainLoad.Text = "Load";
-            this.tbrMainLoad.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.tbrMainLoad.Click += new System.EventHandler(this.tbrMainLoad_Click);
+            this.mnuMainShowForms.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuMainShowReturns,
+            this.mnuMainShowSummaries,
+            this.mnuMainShowSchedules});
+            this.mnuMainShowForms.Name = "mnuMainShowForms";
+            this.mnuMainShowForms.Size = new System.Drawing.Size(159, 22);
+            this.mnuMainShowForms.Text = "&Show";
             // 
-            // toolStripSeparator5
+            // mnuMainShowReturns
             // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 38);
+            this.mnuMainShowReturns.Checked = true;
+            this.mnuMainShowReturns.CheckOnClick = true;
+            this.mnuMainShowReturns.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mnuMainShowReturns.Name = "mnuMainShowReturns";
+            this.mnuMainShowReturns.Size = new System.Drawing.Size(152, 22);
+            this.mnuMainShowReturns.Text = "&Returns";
+            this.mnuMainShowReturns.Click += new System.EventHandler(this.mnuMainShowReturns_Click);
+            // 
+            // mnuMainShowSummaries
+            // 
+            this.mnuMainShowSummaries.Checked = true;
+            this.mnuMainShowSummaries.CheckOnClick = true;
+            this.mnuMainShowSummaries.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mnuMainShowSummaries.Name = "mnuMainShowSummaries";
+            this.mnuMainShowSummaries.Size = new System.Drawing.Size(152, 22);
+            this.mnuMainShowSummaries.Text = "&Summaries";
+            this.mnuMainShowSummaries.Click += new System.EventHandler(this.mnuMainShowSummaries_Click);
+            // 
+            // mnuMainShowSchedules
+            // 
+            this.mnuMainShowSchedules.Checked = true;
+            this.mnuMainShowSchedules.CheckOnClick = true;
+            this.mnuMainShowSchedules.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mnuMainShowSchedules.Name = "mnuMainShowSchedules";
+            this.mnuMainShowSchedules.Size = new System.Drawing.Size(152, 22);
+            this.mnuMainShowSchedules.Text = "S&chedules";
+            this.mnuMainShowSchedules.Click += new System.EventHandler(this.mnuMainShowSchedules_Click);
             // 
             // frmViewer
             // 
@@ -757,6 +802,10 @@
         private System.Windows.Forms.ToolStripMenuItem mnuMainActionsClearAllPrompts;
         private System.Windows.Forms.ToolStripButton tbrMainLoad;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem mnuMainShowForms;
+        private System.Windows.Forms.ToolStripMenuItem mnuMainShowReturns;
+        private System.Windows.Forms.ToolStripMenuItem mnuMainShowSummaries;
+        private System.Windows.Forms.ToolStripMenuItem mnuMainShowSchedules;
     }
 }
 

@@ -93,9 +93,9 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "Ohio_MF2";
             //_interface.FormFileName = "Ohio_MF2.frm";
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\UAT Ready Forms\\SC\\Supplier";
-            _interface.FormGroup = "L-2119";
-            _interface.FormFileName = "SC Supplier.frm";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\UAT Ready Forms\\SC\\Supplier";
+            //_interface.FormGroup = "L-2119";
+            //_interface.FormFileName = "SC Supplier.frm";
 
             //_interface.FormFilesFolder = _interface.FormFilesFolder + "/USOil/IA";
             //_interface.FormGroup = "Iowa Supplier/Distributor";
@@ -120,6 +120,10 @@ namespace IGenFormsViewer
             //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\TASG\\NE";
             //_interface.FormGroup = "Form_73";
             //_interface.FormFileName = "FORM_73.frm";
+
+            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\AR\\Distilate Importer";
+            _interface.FormGroup = "Arkansas_Tax_Forms";
+            _interface.FormFileName = "AMFT-13(I).frm";
 
             _interface.GenerateForms();
 

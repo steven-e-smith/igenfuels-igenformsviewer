@@ -23,10 +23,17 @@ namespace IGenFormsViewer
 
         TabPage clickedTab = new TabPage();
 
+        // save the tabpages loaded
+        List<TabPage> loadedPages = new List<TabPage>();
+
+        private TabPage currentTabPage = null;
+
         bool isDirty = false;
 
         bool initialDisplay = true;
         bool runPrepare = true;
+
+        private Point dragTabStartPosition = Point.Empty;
 
 
         public frmViewer()
@@ -163,10 +170,15 @@ namespace IGenFormsViewer
                 tbrMainLastPage.Click += new EventHandler(btnLast_Click);
                 tbrMainGotoPage.Click += new EventHandler(btnGoto_Click);
 
-                // set the tab select event
+                // set the tab events
                 tabForms.Selected += new TabControlEventHandler(tabForms_Selected);
-                tabForms.MouseDown += new MouseEventHandler(TabClick);
                 tabForms.DoubleClick += new EventHandler(tabForms_DoubleClick);
+                tabForms.SelectedIndexChanged += new EventHandler(tabForms_SelectedIndexChanged);
+                tabForms.MouseDown += new MouseEventHandler(tabForms_MouseDown);
+                tabForms.MouseMove += new MouseEventHandler(tabForms_MouseMove);
+                tabForms.MouseUp += new MouseEventHandler(tabForms_MouseUp);
+                tabForms.DragOver += new DragEventHandler(tabForms_DragOver);
+                tabForms.AllowDrop = true;
 
                 tabForms.TabPages.Clear();
 
@@ -272,7 +284,7 @@ namespace IGenFormsViewer
 
             try
             {
-                string[] _dropDownMenuItems = {"Break Out|BreakOut"};
+                string[] _dropDownMenuItems = {"Break Out|BreakOut", "Hide|Hide"};
 
                     // create a file drop down menu
                     for (int n = 0; n < _dropDownMenuItems.Length; n++)
@@ -379,6 +391,29 @@ namespace IGenFormsViewer
                         }
                         break;
 
+                    case "HIDE":
+                        // hide the current tab
+                        if (currentTabPage != null)
+                        {
+                            // get the index of this tab
+                            int _index = tabForms.SelectedIndex;
+                            ShowTab(currentTabPage, false);
+                            if (tabForms.TabCount > 0)
+                            {
+                                if (_index < tabForms.TabCount)
+                                {
+                                    tabForms.SelectedIndex = _index;
+                                    currentTabPage = tabForms.TabPages[_index];
+                                }
+                            }
+                            else
+                            {
+                                currentTabPage = null;
+                                clickedTab = null;
+                            }
+                            
+                        }
+                        break;
 
                 }
             }
@@ -456,6 +491,14 @@ namespace IGenFormsViewer
                     // recreate the forms
                     DisplayStatus("Displaying form...");
                     displayIGenForms.DisplayForms(tabForms, true);
+
+                    // now save the tabpages
+                    loadedPages.Clear();
+                    for (int n=0;n<tabForms.TabCount;n++)
+                    {
+                        loadedPages.Add(tabForms.TabPages[n]);
+                    }
+
                     #endregion
 
                 }
@@ -500,25 +543,26 @@ namespace IGenFormsViewer
                         {
                             IGenField _field = (IGenField)_control.Tag;
 
-                            if (_field.type.ToUpper().IndexOf("TEXTBOX") >= 0)
+                            switch (_field.type.ToUpper())
                             {
-                                _control.Click += TextBox_Click;
-                            }
-                            else
-                            {
-                                if (_control.GetType().Name.ToUpper().IndexOf("CHECKBOX") >= 0)
-                                {
+                                case "TEXTBOX":
+                                    _control.Click += TextBox_Click;
+                                    break;
+
+                                case "CHECKBOX":
                                     CheckBox _checkBox = (CheckBox)_control;
                                     _checkBox.CheckedChanged += CheckBox_CheckedChanged;
-                                }
-                                else
-                                {
-                                    if (_control.GetType().Name.ToUpper().IndexOf("COMBOBOX") >= 0)
-                                    {
+                                    break;
+
+                                case "COMBOBOX":
                                         ComboBox _comboBox = (ComboBox)_control;
                                         _comboBox.SelectedValueChanged += ComboBox_SelectedValueChanged;
-                                    }
-                                }
+                                    break;
+
+                                default:
+                                    _control.DoubleClick += _control_DoubleClick;
+                                    break;
+
                             }
 
                             _control.MouseHover += _control_MouseHover;
@@ -546,6 +590,36 @@ namespace IGenFormsViewer
             displayIGenForms.DisplayProgress(0, 0);
 
             DisplayStatus("Ready");
+
+            return;
+
+        }
+
+
+
+
+
+        void _control_DoubleClick(object sender, EventArgs e)
+        {
+            Control _control = (Control)sender;
+            string _name = "Name=" + _control.Name;
+            string _text = "";
+
+            // display the control text
+            try
+            {
+                if (_control.Tag != null && _control.Tag.GetType().Name.ToUpper() == "IGENFIELD")
+                {
+                    IGenField _field = (IGenField)_control.Tag;
+                    _name = "[" + _field.parentFormName + "].[" + _field.name + "]";
+                    _text = "Value:\r\n" + _field.value + "\r\n\r\nCompiled Value:\r\n" + _field.compiledValue + "\r\n\r\nComments:\r\n" + _field.comments;
+                }
+                CommonRoutines.DisplayText(_text, _name);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + "._control_DoubleClick > " + ex.Message);
+            }
 
             return;
 
@@ -584,7 +658,6 @@ namespace IGenFormsViewer
             }
 
             return;
-
 
         }
 
@@ -793,67 +866,6 @@ namespace IGenFormsViewer
 
         
 
-        void TabClick(object sender, MouseEventArgs e)
-        {
-
-            try
-            {
-                // get the tab under the click
-                clickedTab = FindTab();
-                switch (e.Button)
-                {
-                    case System.Windows.Forms.MouseButtons.Right:
-                        ContextMenuStrip objRightClickMenu = CreateRightClickDropDownMenu();
-                        if (objRightClickMenu != null)
-                        {
-                            int X = tabForms.Left + e.X;
-                            int Y = tabForms.Top + e.Y;
-                            objRightClickMenu.Show(this, X, Y);  // (this, new Point(X, Y));
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + "._tabPage_Click > " + ex.Message);
-            }
-
-            return;
-
-        }
-
-
-
-
-
-
-
-        private TabPage FindTab()
-        {
-            TabPage _tabPage = null;
-
-            try
-            {
-                for (int index = 0; index <= tabForms.TabCount - 1; index++)
-                {
-                    if (tabForms.GetTabRect(index).Contains(tabForms.PointToClient(Cursor.Position)))
-                    {
-                        _tabPage = tabForms.TabPages[index];
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".FindTab > " + ex.Message);
-            }
-
-            return _tabPage;
-
-        }
 
 
 
@@ -2242,6 +2254,7 @@ namespace IGenFormsViewer
                 if (displayIGenForms != null)
                 {
                     displayIGenForms.LoadFormValues();
+
                 }
             }
             catch (Exception ex)
@@ -2255,6 +2268,392 @@ namespace IGenFormsViewer
 
 
 
+
+
+
+        void ShowFormTypes(string formType, bool showFlag)
+        {
+            bool _pagesFound = false;
+
+            try
+            {
+                // walk the tab and see which forms should be shown or hidden
+                for (int n=0;n<loadedPages.Count;n++)
+                {
+                    TabPage _tabPage = loadedPages[n];
+                    if (_tabPage.Tag != null)
+                    {
+                        PictureBox _pallet = (PictureBox) _tabPage.Controls[0];
+                        if (_pallet.Tag != null && _pallet.Tag.GetType().Name.ToUpper().IndexOf("IGENFORM") >= 0)
+                        {
+                            IGenForm _form = (IGenForm)_pallet.Tag;
+                            if (_form.formType.ToUpper() == formType.ToUpper())
+                            {
+                                ShowTab(_tabPage, showFlag);
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".ShowFormTypes > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+
+        private void mnuMainShowReturns_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ShowFormTypes("Returns", mnuMainShowReturns.Checked);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainShowReturns_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+        private void mnuMainShowSummaries_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ShowFormTypes("Summary", mnuMainShowSummaries.Checked);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainShowSummaries_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+        private void mnuMainShowSchedules_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                ShowFormTypes("Schedule", mnuMainShowSchedules.Checked);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".mnuMainShowSchedules_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+        #region [TabForms events]
+
+        void tabForms_MouseDown(object sender, MouseEventArgs e)
+        {
+
+            try
+            {
+                // get the tab under the click
+                clickedTab = FindTab();
+                currentTabPage = clickedTab;
+
+                switch (e.Button)
+                {
+                    case System.Windows.Forms.MouseButtons.Right:
+                        ContextMenuStrip objRightClickMenu = CreateRightClickDropDownMenu();
+                        if (objRightClickMenu != null)
+                        {
+                            int X = tabForms.Left + e.X;
+                            int Y = tabForms.Top + e.Y;
+                            objRightClickMenu.Show(this, X, Y);  // (this, new Point(X, Y));
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tabForms_MouseDown > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+        void tabForms_MouseMove(object sender, MouseEventArgs e)
+        {
+
+            try
+            {
+                if (e.Button != MouseButtons.Left)
+                {
+                    return;
+                }
+
+                Rectangle _rect = new Rectangle(dragTabStartPosition, Size.Empty);
+
+                _rect.Inflate(SystemInformation.DragSize);
+
+                TabPage _hoverPage = HoverTab();
+
+                if (_hoverPage != null)
+                {
+                    if (!_rect.Contains(e.X, e.Y))
+                    {
+                        tabForms.DoDragDrop(_hoverPage, DragDropEffects.All);
+                    }
+                }
+
+                dragTabStartPosition = Point.Empty;
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tabForms_MouseMove > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+        void tabForms_MouseUp(object sender, MouseEventArgs e)
+        {
+
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tabForms_MouseUp > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+        private void tabForms_DragOver(object sender, System.Windows.Forms.DragEventArgs e)
+        {
+
+            try
+            {
+                TabPage hover_Tab = HoverTab();
+
+                if (hover_Tab == null)
+                    e.Effect = DragDropEffects.None;
+                else
+                {
+                    if (e.Data.GetDataPresent(typeof(TabPage)))
+                    {
+                        e.Effect = DragDropEffects.Move;
+                        TabPage drag_tab = (TabPage)e.Data.GetData(typeof(TabPage));
+
+                        if (hover_Tab == drag_tab)
+                        {
+                            return;
+                        }
+
+                        Rectangle _tabRect = tabForms.GetTabRect(tabForms.TabPages.IndexOf(hover_Tab));
+                        _tabRect.Inflate(-3, -3);
+                        if (_tabRect.Contains(tabForms.PointToClient(new Point(e.X, e.Y))))
+                        {
+                            SwapTabPages(drag_tab, hover_Tab);
+                            tabForms.SelectedTab = drag_tab;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tabForms_DragOver > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+        void tabForms_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (tabForms.SelectedTab != null)
+                {
+                    currentTabPage = tabForms.SelectedTab;
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tabForms_SelectedIndexChanged > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+
+        private TabPage HoverTab()
+        {
+            TabPage _tabPage = null;
+
+            try
+            {
+                for (int index = 0; index <= tabForms.TabCount - 1; index++)
+                {
+                    if (tabForms.GetTabRect(index).Contains(tabForms.PointToClient(Cursor.Position)))
+                    {
+                        _tabPage = tabForms.TabPages[index];
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".HoverTab > " + ex.Message);
+            }
+
+            return _tabPage;
+
+        }
+
+
+
+
+
+        private void SwapTabPages(TabPage tp1, TabPage tp2)
+        {
+
+            try
+            {
+                int Index1 = tabForms.TabPages.IndexOf(tp1);
+                int Index2 = tabForms.TabPages.IndexOf(tp2);
+                tabForms.TabPages[Index1] = tp2;
+                tabForms.TabPages[Index2] = tp1;
+
+                // swap the forms 
+
+                isDirty = true;
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SwapTabPages > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+        private TabPage FindTab()
+        {
+            TabPage _tabPage = null;
+
+            try
+            {
+                for (int index = 0; index <= tabForms.TabCount - 1; index++)
+                {
+                    if (tabForms.GetTabRect(index).Contains(tabForms.PointToClient(Cursor.Position)))
+                    {
+                        _tabPage = tabForms.TabPages[index];
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".FindTab > " + ex.Message);
+            }
+
+            return _tabPage;
+
+        }
+
+
+
+        void ShowTab(TabPage tabPage, bool showFlag)
+        {
+
+            try
+            {
+                if (showFlag)
+                {
+                    // add the tab if not already there...
+                    if (!tabForms.TabPages.Contains(tabPage))
+                    {
+                        tabForms.TabPages.Add(tabPage);
+                    }
+                }
+                else
+                {
+                    // remove the tab
+                    int _index = tabForms.TabPages.IndexOf(tabPage);
+                    tabForms.TabPages.RemoveAt(_index);
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".ShowTab > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+
+
+
+
+        #endregion 
 
 
 

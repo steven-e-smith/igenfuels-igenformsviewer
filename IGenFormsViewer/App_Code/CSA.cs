@@ -46,7 +46,11 @@ namespace IGenFormsViewer
                             "1.1.6.16   SES     FB-15429 - Odd calcs for IGenForms.  Numeric display values truncating on display",
                             "1.1.6.17   SES     Added stop menu button for prints",
                             "1.1.6.18   SES     Added a load from database button",
-                            "                   Fixed alignment issue with pdf printing"
+                            "                   Fixed alignment issue with pdf printing",
+                            "                   FB-14543 - Added ability to restrict which tabs show up in the viewer and are processed when the prepare button is clicked",
+                            "                   Added capability to set a field to wraptext in order to not truncate it but to align at top and wrap",
+                            "1.1.6.19   SES     FB-15813 - Commas on schedules",
+                            "                   Added ability to show neg numbers as red"
                         };
 
 

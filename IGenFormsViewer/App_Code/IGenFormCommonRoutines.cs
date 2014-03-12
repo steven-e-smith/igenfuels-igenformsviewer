@@ -319,6 +319,11 @@ namespace IGenFormsViewer
             {
                 string _fieldType = _field.dataType.ToUpper();
                 string _type = _field.type.ToUpper();
+                // if this is a numeric field then set to zero if blank
+                // see if this field has formatting properties
+                string _formatMask = _field.formatMask;
+                string _negNumbersRed = _field.GetProperty("NegNumbersRed");
+                string _negNumbersInParens = _field.GetProperty("NegNumbersInParens");
 
                 if (_field.name.ToUpper().IndexOf("tbrControlsLabel_288".ToUpper()) >= 0)
                 {
@@ -498,13 +503,23 @@ namespace IGenFormsViewer
                 _checkValue = _checkValue.Trim();
                 if (_checkValue == "")
                 {
-                    _value = _checkValue;
+                    _value = "";
+                    _expression = false;
+                }
+
+                // check the value to see if there is nothing but commas in it...
+                _checkValue = _value.Replace(",", "").Trim();
+                if (_checkValue == "")
+                {
+                    _value = "";
                     _expression = false;
                 }
 
                 // see if this is something other than a literal or such
                 if (_expression)
                 {
+                    #region [Handle Expressions]
+
                     _fieldName = "";
                     int _rowIndex = 0;
                     int _startIndex = 0;
@@ -1420,6 +1435,29 @@ namespace IGenFormsViewer
 
                     #endregion
 
+                    #endregion
+                }
+
+                if (_value != "")
+                {
+                    decimal _decValue = CommonRoutines.ConvertToDecimal(_value);
+
+                    if (_decValue != 0)
+                    {
+                        if (_decValue < 0)
+                        {
+                            if (_negNumbersRed.ToUpper() == "TRUE")
+                            {
+                                // if the value is neg then make it red
+                                _field.foreColor = "Red";
+                            }
+                        }
+
+                        if (_formatMask != "")
+                        {
+                            // format the value
+                        }
+                    }
                 }
 
             }

@@ -298,6 +298,7 @@ namespace IGenFormsViewer
             int _top = 0;
             int _width = 0;
             int _height = 0;
+            string _dataType = "TEXT";
             float _factorX = 1.35F;
             float _factorY = 1.20F;
             Pen _pen = new Pen(Brushes.Black);
@@ -343,7 +344,6 @@ namespace IGenFormsViewer
                     {
                         _pdfPage = pdfDoc.AddPage(inputDocument.Pages[0]);
                         _pdfGraphics = XGraphics.FromPdfPage(_pdfPage);
-//                        _pdfPage.Orientation = (orientation.ToUpper().IndexOf('L') == 0) ? PdfSharp.PageOrientation.Landscape : _pdfPage.Orientation = PdfSharp.PageOrientation.Portrait;
                     }
                 }
                 else
@@ -351,14 +351,21 @@ namespace IGenFormsViewer
                     _pdfPage = pdfDoc.AddPage();
                     _pdfPage.Orientation = (orientation.ToUpper().IndexOf('L') == 0) ? PdfSharp.PageOrientation.Landscape : _pdfPage.Orientation = PdfSharp.PageOrientation.Portrait;
                     _pdfGraphics = XGraphics.FromPdfPage(_pdfPage);
-                    pdfImages.DrawPng(_pdfGraphics, 1, pallet.Image);
+                    // if there is an image, draw it...
+                    if (pallet.Image != null)
+                    {
+                        pdfImages.DrawPng(_pdfGraphics, 1, pallet.Image);
+                    }
                 }
 
                 if (_pdfPage != null)
                 {
 
+                    IGenForm _form = (IGenForm)pallet.Tag;
+
                     XPdfFontOptions options = new XPdfFontOptions(PdfFontEncoding.WinAnsi, PdfFontEmbedding.Default);
                     XFont _pdfFont = new XFont("Times New Roman", 9, XFontStyle.Regular, options);
+                    int _rotate = _pdfPage.Rotate;
 
                     //pdfText.DrawText(_pdfGraphics, "Test Text", 10, 20);
                     //_pdfGraphics.DrawString("Test Text", _pdfFont, XBrushes.Black, 10, 20);
@@ -390,41 +397,74 @@ namespace IGenFormsViewer
 
                             _type = _igenFieldObject.type.ToUpper();
 
-                            _left = _igenFieldObject.left;
+                            _left = _igenFieldObject.left - 3;
                             _top = _igenFieldObject.top;
                             _height = _igenFieldObject.height;
                             _width = _igenFieldObject.width;
                             _value = _igenFieldObject.text;
-
+                            _dataType = _igenFieldObject.dataType.ToUpper();
+                            
                             _fontHeight = _pdfFont.Height;
                             int _valueWidth = _value.Length * _fontHeight;
 
-                            if (_fontHeight > 0)
+                            if (_valueWidth > 0)
                             {
+                                int xxxxx = 0;
+                            }
+
+                            if (_fontHeight > 0 && _valueWidth > 0)
+                            {
+
                                 // if the total length of the field greater than the width of the rectangle, then truncate it.
                                 // adjust the top to put the value at the bottom of the rectangle
                                 if (_height > _fontHeight)
                                 {
-                                    if (_valueWidth < (_width + _fontHeight))
+                                    int _maxChars = (int)(_width / _fontHeight) + 2;
+                                    int _maxLines = (int)(_height / _fontHeight) + 1;
+                                    if (_igenFieldObject.wrapText)
                                     {
-                                        _top = _top + _height - _fontHeight - 1;
+                                        //_value = "thisisareallylongtexttoseeifthewrappingisworkingokornot";
+                                        //_valueWidth = _value.Length * _fontHeight;
+                                        int _cntr = 0;
+                                        // break it up into parts...
+                                        string _newValue = "";
+                                        for (int m = 0; m < _value.Length;m++)
+                                        {
+                                            _cntr++;
+                                            if (_cntr > _maxChars)
+                                            {
+                                                _newValue = _newValue + " ";
+                                                _cntr = 0;
+                                            }
+                                            _newValue = _newValue + _value.Substring(m, 1);
+                                        }
+                                        _value = _newValue;
                                     }
                                     else
                                     {
-                                        int x = 0;
-                                        // break it up into parts...
-                                        string[] _parts = _value.Split(' ');
-                                        string _newValue = "";
-                                        int _maxChars = (int)(_width / _fontHeight) + 2;
-                                        for (int m = 0; m < _parts.Length;m++)
+                                        // place it at the bottom
+                                        _top = _top + _height - _fontHeight - 2;
+                                        // now see if it should be truncated
+                                        if (_value.Length > _maxChars)
                                         {
-                                            if (_parts[m].Length > _maxChars)
+                                            // calculate the diff...
+                                            int _charsLeft = _value.Length - _maxChars;
+                                            // if numeric or right justified, slide the left to the left and increase the widget
+                                            int _pixelsToShift = (int)(_charsLeft * _fontHeight) + 1;
+                                            switch (_dataType)
                                             {
-                                                _parts[m] = _parts[m].Substring(0, _maxChars);
+                                                case "TEXT":
+                                                case "LABEL":
+                                                    _value = _value.Substring(0, _maxChars);
+                                                    break;
+
+                                                default:
+                                                    _left = _left - _pixelsToShift;
+                                                    _width = _width + _pixelsToShift;
+                                                    break;
                                             }
-                                            _newValue = _newValue + _parts[m] + " ";
                                         }
-                                        _value = _newValue;
+
                                     }
                                 }
                             }
@@ -432,8 +472,8 @@ namespace IGenFormsViewer
 
                             _left = (int)(_left * .745) + _printLeftOffset;
                             _top = (int)(_top * .745) + _printTopOffset;
-                            _width = (int)(_width * .745);
-                            _height = (int)(_height * .745);
+                            _width = (int)(_width * .760);
+                            _height = (int)(_height * .760);
 
                             switch (_type)
                             {
@@ -468,11 +508,15 @@ namespace IGenFormsViewer
                                     break;
 
                                 default:
-
+                                    if (_valueWidth > 10)
+                                    {
+                                        int jdsafd = 0;
+                                    }
                                     // create a rect of where the control sits
                                     _format = new XStringFormat();
                                     _textFormatter = new XTextFormatter(_pdfGraphics);
                                     _format.LineAlignment = XLineAlignment.Near;
+                                    _textFormatter.Alignment = XParagraphAlignment.Left;
                                     XRect _rect = new XRect(_left, _top, _width, _height);
 
                                     // check alignment
@@ -503,7 +547,18 @@ namespace IGenFormsViewer
 
                                     }
 
-                                    _textFormatter.DrawString(_value, _pdfFont, XBrushes.Black, _rect, XStringFormat.TopLeft);
+                                    // check the fields color
+                                    XBrush _brush = XBrushes.Black;
+
+                                    if (_igenFieldObject.foreColor != "")
+                                    {
+                                        if (_igenFieldObject.foreColor.ToUpper() != "BLACK")
+                                        {
+                                            _brush = GetBrushByColor(_igenFieldObject.foreColor);
+                                        }
+                                    }
+
+                                    _textFormatter.DrawString(_value, _pdfFont, _brush, _rect, XStringFormat.TopLeft);
 
                                     break;
                             }
@@ -519,6 +574,32 @@ namespace IGenFormsViewer
 
             return;
         }
+
+
+
+
+
+
+
+        private XBrush GetBrushByColor(string color)
+        {
+            XBrush _brush = XBrushes.Black;
+
+            try
+            {
+                XColor _color = XColor.FromName(color);
+                _brush = new XSolidBrush(_color);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".GetBrushByColor > " + ex.Message);
+            }
+
+            return _brush;
+
+        }
+
+
 
 
 

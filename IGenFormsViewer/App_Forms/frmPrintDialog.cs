@@ -163,9 +163,17 @@ namespace IGenFormsViewer
                 tbrMainStop.Enabled = true;
                 Application.DoEvents();
 
+                keepPrinting = true;
+                cancelPrinting = false;
+                
                 // print the selected forms
                 for (int n = 0; n < dgvFormsToPrint.Rows.Count; n++)
                 {
+
+                    if (cancelPrinting)
+                    {
+                        break;
+                    }
 
                     if (dgvFormsToPrint.Rows[n].Cells["PrintForm"].Value != null)
                     {
@@ -231,64 +239,75 @@ namespace IGenFormsViewer
 
                                         tbrMainPrintStatus.Text = "Printing form " + _formTitle + " (" + _formName + ")  page " + (_pageNo + 1) + " of " + _totalPages;
 
-                                        // get the page for the form
-                                        #region [Increment Pages]
-
-                                        // now for each dataset on the form page the result sets
-                                        for (int m = 0; m < _form.datasets.Count; m++)
+                                        if (_form.multiPageForm.ToUpper() == "TRUE")
                                         {
-                                            IGenDataset _formDataset = _form.datasets[m];
-                                            int _dsOrdinal = _formDataset.referenceDatasetOrdinal;
-                                            IGenDataset _dataset = IGenFormCommonRoutines.currentIGenForms.datasets[_dsOrdinal];
-                                            _form.dataset = _dataset;
+                                            // get the page for the form
+                                            #region [Increment Pages]
 
-                                            List<IGenPage> _pages = _formDataset.pages;
+                                            // now for each dataset on the form page the result sets
+                                            #region [Page Datasets]
 
-                                            if (_pageNo < _pages.Count)
+                                            for (int m = 0; m < _form.datasets.Count; m++)
                                             {
-                                                // reload the page with the next page of data
-                                                // get the starting and ending values 
-                                                int _startingRow = _pages[_pageNo].startingRow;
-                                                int _endingRow = _pages[_pageNo].endingRow;
-                                                int _numRows = _endingRow - _startingRow + 1;
+                                                IGenDataset _formDataset = _form.datasets[m];
+                                                int _dsOrdinal = _formDataset.referenceDatasetOrdinal;
+                                                IGenDataset _dataset = IGenFormCommonRoutines.currentIGenForms.datasets[_dsOrdinal];
+                                                _form.dataset = _dataset;
 
-                                                // see if there are any rows...
-                                                if (_dataset.numRows > 0)
+                                                List<IGenPage> _pages = _formDataset.pages;
+
+                                                if (_pageNo < _pages.Count)
                                                 {
-                                                    _dataset.currentPosition = _startingRow - 1;
+                                                    // reload the page with the next page of data
+                                                    // get the starting and ending values 
+                                                    int _startingRow = _pages[_pageNo].startingRow;
+                                                    int _endingRow = _pages[_pageNo].endingRow;
+                                                    int _numRows = _endingRow - _startingRow + 1;
 
-                                                    // get the rows for this page
-                                                    List<string[]> _results = _dataset.GetRows(_startingRow, _numRows);
+                                                    // see if there are any rows...
+                                                    if (_dataset.numRows > 0)
+                                                    {
+                                                        _dataset.currentPosition = _startingRow - 1;
 
-                                                    _formDataset.results = _results;
-                                                    _form.dataset.pages = _pages;
-                                                    _form.dataset.results = _results;
-                                                    _dataset.results = _results;
+                                                        // get the rows for this page
+                                                        List<string[]> _results = _dataset.GetRows(_startingRow, _numRows);
+
+                                                        _formDataset.results = _results;
+                                                        _form.dataset.pages = _pages;
+                                                        _form.dataset.results = _results;
+                                                        _dataset.results = _results;
+                                                    }
                                                 }
+                                                else
+                                                {
+                                                    // clear out the results
+                                                    if (_formDataset.results != null)
+                                                    {
+                                                        _formDataset.results.Clear();
+                                                    }
+                                                    if (_form.dataset.results != null)
+                                                    {
+                                                        _form.dataset.results.Clear();
+                                                    }
+                                                    if (_dataset.results != null)
+                                                    {
+                                                        _dataset.results.Clear();
+                                                    }
+                                                }
+
                                             }
-                                            else
-                                            {
-                                                // clear out the results
-                                                if (_formDataset.results != null)
-                                                {
-                                                    _formDataset.results.Clear();
-                                                }
-                                                if (_form.dataset.results != null)
-                                                {
-                                                    _form.dataset.results.Clear();
-                                                }
-                                                if (_dataset.results != null)
-                                                {
-                                                    _dataset.results.Clear();
-                                                }
-                                            }
-                                            
+                                            #endregion
+
+                                            // refresh the page
+                                            IGenFormCommonRoutines.currentIGenForms.RedisplaySelectedForm(_pallet, _formName);
+                                            #endregion
+
                                         }
 
-                                        // refresh the page
-                                        //IGenFormCommonRoutines.currentIGenForms.ProcessForms();
-
-                                        IGenFormCommonRoutines.currentIGenForms.RedisplaySelectedForm(_pallet, _formName);
+                                        if (cancelPrinting)
+                                        {
+                                            break;
+                                        }
 
                                         if (_printForm)
                                         {
@@ -314,8 +333,6 @@ namespace IGenFormsViewer
 
                                         _pageNo = _pageNo + 1;
 
-                                        #endregion
-
                                         Application.DoEvents();
                                     }
 
@@ -331,6 +348,7 @@ namespace IGenFormsViewer
                     {
                         break;
                     }
+
                 }
 
                 if (!_printForm)
@@ -343,6 +361,9 @@ namespace IGenFormsViewer
             {
                 CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".PrintForms > " + ex.Message);
             }
+
+            // clear the select all
+            chkPrintAll.Checked = false;
 
             tbrMainPrintStatus.Text = "Done";
 
@@ -360,6 +381,7 @@ namespace IGenFormsViewer
 
             try
             {
+                this.Cursor = Cursors.Default;
                 this.Close();
             }
             catch (Exception ex)
@@ -451,7 +473,7 @@ namespace IGenFormsViewer
                 DialogResult _answer = CommonRoutines.AskYesNo("Do you wish to stop printing?", "Stop Printing");
                 if (_answer == System.Windows.Forms.DialogResult.Yes)
                 {
-                    keepPrinting = false;
+                    cancelPrinting = true;
                 }
             }
             catch (Exception ex)

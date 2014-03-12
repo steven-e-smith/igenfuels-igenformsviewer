@@ -5208,6 +5208,32 @@ namespace IGenFormsViewer
         }
 
 
+        /// <summary>
+        /// Color GetColorFromString(string color)
+        /// Get the color from a string
+        /// </summary>
+        /// <returns></returns>
+        public static Color GetColorFromString(string color)
+        {
+            Color _color = Color.Transparent;
+
+            try
+            {
+                _color = Color.FromName(color);
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.Log("$E:" + moduleName + ".GetColorFromString > " + ex.Message);
+            }
+
+            return _color;
+
+        }
+
+
+
+
+
 
     }
 }

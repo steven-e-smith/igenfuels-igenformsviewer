@@ -764,6 +764,32 @@ namespace IGenFormsViewer
                                 }
                                 break;
 
+                            case "NEGNUMBERSRED":
+                                if (_formFlag)
+                                {
+                                }
+                                else
+                                {
+                                    if (_fieldFlag)
+                                    {
+                                        _field.AddProperty("NegNumbersRed", _tagValue);
+                                    }
+                                }
+                                break;
+
+                            case "NEGNUMBERSINPARENS":
+                                if (_formFlag)
+                                {
+                                }
+                                else
+                                {
+                                    if (_fieldFlag)
+                                    {
+                                        _field.AddProperty("NegNumbersInParens", _tagValue);
+                                    }
+                                }
+                                break;
+
                             case "VISIBLE":
                                 if (_formFlag)
                                 {
@@ -779,6 +805,13 @@ namespace IGenFormsViewer
                                     {
 
                                     }
+                                }
+                                break;
+
+                            case "WRAPTEXT":
+                                if (_fieldFlag)
+                                {
+                                    _field.wrapText = (_tagValue.ToUpper() == "TRUE") ? true : false;
                                 }
                                 break;
 
@@ -2405,7 +2438,7 @@ namespace IGenFormsViewer
 
             try
             {
-                if (progressBar != null)
+                if (progressBar != null && progressBar.ProgressBar != null)
                 {
                     if (entity == 0 || totalEntities == 0)
                     {
@@ -2775,6 +2808,7 @@ namespace IGenFormsViewer
                                 _control.KeyUp += new KeyEventHandler(Control_KeyUp);
                                 _field.controlContainer = _control;
                                 _field.SetHandles();
+
                             }
                         }
 
@@ -3238,7 +3272,6 @@ namespace IGenFormsViewer
                             _value = _field.compiledValue.Trim();
 
                             _value = IGenFormCommonRoutines.ResolveValue(this, _form.name, _field.name, _value);
-                            // if this is a numeric field then set to zero if blank
                         }
                     }
                     else
@@ -3315,6 +3348,7 @@ namespace IGenFormsViewer
                             }
 
                             _control.Visible = _field.visible;
+                            _control.ForeColor = CommonRoutines.GetColorFromString(_field.foreColor);
                         }
                     }
                 }
@@ -5736,6 +5770,7 @@ namespace IGenFormsViewer
         public string originalValue = "";
         public string instructions = "";
         public bool visible = true;
+        public bool wrapText = false;
         public string innerType = "";
         public string imageName = "";
         public string formatMask = "";
@@ -6524,6 +6559,7 @@ namespace IGenFormsViewer
                 _attributes.Add(new string[] { "Top", top.ToString() });
                 _attributes.Add(new string[] { "Width", width.ToString() });
                 _attributes.Add(new string[] { "Height", height.ToString() });
+                _attributes.Add(new string[] { "WrapText", wrapText.ToString() });
                 _attributes.Add(new string[] { "TabOrder", tabIndex.ToString() });
                 _attributes.Add(new string[] { "BackColor", backColor });
                 _attributes.Add(new string[] { "ForeColor", foreColor });

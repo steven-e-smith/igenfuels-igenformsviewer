@@ -60,11 +60,11 @@ namespace IGenFormsViewer
         }
 
 
-        private string formSQL = "";
-        public string FormSQL
+        private string returnId = "";
+        public string ReturnId
         {
-            get { return formSQL; }
-            set { formSQL = value; }
+            get { return returnId; }
+            set { returnId = value; }
         }
 
 
@@ -221,7 +221,6 @@ namespace IGenFormsViewer
                 IGenFormCommonRoutines.currentIGenForm = null;
 
                 _igenForms.xmlRecs = XmlRecs;
-                _igenForms.sql = formSQL;
 
                 // load the form group
                 _igenForms.Execute();

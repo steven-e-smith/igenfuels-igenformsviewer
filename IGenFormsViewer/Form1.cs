@@ -55,8 +55,14 @@ namespace IGenFormsViewer
             // assign the connection string
             _interface.BaseConnectionString = ConfigRoutines.GetSetting("BaseConnection");
             _interface.BaseConnectionDBMS = ConfigRoutines.GetSetting("BaseDBMS");
+            DatabaseRoutines.BaseConnection = _interface.BaseConnectionString;
+            DatabaseRoutines.BaseDBMS = _interface.BaseConnectionDBMS;
+
             _interface.ConnectionString = ConfigRoutines.GetSetting("MainConnection");
             _interface.ConnectionDBMS = ConfigRoutines.GetSetting("MainDBMS");
+            DatabaseRoutines.MainConnection = _interface.ConnectionString;
+            DatabaseRoutines.MainDBMS = _interface.ConnectionDBMS;
+
             _interface.FormFilesFolder = CommonRoutines.currentFormsPath;
             _interface.FormImagesFolder = CommonRoutines.currentFormImagesPath;
 
@@ -121,9 +127,27 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "Form_73";
             //_interface.FormFileName = "FORM_73.frm";
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms\\AR\\Distilate Importer";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\AR";
+            //_interface.FormGroup = "Arkansas_Tax_Forms";
+            //_interface.FormFileName = "AMFT-13(I).frm";
+
+            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\AR";
             _interface.FormGroup = "Arkansas_Tax_Forms";
-            _interface.FormFileName = "AMFT-13(I).frm";
+            _interface.FormFileName = "AMFT-22(I).frm";
+
+            // now load the filing info..
+            List<string[]> _filingInfo = new List<string[]>();
+            _filingInfo = GetFilingInfo(44, 35, 4);
+
+            // add all of the properties to the interface
+            for (int n = 1; n < _filingInfo.Count;n++)
+            {
+                string[] _fields = _filingInfo[0];
+                for (int m=0;m<_fields.Length;m++)
+                {
+                    _interface.AddProperty(_fields[m], _filingInfo[n][m]);
+                }
+            }
 
             _interface.GenerateForms();
 
@@ -135,6 +159,51 @@ namespace IGenFormsViewer
 
 
 
+        /// <summary>
+        /// List<string[]> GetPeriodInfo(int periodId)
+        /// Get the period information
+        /// </summary>
+        /// <param name="valueString"></param>
+        /// <returns></returns>
+        public List<string[]> GetFilingInfo(int filingId, int submissionId, int submissionReturnId)
+        {
+            List<string[]> _rows = new List<string[]>();
+            string _sql = "";
 
-    }
+            try
+            {
+                _sql = "Select * " +
+                       "From vw_Filing_Info " +
+                       "Where Filing_ID=" + filingId + " ";
+
+                if (submissionId > 0)
+                {
+                    _sql = _sql + " and Submission_Id=" + submissionId + " ";
+                }
+
+                if (submissionReturnId > 0)
+                {
+                    _sql = _sql + " and Submission_Return_Id=" + submissionReturnId + " ";
+                }
+                
+                _sql = _sql + "Order By Period_Id, Filing_Id, Submission_Id, Submission_Return_Id ";
+
+                _rows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".GetPeriodInfo > " + ex.Message);
+            }
+
+            return _rows;
+
+        }
+
+
+
+        }
+
+
+
 }

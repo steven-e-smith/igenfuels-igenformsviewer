@@ -481,7 +481,8 @@ namespace IGenFormsViewer
                     // load the previous values into the form
                     if (_persistFlag.ToUpper().IndexOf('T') == 0)
                     {
-                        displayIGenForms.LoadFormValues();
+                        // get the properties
+                        LoadFormValues();
                     }
 
                     //// now process the form rules
@@ -1493,10 +1494,11 @@ namespace IGenFormsViewer
                 {
                     // get the filing id
                     int _filingId = CommonRoutines.ConvertToInt(CSA.GetProperty("","Filing_Id"));
+                    int _submissionReturnId = CommonRoutines.ConvertToInt(CSA.GetProperty("", "Submission_Return_Id"));
 
                     this.Cursor = Cursors.WaitCursor;
                     DisplayStatus("Saving form values, please wait....");
-                    displayIGenForms.SaveFormsToDatabase(_filingId);
+                    displayIGenForms.SaveFormsToDatabase(_filingId, _submissionReturnId);
 
                     // get the last calced date
                     SetLastDatePrepared();
@@ -1514,6 +1516,40 @@ namespace IGenFormsViewer
             return;
 
         }
+
+
+
+
+        private void LoadFormValues()
+        {
+
+            try
+            {
+                if (displayIGenForms != null)
+                {
+                    // get the filing id
+                    int _filingId = CommonRoutines.ConvertToInt(CSA.GetProperty("", "Filing_Id"));
+                    int _submissionReturnId = CommonRoutines.ConvertToInt(CSA.GetProperty("", "Submission_Return_Id"));
+
+                    this.Cursor = Cursors.WaitCursor;
+                    DisplayStatus("Saving form values, please wait....");
+                    displayIGenForms.LoadFormValues(_filingId, _submissionReturnId);
+
+                    DisplayForms();
+
+                    DisplayStatus("Ready");
+                    this.Cursor = Cursors.Arrow;
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveForm > " + ex.Message);
+            }
+
+            return;
+
+        }
+
 
 
 
@@ -2231,7 +2267,7 @@ namespace IGenFormsViewer
             try
             {
                 // load the forms from the database
-                LoadForms();
+                LoadFormValues();
             }
             catch (Exception ex)
             {
@@ -2246,25 +2282,25 @@ namespace IGenFormsViewer
 
 
 
-        private void LoadForms()
-        {
+        //private void LoadForms()
+        //{
 
-            try
-            {
-                if (displayIGenForms != null)
-                {
-                    displayIGenForms.LoadFormValues();
+        //    try
+        //    {
+        //        if (displayIGenForms != null)
+        //        {
+        //            displayIGenForms.LoadFormValues();
 
-                }
-            }
-            catch (Exception ex)
-            {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".LoadForms > " + ex.Message);
-            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".LoadForms > " + ex.Message);
+        //    }
 
-            return;
+        //    return;
 
-        }
+        //}
 
 
 

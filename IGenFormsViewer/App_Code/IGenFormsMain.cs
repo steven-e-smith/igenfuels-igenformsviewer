@@ -4629,25 +4629,26 @@ namespace IGenFormsViewer
 
 
 
-        public void LoadFormValues()
+        public void LoadFormValues(int filingId, int submissionReturnId)
         {
             string _sql = "";
 
             try
             {
-                for (int n = 0; n < forms.Count; n++)
+                // get the header
+                _sql = "Select * From IGenForms " +
+                                "Where Form_Group='" + formGroupName + "' " +
+                                "   and Filing_Id=" + filingId +
+                                "   and Submission_Return_Id=" + submissionReturnId + " " +
+                                "Order By Run_Date Desc";
+                List<string[]> _headerRows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
+
+                if (_headerRows.Count > 0)
                 {
-                    IGenForm _form = forms[n];
-
-                    // get the header
-                    _sql = "Select * From IGenForms " + 
-                                    "Where Form_Group='" + formGroupName + "' " +
-                                    " and Filing_Id=" + filingId +
-                                    " Order By Run_Date Desc";
-                    List<string[]> _headerRows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
-
-                    if (_headerRows.Count > 0)
+                    for (int n = 0; n < forms.Count; n++)
                     {
+                        IGenForm _form = forms[n];
+
                         int _igenFormsId = CommonRoutines.ConvertToInt(DatabaseRoutines.GetRowValue(_headerRows[0], _headerRows[1], "ID"));
                         // load the fields
                         _sql = "Select * " +
@@ -4765,29 +4766,9 @@ namespace IGenFormsViewer
 
 
 
-        public void SaveFormsToDatabase()
-        {
-
-            try
-            {
-                SaveFormsToDatabase(0);
-            }
-            catch (Exception ex)
-            {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveFormToDatabase() > " + ex.Message);
-            }
-
-            return;
-
-        }
 
 
-
-
-
-
-
-        public void SaveFormsToDatabase(int filingId)
+        public void SaveFormsToDatabase(int filingId, int submissionReturnId)
         {
             string _formFileName = "";
             string _sql = "";
@@ -4808,7 +4789,8 @@ namespace IGenFormsViewer
                 _sql = "Select Id " +
                        "From IGenForms " +
                        "Where Form_Group='" + formGroupName + "' " +
-                       "      and Filing_Id=" + filingId;
+                       "      and Filing_Id=" + filingId + 
+                       "      and Submission_Return_Id=" + submissionReturnId;
 
                 List<string[]> _rows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
 
@@ -4822,18 +4804,17 @@ namespace IGenFormsViewer
                     #region [Create IGenForms record]
                     // insert the igenforms record
                     _runDate = CommonRoutines.GetCurrentDateTime();
-                    _fieldList = "Form_Group, Run_Date, Error_Flag, Filing_Id, Description, Status";
-                    _fieldValues = "'" + formGroupName + "'," +
-                                            "'" + _runDate + "'," +
-                                            "'" + errorFlag + "'," +
-                                            filingId + "," +
-                                            "'Form'," +
-                                            "'A'";
-
                     // insert into the table
                     _sql = "Insert into IGenForms " +
-                                    "(" + _fieldList + ") " +
-                                    "Values(" + _fieldValues + ")";
+                           "(Form_Group, Run_Date, Error_Flag, Filing_Id, Submission_Return_Id, Description, Status) " +
+                           "Values(" + 
+                           "'" + formGroupName + "'," +
+                            "'" + _runDate + "'," +
+                            "'" + errorFlag + "'," +
+                            filingId + "," +
+                            submissionReturnId + "," +
+                            "'Form'," +
+                            "'A')";
 
                     _numRowsAffected = DatabaseRoutines.Execute(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
                     if (_numRowsAffected > 0)
@@ -4843,7 +4824,8 @@ namespace IGenFormsViewer
                         _sql = "Select Id " +
                                "From IGenForms " +
                                "Where Form_Group='" + formGroupName + "' " +
-                               "      and Filing_Id=" + filingId;
+                               "      and Filing_Id=" + filingId +
+                               "      and Submission_Return_Id=" + submissionReturnId;
                         _rows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
 
                         if (_rows.Count > 0)

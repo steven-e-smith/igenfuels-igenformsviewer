@@ -50,7 +50,8 @@ namespace IGenFormsViewer
                             "                   FB-14543 - Added ability to restrict which tabs show up in the viewer and are processed when the prepare button is clicked",
                             "                   Added capability to set a field to wraptext in order to not truncate it but to align at top and wrap",
                             "1.1.6.19   SES     FB-15813 - Commas on schedules",
-                            "                   Added ability to show neg numbers as red"
+                            "                   Added ability to show neg numbers as red",
+                            "1.1.6.20   SES     FB-16034 - Add submission return info to IGenForms table and Viewer"
                         };
 
 

@@ -3284,6 +3284,13 @@ namespace IGenFormsViewer
 
                     _field.text = IGenFormCommonRoutines.FormatValue(_value, _field.dataType);
 
+                    // check the value to see if there is nothing but extraneous characters . . negate if so
+                    string _checkValue = _field.text.Trim();
+                    if ((_checkValue == @",") || (_checkValue == @", "))
+                    {
+                        _field.text = "";
+                    }
+
                     switch (_field.type.ToUpper())
                     {
                         case "BUTTON":

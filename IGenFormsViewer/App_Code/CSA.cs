@@ -51,7 +51,9 @@ namespace IGenFormsViewer
                             "                   Added capability to set a field to wraptext in order to not truncate it but to align at top and wrap",
                             "1.1.6.19   SES     FB-15813 - Commas on schedules",
                             "                   Added ability to show neg numbers as red",
-                            "1.1.6.20   SES     FB-16034 - Add submission return info to IGenForms table and Viewer"
+                            "1.1.6.20   SES     FB-16034 - Add submission return info to IGenForms table and Viewer",
+                            "1.1.6.21   ???     FB-?????",
+                            "1.1.6.22   SGS     FB-15813 - IF logic on schedules will not print commas in cells when the row is blank"
                         };
 
 

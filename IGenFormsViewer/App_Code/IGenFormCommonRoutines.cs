@@ -411,6 +411,20 @@ namespace IGenFormsViewer
                             }
                         }
 
+                        // resolve to the type
+                        switch (_newFieldDataType)
+                        {
+                            case "INTEGER":
+                                // get the fields round up/down
+                                string _roundIntegers = field.GetProperty("RoundIntegers").ToUpper();
+                                int _intValue = CommonRoutines.ConvertToInt(FormatValue(_temp, _newFieldDataType,0,"",_roundIntegers));
+                                _temp = _intValue.ToString();
+                                break;
+
+                        }
+
+
+
                         bool _resolvedAlready = false;
 
                         // has this one been resolved yet?
@@ -1482,7 +1496,7 @@ namespace IGenFormsViewer
             try
             {
                 int _numDecimalPlaces = CommonRoutines.ConvertToInt(ConfigRoutines.GetSetting("NumberDecimalPlaces"));
-                _newValue = FormatValue(value, dataType, _numDecimalPlaces, "");
+                _newValue = FormatValue(value, dataType, _numDecimalPlaces, "", "UP");
             }
             catch (Exception ex)
             {
@@ -1502,7 +1516,7 @@ namespace IGenFormsViewer
 
             try
             {
-                _newValue = FormatValue(value, dataType, numDecimalPlaces, "");
+                _newValue = FormatValue(value, dataType, numDecimalPlaces, "", "UP");
             }
             catch (Exception ex)
             {
@@ -1518,9 +1532,43 @@ namespace IGenFormsViewer
 
 
 
+        public static string CleanNumericField(string value)
+        {
+            string _newValue = "";
+
+            try
+            {
+                // first make sure no non-numeric chars are in it
+                string _validChars = "0123456789-.";
+
+                for (int n = 0; n < value.Length;n++)
+                {
+                    char _char = value.ToCharArray(n, 1)[0];
+                    if (_validChars.IndexOf(_char) >= 0)
+                    {
+                        // valid, add it
+                        _newValue = _newValue + _char.ToString();
+                    }
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".CleanNumericField > " + ex.Message);
+            }
+
+            return _newValue;
+
+        }
 
 
-        public static string FormatValue(string value, string dataType, int numDecimalPlaces, string formatMask)
+
+
+
+
+
+        public static string FormatValue(string value, string dataType, int numDecimalPlaces, string formatMask, string roundIntegers)
         {
             string _newValue = value;
             bool _fieldIsNumeric = false;
@@ -1564,8 +1612,16 @@ namespace IGenFormsViewer
                 switch (dataType.ToUpper())
                 {
                     case "INTEGER":
-                        _integerString = (formatMask != "") ? formatMask : _integerString;
-                        _newValue = _decimal.ToString(_integerString, CultureInfo.InvariantCulture);
+                        // if rounding is DOWN or blank, then just truncate
+                        if (roundIntegers == "DOWN" || roundIntegers == "")
+                        {
+                            _newValue = CommonRoutines.ConvertToInt(_decimal.ToString()).ToString();
+                        }
+                        else
+                        {
+                            _integerString = (formatMask != "") ? formatMask : _integerString;
+                            _newValue = _decimal.ToString(_integerString, CultureInfo.InvariantCulture);
+                        }
                         _fieldIsNumeric = true;
                         break;
 

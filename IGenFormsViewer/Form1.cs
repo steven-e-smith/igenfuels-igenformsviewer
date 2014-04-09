@@ -79,9 +79,13 @@ namespace IGenFormsViewer
                 _interface.FormImagesFolder = _formFileImageFolder;
             }
 
-            //_interface.FormFilesFolder = _interface.FormFilesFolder + "/Good forms/NY";
-            //_interface.FormGroup = "PT100-102";
-            //_interface.FormFileName = "PT100-102-TEST.frm";
+            // hard code the forms folders
+            _interface.FormFilesFolder = "C:\\APPS\\IGENFUELS\\FORMFILES\\";
+            _interface.FormImagesFolder = "C:\\APPS\\IGENFUELS\\FORMIMAGES\\";
+
+            _interface.FormFilesFolder = _interface.FormFilesFolder + "Aaron/MO";
+            _interface.FormGroup = "MO_572_Supplier";
+            _interface.FormFileName = "MO_572_Supplier.frm";
 
             //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms/SC/Supplier";
             //_interface.FormGroup = "South_Carolina_Tax";
@@ -131,13 +135,13 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "Arkansas_Tax_Forms";
             //_interface.FormFileName = "AMFT-13(I).frm";
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\AR";
-            _interface.FormGroup = "Arkansas_Tax_Forms";
-            _interface.FormFileName = "AMFT-22(I).frm";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\AR";
+            //_interface.FormGroup = "Arkansas_Tax_Forms";
+            //_interface.FormFileName = "AMFT-22(I).frm";
 
             // now load the filing info..
             List<string[]> _filingInfo = new List<string[]>();
-            _filingInfo = GetFilingInfo(44, 35, 4);
+            _filingInfo = GetFilingInfo(49, 40, 11); 
 
             // add all of the properties to the interface
             for (int n = 1; n < _filingInfo.Count;n++)

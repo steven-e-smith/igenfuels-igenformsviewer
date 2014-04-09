@@ -51,7 +51,10 @@ namespace IGenFormsViewer
                             "                   Added capability to set a field to wraptext in order to not truncate it but to align at top and wrap",
                             "1.1.6.19   SES     FB-15813 - Commas on schedules",
                             "                   Added ability to show neg numbers as red",
-                            "1.1.6.20   SES     FB-16034 - Add submission return info to IGenForms table and Viewer"
+                            "1.1.6.20   SES     FB-16034 - Add submission return info to IGenForms table and Viewer",
+                            "1.1.6.21   SES     FB 16321 - Remove non numeric characters on save of fields to the database",
+                            "                   FB 16320 - IGenForms Table Duplicates allowed",
+                            "1.1.6.22   SES     FB 16634 - Missouri Issue of not rounding internal values on integer fields"
                         };
 
 

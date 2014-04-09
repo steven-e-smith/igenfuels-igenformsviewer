@@ -613,7 +613,12 @@ namespace IGenFormsViewer
                 {
                     IGenField _field = (IGenField)_control.Tag;
                     _name = "[" + _field.parentFormName + "].[" + _field.name + "]";
-                    _text = "Value:\r\n" + _field.value + "\r\n\r\nCompiled Value:\r\n" + _field.compiledValue + "\r\n\r\nComments:\r\n" + _field.comments;
+                    _text = "Value:\r\n" + _field.value + 
+                            "\r\n\r\nCompiled Value:\r\n" + _field.compiledValue +
+                            "\r\n\r\nText Value:\r\n" + _field.text +
+                            "\r\n\r\nDataType:\r\n" + _field.dataType +
+                            "\r\n\r\nFormat:\r\n" + _field.formatMask +
+                            "\r\n\r\nComments:\r\n" + _field.comments;
                 }
                 CommonRoutines.DisplayText(_text, _name);
             }

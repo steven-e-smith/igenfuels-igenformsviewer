@@ -1,0 +1,62 @@
+[1mdiff --git a/IGenFormsViewer/App_Code/CSA.cs b/IGenFormsViewer/App_Code/CSA.cs[m
+[1mindex ff8b8eb..d9a2958 100644[m
+[1m--- a/IGenFormsViewer/App_Code/CSA.cs[m
+[1m+++ b/IGenFormsViewer/App_Code/CSA.cs[m
+[36m@@ -51,7 +51,9 @@[m [mnamespace IGenFormsViewer[m
+                             "                   Added capability to set a field to wraptext in order to not truncate it but to align at top and wrap",[m
+                             "1.1.6.19   SES     FB-15813 - Commas on schedules",[m
+                             "                   Added ability to show neg numbers as red",[m
+[31m-                            "1.1.6.20   SES     FB-16034 - Add submission return info to IGenForms table and Viewer"[m
+[32m+[m[32m                            "1.1.6.20   SES     FB-16034 - Add submission return info to IGenForms table and Viewer",[m
+[32m+[m[32m                            "1.1.6.21   ???     FB-?????",[m
+[32m+[m[32m                            "1.1.6.22   SGS     FB-15075 - If 'Clear Prompts (All)' clicked, do not save value or caption to IGenForms database"[m
+                         };[m
+ [m
+ [m
+[1mdiff --git a/IGenFormsViewer/App_Code/IGenFormsMain.cs b/IGenFormsViewer/App_Code/IGenFormsMain.cs[m
+[1mindex c259ef5..a29afb2 100644[m
+[1m--- a/IGenFormsViewer/App_Code/IGenFormsMain.cs[m
+[1m+++ b/IGenFormsViewer/App_Code/IGenFormsMain.cs[m
+[36m@@ -4890,7 +4890,7 @@[m [mnamespace IGenFormsViewer[m
+             }[m
+             catch (Exception ex)[m
+             {[m
+[31m-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveFormToDatabase(i) > " + ex.Message);[m
+[32m+[m[32m                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveFormsToDatabase(i) > " + ex.Message);[m
+             }[m
+ [m
+             return;[m
+[1mdiff --git a/IGenFormsViewer/App_Forms/frmViewer.cs b/IGenFormsViewer/App_Forms/frmViewer.cs[m
+[1mindex d5448e2..7c371a5 100644[m
+[1m--- a/IGenFormsViewer/App_Forms/frmViewer.cs[m
+[1m+++ b/IGenFormsViewer/App_Forms/frmViewer.cs[m
+[36m@@ -1510,7 +1510,7 @@[m [mnamespace IGenFormsViewer[m
+             }[m
+             catch (Exception ex)[m
+             {[m
+[31m-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveForm > " + ex.Message);[m
+[32m+[m[32m                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveForms > " + ex.Message);[m
+             }[m
+ [m
+             return;[m
+[36m@@ -2012,6 +2012,8 @@[m [mnamespace IGenFormsViewer[m
+                         {[m
+                             IGenField _field = _currentForm.formFields.fields[n];[m
+                             _field.text = "";[m
+[32m+[m[32m                            _field.caption = "";[m
+[32m+[m[32m                            _field.value = "";[m
+                             _field.checkedFlag = false;[m
+                             _currentForm.formFields.fields[n] = _field;[m
+                         }[m
+[1mdiff --git a/IGenFormsViewer/Properties/AssemblyInfo.cs b/IGenFormsViewer/Properties/AssemblyInfo.cs[m
+[1mindex 4067dfc..e75456b 100644[m
+[1m--- a/IGenFormsViewer/Properties/AssemblyInfo.cs[m
+[1m+++ b/IGenFormsViewer/Properties/AssemblyInfo.cs[m
+[36m@@ -32,5 +32,5 @@[m [musing System.Runtime.InteropServices;[m
+ // You can specify all the values or you can default the Build and Revision Numbers [m
+ // by using the '*' as shown below:[m
+ // [assembly: AssemblyVersion("1.0.*")][m
+[31m-[assembly: AssemblyVersion("1.1.6.20")][m
+[31m-[assembly: AssemblyFileVersion("1.1.6.20")][m
+[32m+[m[32m[assembly: AssemblyVersion("1.1.6.22")][m
+[32m+[m[32m[assembly: AssemblyFileVersion("1.1.6.22")][m

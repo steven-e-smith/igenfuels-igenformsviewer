@@ -54,7 +54,8 @@ namespace IGenFormsViewer
                             "1.1.6.20   SES     FB-16034 - Add submission return info to IGenForms table and Viewer",
                             "1.1.6.21   SES     FB 16321 - Remove non numeric characters on save of fields to the database",
                             "                   FB 16320 - IGenForms Table Duplicates allowed",
-                            "1.1.6.22   SES     FB 16634 - Missouri Issue of not rounding internal values on integer fields",
+                            "1.1.6.22   SGS     FB-15813 - IF logic on schedules will not print commas in cells when the row is blank",
+                            "           SES     FB 16634 - Missouri Issue of not rounding internal values on integer fields",
                             "1.1.6.23   SES     FB 16672 - Taborder not working properly in field calculations"
                         };
 

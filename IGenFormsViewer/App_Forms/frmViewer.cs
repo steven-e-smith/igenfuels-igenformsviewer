@@ -1515,7 +1515,7 @@ namespace IGenFormsViewer
             }
             catch (Exception ex)
             {
-                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveForm > " + ex.Message);
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SaveForms > " + ex.Message);
             }
 
             return;
@@ -2017,6 +2017,8 @@ namespace IGenFormsViewer
                         {
                             IGenField _field = _currentForm.formFields.fields[n];
                             _field.text = "";
+                            _field.caption = "";
+                            _field.value = "";
                             _field.checkedFlag = false;
                             _currentForm.formFields.fields[n] = _field;
                         }

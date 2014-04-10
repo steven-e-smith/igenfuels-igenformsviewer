@@ -2188,6 +2188,9 @@ namespace IGenFormsViewer
                         Font _font = new Font(_field.fontName, (_field.fontSize * _multiplier / 100));
                         _control.Font = _font;
                     }
+
+                    // save the pct to the form
+
                 }
 
             }
@@ -2695,6 +2698,95 @@ namespace IGenFormsViewer
 
 
         #endregion 
+
+
+
+        private void tbrMainZoomIn_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                TabPage _tabPage = tabForms.SelectedTab;
+
+                if (_tabPage.Controls.Count > 0 && _tabPage.Controls[0].GetType().Name.ToUpper().IndexOf("PICTUREBOX") >= 0)
+                {
+                    PictureBox _pallet = (PictureBox)_tabPage.Controls[0];
+
+                    // get the image and increase it by that percentage
+                    IGenForm _form = (IGenForm)_pallet.Tag;
+
+                    int _zoomPct = _form.zoomPCT;
+
+                    _zoomPct = _zoomPct + 50;
+
+                    if (_zoomPct > 300)
+                    {
+                        _zoomPct = 300;
+                    }
+                    else
+                    {
+                        // zoom in
+                        ZoomPage(_zoomPct);
+                    }
+
+                    _form.zoomPCT = _zoomPct;
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tbrMainZoomIn_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
+
+        private void tbrMainZoomOut_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                TabPage _tabPage = tabForms.SelectedTab;
+
+                if (_tabPage.Controls.Count > 0 && _tabPage.Controls[0].GetType().Name.ToUpper().IndexOf("PICTUREBOX") >= 0)
+                {
+                    PictureBox _pallet = (PictureBox)_tabPage.Controls[0];
+
+                    // get the image and increase it by that percentage
+                    IGenForm _form = (IGenForm)_pallet.Tag;
+
+                    int _zoomPct = _form.zoomPCT;
+
+                    _zoomPct = _zoomPct - 50;
+                    if (_zoomPct < 50)
+                    {
+                        _zoomPct = 50;
+                    }
+                    else
+                    {
+                        // zoom out
+                        ZoomPage(_zoomPct);
+                    }
+
+                    _form.zoomPCT = _zoomPct;
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".tbrMainZoomOut_Click > " + ex.Message);
+            }
+
+            return;
+
+        }
 
 
 

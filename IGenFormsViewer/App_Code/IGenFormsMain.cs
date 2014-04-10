@@ -482,8 +482,8 @@ namespace IGenFormsViewer
                                 _ruleFlag = false;
                                 _field = new IGenField();
                                 _field.parentFormName = _form.name;
-                                // add it
-                                _form.AddField(_field);
+                                //// add it
+                                //_form.AddField(_field);
                                 break;
 
                             case "FONT":
@@ -535,6 +535,8 @@ namespace IGenFormsViewer
                                 _formFlag = false;
                                 _fieldFlag = false;
                                 _ruleFlag = false;
+                                // add it
+                                _form.AddField(_field);
                                 break;
 
                             case "/FORM":
@@ -5159,6 +5161,7 @@ namespace IGenFormsViewer
         public string imageName = "";
         public int imageHeight = 900;
         public int imageWidth = 900;
+        public int zoomPCT = 100;
 
         public int currentRow = 0;
         public int totalRows = 0;
@@ -5618,7 +5621,43 @@ namespace IGenFormsViewer
 
             try
             {
-                fields.Add(field);
+                int _tabIndex = field.tabIndex;
+
+                // put it in the correct order based on the tab index
+                if (_tabIndex > 0)
+                {
+                    bool _foundIndex = false;
+                    // find out where to insert it
+                    for (int n=0;n<fields.Count;n++)
+                    {
+                        if (fields[n].tabIndex > _tabIndex)
+                        {
+                            // insert it here
+                            fields.Insert(n, field);
+                            _foundIndex = true;
+                            break;
+                        }
+
+                    }
+                    if (!_foundIndex)
+                    {
+                        // add it to the end
+                        fields.Add(field);
+                    }
+                }
+                else
+                {
+                    if (_tabIndex < 0)
+                    {
+                        // add it to the end
+                        fields.Add(field);
+                    }
+                    else
+                    {
+                        // add it to the front
+                        fields.Insert(0, field);
+                    }
+                }
             }
             catch (Exception ex)
             {

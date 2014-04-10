@@ -332,6 +332,8 @@
     <Content Include="Resources\compile.ico" />
     <Content Include="Resources\Excel2.ico" />
     <Content Include="Resources\Execute.png" />
+    <None Include="Resources\zoomout.png" />
+    <None Include="Resources\zoomin.png" />
     <None Include="Resources\goto.bmp" />
     <Content Include="Resources\link.ICO" />
     <Content Include="Resources\OpenLock.ico" />

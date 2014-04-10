@@ -142,15 +142,10 @@ namespace IGenFormsViewer
             //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\USOil\\AR";
             //_interface.FormGroup = "Arkansas_Tax_Forms";
             //_interface.FormFileName = "AMFT-22(I).frm";
-<<<<<<< HEAD
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "\\AR";   //  C:\IGenFuels_QA\Formfiles\AR  sgs was here
-            _interface.FormGroup = "Arkansas_Tax_Forms";
-            _interface.FormFileName = "AMFT_DD.frm";
-
-
-=======
->>>>>>> 13259cc36d927557ef947f741b5cf227b2c7612d
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\AR";   //  C:\IGenFuels_QA\Formfiles\AR  sgs was here
+            //_interface.FormGroup = "Arkansas_Tax_Forms";
+            //_interface.FormFileName = "AMFT_DD.frm";
 
             // now load the filing info..
             List<string[]> _filingInfo = new List<string[]>();

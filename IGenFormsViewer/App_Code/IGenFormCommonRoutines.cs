@@ -330,9 +330,14 @@ namespace IGenFormsViewer
                     int fdfd = 0;
                 }
 
-                if (_field.name == "1.5.23.0")
+                if (_field.name == "1.2.6.D")
                 {
                     int xxx = 0;
+                }
+
+                if (_field.name == "1.1.5.D")
+                {
+                    int zzz = 0;
                 }
 
                 // see if there are any expressions to resolve
@@ -1613,7 +1618,7 @@ namespace IGenFormsViewer
                 {
                     case "INTEGER":
                         // if rounding is DOWN or blank, then just truncate
-                        if (roundIntegers == "DOWN" || roundIntegers == "")
+                        if (roundIntegers == "DOWN" )
                         {
                             _newValue = CommonRoutines.ConvertToInt(_decimal.ToString()).ToString();
                         }

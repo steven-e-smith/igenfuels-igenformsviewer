@@ -876,6 +876,17 @@ namespace IGenFormsViewer
                                 }
                                 break;
 
+                            case "SPACEDTEXTBOXSIZE":
+                                if (_fieldFlag)
+                                {
+                                    _field.spacedTextBoxSize = CommonRoutines.ConvertToInt(_tagValue);
+                                    if (_field.spacedTextBoxSize < 1)
+                                    {
+                                        _field.spacedTextBoxSize = 1;
+                                    }
+                                }
+                                break;
+
                             case "ALIGNMENT":
                                 if (_fieldFlag)
                                 {
@@ -3246,7 +3257,7 @@ namespace IGenFormsViewer
                         break;
                     }
 
-                    if (_field.name.ToUpper() == "1.5.22.0")
+                    if (_field.name.ToUpper() == "1.1.6.C")
                     {
                         int xxxxxx = 0;
                     }
@@ -3282,7 +3293,29 @@ namespace IGenFormsViewer
                         }
                     }
 
-                    _field.text = IGenFormCommonRoutines.FormatValue(_value, _field.dataType);
+                    // if the field is a spaced text field, then format it here...
+                    if (_field.dataType.ToUpper() == "SPACEDTEXT")
+                    {
+                        // break up the text putting spaces between chars to allow for boxes on the image
+                        // get the box size to determine how to format the text.  this is the number of pixels the box the char goes in is wide
+                        int _spacedTextBoxSize = _field.spacedTextBoxSize;
+                        if (_spacedTextBoxSize > 1)
+                        {
+                            // create the buffer on each side
+                            int _addSpaces = (int) (_spacedTextBoxSize / 2);
+                            string _padding = "                                                   ".Substring(0, _addSpaces);
+                            string _spacedValue = "";
+                            for (int n=0;n<_value.Length;n++)
+                            {
+                                _spacedValue = _spacedValue + _padding + _value.Substring(n, 1) + _padding + " ";
+                            }
+                            _field.text = _spacedValue;
+                        }
+                    }
+                    else
+                    {
+                        _field.text = IGenFormCommonRoutines.FormatValue(_value, _field.dataType);
+                    }
 
                     // check the value to see if there is nothing but extraneous characters . . negate if so
                     string _checkValue = _field.text.Trim();
@@ -3432,7 +3465,9 @@ namespace IGenFormsViewer
                         case "NUMERIC":
                         case "CURRENCY":
                         case "DECIMAL":
-                            _control.Text = IGenFormCommonRoutines.FormatValue(field.text, field.dataType, -1, field.formatMask);
+                            // get the fields round up/down
+                            string _roundIntegers = field.GetProperty("RoundIntegers").ToUpper();
+                            _control.Text = IGenFormCommonRoutines.FormatValue(field.text, field.dataType, -1, field.formatMask, _roundIntegers);
                             field.alignment = "Right";
                             break;
 
@@ -4867,11 +4902,30 @@ namespace IGenFormsViewer
                                 // set the text
                                 _field.text = _field.checkedFlag.ToString();
                             }
+
+                            string _newValue = _field.text;
+
+                            // clean the value based on it's datatype
+                            switch (_field.dataType.ToUpper())
+                            {
+                                case "TEXT":
+                                    break;
+
+                                case "INTEGER":
+                                case "NUMERIC":
+                                case "CURRENCY":
+                                case "DECIMAL":
+                                    // strip out any values not numeric
+                                    _newValue = IGenFormCommonRoutines.CleanNumericField(_newValue);
+                                    break;
+
+                            }
+
                             _fieldValues = igenFormsId + "," +
                                             "'" + forms[n].name + "'," +
                                             (m + 1) + "," +
                                             "'" + _field.name + "'," +
-                                            "'" + _field.text.Replace("'", "''") + "'," +
+                                            "'" + _newValue.Replace("'", "''") + "'," +
                                             "'" + _field.originalValue.Replace("'", "''") + "'," +
                                             "'" + (_field.ediFlag + "N").Substring(0, 1) + "'," +
                                             "'" + _field.ediName + "'," +
@@ -5764,6 +5818,10 @@ namespace IGenFormsViewer
         public string imageName = "";
         public string formatMask = "";
         public string sourceDesignation = "";
+
+        // spaced text value
+        public int spacedTextBoxSize = 1;
+
         public string comments = "";
         public int layer = 0;
         public Image img = null;

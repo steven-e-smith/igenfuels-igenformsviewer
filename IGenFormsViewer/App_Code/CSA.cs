@@ -52,8 +52,14 @@ namespace IGenFormsViewer
                             "1.1.6.19   SES     FB-15813 - Commas on schedules",
                             "                   Added ability to show neg numbers as red",
                             "1.1.6.20   SES     FB-16034 - Add submission return info to IGenForms table and Viewer",
+<<<<<<< HEAD
                             "1.1.6.21   ???     FB-?????",
                             "1.1.6.22   SGS     FB-15813 - IF logic on schedules will not print commas in cells when the row is blank"
+=======
+                            "1.1.6.21   SES     FB 16321 - Remove non numeric characters on save of fields to the database",
+                            "                   FB 16320 - IGenForms Table Duplicates allowed",
+                            "1.1.6.22   SES     FB 16634 - Missouri Issue of not rounding internal values on integer fields"
+>>>>>>> 13259cc36d927557ef947f741b5cf227b2c7612d
                         };
 
 

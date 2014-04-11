@@ -317,7 +317,7 @@ namespace IGenFormsViewer
 
             try
             {
-                string _fieldType = _field.dataType.ToUpper();
+                string _fieldDataType = _field.dataType.ToUpper();
                 string _type = _field.type.ToUpper();
                 // if this is a numeric field then set to zero if blank
                 // see if this field has formatting properties
@@ -335,7 +335,7 @@ namespace IGenFormsViewer
                     int xxx = 0;
                 }
 
-                if (_field.name == "1.1.5.D")
+                if (_field.name == "1.2.7.F")
                 {
                     int zzz = 0;
                 }
@@ -391,44 +391,38 @@ namespace IGenFormsViewer
                         else
                         {
                             _temp = _newField.text;  // (_newField.compiledValue.Trim() == "" ? _newField.text : _newField.compiledValue.Trim());  // _newField.text;  <-- was this..
-                            if ((_temp.IndexOf(',') >= 0 || _temp.IndexOf('$') >= 0) &&
-                                        _temp.IndexOf("=SQL") < 0)
+                            switch (_newFieldDataType)
                             {
-                                switch (_fieldType)
-                                {
-                                    case "NUMERIC":
-                                    case "DECIMAL":
-                                    case "CURRENCY":
-                                    case "INTEGER":
+                                case "NUMERIC":
+                                case "DECIMAL":
+                                case "CURRENCY":
+                                case "INTEGER":
+                                    if ((_temp.IndexOf(',') >= 0 || _temp.IndexOf('$') >= 0) &&
+                                                _temp.IndexOf("=SQL") < 0)
+                                    {
                                         string _checkTemp = _temp.Replace(",", "");
                                         _checkTemp = _checkTemp.Replace("$", "");
                                         if (_checkTemp == "")
                                         {
                                             _checkTemp = "0";
                                         }
-                                        // now is it numeric?
-                                        if (CommonRoutines.IsNumeric(_checkTemp))
-                                        {
-                                            _temp = _checkTemp;
-                                        }
-                                        break;
-                                }
+                                        _temp = _checkTemp;
+                                    }
+                                    // now is it numeric?
+                                    if (CommonRoutines.IsNumeric(_temp))
+                                    {
+                                        // now format it
+                                        // get the fields round up/down
+                                        string _roundIntegers = field.GetProperty("RoundIntegers").ToUpper();
+                                        string _formattedValue = FormatValue(_temp, _newFieldDataType, 0, "", _roundIntegers);
+                                        _formattedValue = _formattedValue.Replace(",", "").Replace("$", "").Replace(" ", "");
+                                        _temp = _formattedValue;
+
+                                    }
+                                    break;
                             }
+                            
                         }
-
-                        // resolve to the type
-                        switch (_newFieldDataType)
-                        {
-                            case "INTEGER":
-                                // get the fields round up/down
-                                string _roundIntegers = field.GetProperty("RoundIntegers").ToUpper();
-                                int _intValue = CommonRoutines.ConvertToInt(FormatValue(_temp, _newFieldDataType,0,"",_roundIntegers));
-                                _temp = _intValue.ToString();
-                                break;
-
-                        }
-
-
 
                         bool _resolvedAlready = false;
 
@@ -1419,7 +1413,7 @@ namespace IGenFormsViewer
                         _value.IndexOf('/') >= 0)
                     {
                         // see if this is field should be evaluated...
-                        switch (_fieldType)
+                        switch (_fieldDataType)
                         {
                             case "DATE":
                             case "DATETIME":

@@ -3295,29 +3295,7 @@ namespace IGenFormsViewer
                         }
                     }
 
-                    // if the field is a spaced text field, then format it here...
-                    if (_field.dataType.ToUpper() == "SPACEDTEXT")
-                    {
-                        // break up the text putting spaces between chars to allow for boxes on the image
-                        // get the box size to determine how to format the text.  this is the number of pixels the box the char goes in is wide
-                        int _spacedTextBoxSize = _field.spacedTextBoxSize;
-                        if (_spacedTextBoxSize > 1)
-                        {
-                            // create the buffer on each side
-                            int _addSpaces = (int) (_spacedTextBoxSize / 2);
-                            string _padding = "                                                   ".Substring(0, _addSpaces);
-                            string _spacedValue = "";
-                            for (int n=0;n<_value.Length;n++)
-                            {
-                                _spacedValue = _spacedValue + _padding + _value.Substring(n, 1) + _padding + " ";
-                            }
-                            _field.text = _spacedValue;
-                        }
-                    }
-                    else
-                    {
-                        _field.text = IGenFormCommonRoutines.FormatValue(_value, _field.dataType);
-                    }
+                    _field.text = IGenFormCommonRoutines.FormatValue(_value, _field.dataType);
 
                     // check the value to see if there is nothing but extraneous characters . . negate if so
                     string _checkValue = _field.text.Trim();
@@ -3383,7 +3361,18 @@ namespace IGenFormsViewer
                                     }
                                     else
                                     {
-                                        _control.Text = _field.text;
+                                        // if the field is a spaced text field, then format it here...
+                                        if (_field.dataType.ToUpper() == "SPACEDTEXT")
+                                        {
+                                            // break up the text putting spaces between chars to allow for boxes on the image
+                                            // get the box size to determine how to format the text.  this is the number of pixels the box the char goes in is wide
+                                            // space the chars on the control
+                                            SpaceText(_control, _field);
+                                        }
+                                        else
+                                        {
+                                            _control.Text = _field.text;
+                                        }
                                     }
                                     break;
 
@@ -3409,6 +3398,53 @@ namespace IGenFormsViewer
             return _result;
 
         }
+
+
+
+
+        public void SpaceText(Control control, IGenField field)
+        {
+            string _newValue = "";
+            int _boxSize = field.spacedTextBoxSize;
+
+            try
+            {
+                control.Controls.Clear();
+
+                // get the form
+                IGenForm _form = GetForm(field.parentFormName);
+                int _zoomPct = _form.zoomPCT;
+
+                // get the font for the field
+                Font _font = new Font(field.fontName, field.fontSize);
+                int _fontHeight = _font.Height;
+
+                // create controls on this control
+                string _value = field.text;
+
+                for (int n=0;n<_value.Length;n++)
+                {
+                    string _char = _value.Substring(n, 1);
+
+                    Label _charLabel = new Label();
+                    _charLabel.Top = 1;
+                    _charLabel.Height = (_fontHeight + 1) * (_zoomPct / 100);
+                    _charLabel.Width = _charLabel.Height;
+                    _charLabel.Left = (n * (_charLabel.Width + _boxSize)) - 1;
+                    _charLabel.Text = _char;
+                    _charLabel.Visible = true;
+                    control.Controls.Add(_charLabel);
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SpaceText(c,o) > " + ex.Message);
+            }
+
+            return;
+
+        }
+
 
 
 

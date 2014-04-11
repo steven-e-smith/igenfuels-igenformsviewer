@@ -87,9 +87,9 @@ namespace IGenFormsViewer
             _interface.FormFilesFolder = "C:\\APPS\\IGENFUELS\\FORMFILES\\";
             _interface.FormImagesFolder = "C:\\APPS\\IGENFUELS\\FORMIMAGES\\";
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "Aaron/MO";
-            _interface.FormGroup = "MO_572_Supplier";
-            _interface.FormFileName = "MO_572_Supplier.frm";
+            //_interface.FormFilesFolder = _interface.FormFilesFolder + "USOil/UAT Ready Forms/NC/Supplier";
+            //_interface.FormGroup = "Gas-1202";
+            //_interface.FormFileName = "North_Carolina_Tax.frm";
 
             //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\Good Forms/SC/Supplier";
             //_interface.FormGroup = "South_Carolina_Tax";
@@ -146,6 +146,10 @@ namespace IGenFormsViewer
             //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\AR";   //  C:\IGenFuels_QA\Formfiles\AR  sgs was here
             //_interface.FormGroup = "Arkansas_Tax_Forms";
             //_interface.FormFileName = "AMFT_DD.frm";
+
+            _interface.FormFilesFolder = _interface.FormFilesFolder + "Aaron\\MO";
+            _interface.FormGroup = "MO_572_Supplier";
+            _interface.FormFileName = "MO_572_Supplier.frm";
 
             // now load the filing info..
             List<string[]> _filingInfo = new List<string[]>();

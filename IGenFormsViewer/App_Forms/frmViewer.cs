@@ -2189,6 +2189,20 @@ namespace IGenFormsViewer
                         _control.Height = _field.height * _multiplier / 100;
                         Font _font = new Font(_field.fontName, (_field.fontSize * _multiplier / 100));
                         _control.Font = _font;
+
+                        // are there controls on this control?
+                        if (_control.Controls.Count > 0)
+                        {
+                            for (int m = 0; m < _control.Controls.Count; m++)
+                            {
+                                Control _subControl = _control.Controls[m];
+                                _subControl.Left = _subControl.Left * _multiplier / 100;
+                                _subControl.Top = _subControl.Top * _multiplier / 100;
+                                _subControl.Width = _subControl.Width * _multiplier / 100;
+                                _subControl.Height = _subControl.Height * _multiplier / 100;
+                                _subControl.Font = _font;
+                            }
+                        }
                     }
 
                     // save the pct to the form

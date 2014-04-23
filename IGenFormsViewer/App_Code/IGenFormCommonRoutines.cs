@@ -2048,8 +2048,8 @@ namespace IGenFormsViewer
                         _operator = "==";
                     }
 
-                    _leftValue = "var a = " + _leftValue + "; ";
-                    _rightValue = "var b = " + _rightValue + "; ";
+                    _leftValue = "var a = " + _leftValue.ToUpper() + "; ";
+                    _rightValue = "var b = " + _rightValue.ToUpper() + "; ";
                     _condition = "a " + _operator + " b";
                 }
                 else
@@ -2111,8 +2111,8 @@ namespace IGenFormsViewer
 
 
                     // make a var for each of the conditional sections and compare them
-                    _command = _leftValue +
-                                _rightValue +
+                    _command = _leftValue.ToUpper() +
+                                _rightValue.ToUpper() +
                                     "var x; " +
                                     "if (" + _condition + ") " +
                                     "    {x=" + _trueStatement + ";} " +

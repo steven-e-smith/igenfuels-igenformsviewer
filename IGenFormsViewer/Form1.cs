@@ -148,10 +148,19 @@ namespace IGenFormsViewer
   //          _interface.FormGroup = "Arkansas_Tax_Forms";
    //         _interface.FormFileName = "AMFT_DD.frm";
 
-       //         _interface.FormFilesFolder = _interface.FormFilesFolder + "\\AR";   //  C:\IGenFuels_QA\Formfiles\WA  sgs was here
-                      _interface.FormFilesFolder = "C:\\IGenFuels_QA\\Formfiles\\WA";
-                      _interface.FormGroup = "WA_MVF_Supplier";
-                     _interface.FormFileName = "MVF.frm";
+       //         _interface.FormFilesFolder = _interface.FormFilesFolder + "\\AR";   //  C:\IGenFuels_QA\Formfiles\WA  sgs was here  (this works!)
+       //               _interface.FormFilesFolder = "C:\\IGenFuels_QA\\Formfiles\\WA";
+       //               _interface.FormGroup = "WA_MVF_Supplier";
+       //              _interface.FormFileName = "MVF.frm";
+
+
+                     _interface.FormFilesFolder = "C:\\IGenFuels_QA\\Formfiles\\CT";
+                     _interface.FormGroup = "MVF-3";
+                     _interface.FormFileName = "CT_TOR_MVF-3.frm";
+
+
+
+
 
            // _interface.FormFilesFolder = _interface.FormFilesFolder + "Aaron\\MO";
            // _interface.FormGroup = "MO_572_Supplier";

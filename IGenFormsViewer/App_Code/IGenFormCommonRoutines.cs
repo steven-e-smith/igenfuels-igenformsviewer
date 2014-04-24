@@ -1909,7 +1909,6 @@ namespace IGenFormsViewer
         public static string EvaluateIfExpression(IGenField field, string expression)
          {
             string _result = "";
-            string _quote = "\"";
             string _command = "";
 
             try
@@ -1921,7 +1920,6 @@ namespace IGenFormsViewer
                 bool _quoted = false;
                 bool _partsFound = false;
                 bool _openParen = false;
-                bool _closeParen = false;
 
                 if (expression.IndexOf("IN") > 0)
                 {
@@ -2111,8 +2109,8 @@ namespace IGenFormsViewer
 
 
                     // make a var for each of the conditional sections and compare them
-                    _command = _leftValue.ToUpper() +
-                                _rightValue.ToUpper() +
+                    _command = _leftValue +
+                                _rightValue +
                                     "var x; " +
                                     "if (" + _condition + ") " +
                                     "    {x=" + _trueStatement + ";} " +

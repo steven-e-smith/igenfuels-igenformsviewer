@@ -58,7 +58,8 @@ namespace IGenFormsViewer
                             "           SES     FB 16634 - Missouri Issue of not rounding internal values on integer fields",
                             "1.1.6.23   SES     FB 16672 - Taborder not working properly in field calculations",
                             "1.1.6.24   SES     FB-16634 - Additional work on rounding in MO",
-                            "1.1.6.25   SGS     FB-17002 - IF statement failing using IN clause"
+                            "1.1.6.25   SGS     FB-17002 - IF statement failing using IN clause",
+                            "1.1.6.26   SGS     FB 17075 - Subsetted SQL statements causing SQL errors"
                         };
 
 

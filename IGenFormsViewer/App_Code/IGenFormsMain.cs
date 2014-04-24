@@ -7151,27 +7151,27 @@ namespace IGenFormsViewer
                 int _fromOffset = sql.ToUpper().IndexOf(" FROM ");
                 if (_fromOffset > 0)
                 {
-                    string _sql = "Select count(*) " + sql.Substring(_fromOffset);
+               //     string _sql = "Select count(*) " + sql.Substring(_fromOffset);
 
                     // resolve symbolics 
-                    _sql = IGenFormCommonRoutines.ResolveSymbolics(_sql);
+              //      _sql = IGenFormCommonRoutines.ResolveSymbolics(_sql);
 
                     // check for an order by
-                    int _orderOffset = _sql.ToUpper().IndexOf(" ORDER BY ");
-                    if (_orderOffset > 0)
-                    {
-                        _sql = _sql.Substring(0, _orderOffset);
-                    }
+               //     int _orderOffset = _sql.ToUpper().IndexOf(" ORDER BY ");
+               //     if (_orderOffset > 0)
+               //     {
+               //         _sql = _sql.Substring(0, _orderOffset);
+               //     }
 
-                    List<string[]> _rows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
-                    if (_rows.Count > 0)
-                    {
+               //     List<string[]> _rows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
+               //     if (_rows.Count > 0)
+               //     {
                         // first row, first field should be the number of rows
-                        if (_rows[1][0] != "")
-                        {
-                            _numRows = CommonRoutines.ConvertToInt(_rows[1][0]);
-                        }
-                    }
+               //         if (_rows[1][0] != "")
+               //         {
+               //             _numRows = CommonRoutines.ConvertToInt(_rows[1][0]);
+               //         }
+               //     }
                 }
 
             }

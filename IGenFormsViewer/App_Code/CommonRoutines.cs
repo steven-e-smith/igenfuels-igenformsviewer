@@ -4303,7 +4303,7 @@ namespace IGenFormsViewer
             string _newValue = value;
             string[] _fieldNames = { };
             string[] _fieldValues = { };
-
+ 
             try
             {
                 _newValue = ResolveValue(_newValue, _fieldNames, _fieldValues);
@@ -4332,7 +4332,7 @@ namespace IGenFormsViewer
         public static string ResolveValue(string value, string[] fieldNames, string[] fieldValues)
         {
             string _newValue = value;
-
+ 
             try
             {
                 _newValue = CommonRoutines.ResolveSymbolics(_newValue);

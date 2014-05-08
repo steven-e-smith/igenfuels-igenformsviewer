@@ -229,7 +229,7 @@ namespace IGenFormsViewer
         public static string ResolveValue(string formName, string fieldName, string value)
         {
             string _value = value;
-
+ 
             try
             {
                 _value = ResolveValue(currentIGenForms, formName, fieldName, value);
@@ -254,7 +254,7 @@ namespace IGenFormsViewer
         public static string ResolveValue(IGenFormsMain igenForms, string formName, string fieldName, string value)
         {
             string _value = value;
-
+ 
             try
             {
                 IGenForm _form = igenForms.GetForm(formName);
@@ -278,7 +278,7 @@ namespace IGenFormsViewer
         public static string ResolveValue(IGenFormsMain igenForms, int formIndex, int fieldIndex, string value)
         {
             string _value = value;
-
+ 
             try
             {
                 IGenForm _form = igenForms.GetForm(formIndex);
@@ -314,7 +314,7 @@ namespace IGenFormsViewer
             string _fieldName = _field.name;
             string _tempValue = "";
             List<string> _resolvedFields = new List<string>();
-
+ 
             try
             {
                 string _fieldDataType = _field.dataType.ToUpper();
@@ -394,7 +394,7 @@ namespace IGenFormsViewer
                             switch (_newFieldDataType)
                             {
                                 case "NUMERIC":
-                                case "DECIMAL":
+                           //     case "DECIMAL":
                                 case "CURRENCY":
                                 case "INTEGER":
                                     if ((_temp.IndexOf(',') >= 0 || _temp.IndexOf('$') >= 0) &&
@@ -1909,7 +1909,6 @@ namespace IGenFormsViewer
         public static string EvaluateIfExpression(IGenField field, string expression)
          {
             string _result = "";
-            string _quote = "\"";
             string _command = "";
 
             try
@@ -1921,7 +1920,6 @@ namespace IGenFormsViewer
                 bool _quoted = false;
                 bool _partsFound = false;
                 bool _openParen = false;
-                bool _closeParen = false;
 
                 if (expression.IndexOf("IN") > 0)
                 {

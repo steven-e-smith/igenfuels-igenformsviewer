@@ -154,9 +154,9 @@ namespace IGenFormsViewer
        //              _interface.FormFileName = "MVF.frm";
 
 
-                     _interface.FormFilesFolder = "C:\\IGenFuels_QA\\Formfiles\\CT";
-                     _interface.FormGroup = "MVF-3";
-                     _interface.FormFileName = "CT_TOR_MVF-3.frm";
+            _interface.FormFilesFolder = "C:\\IGenFuels_QA\\Formfiles\\MO";
+            _interface.FormGroup = "MO_572_Supplier";
+            _interface.FormFileName = "MO_572_Supplier.FRM";
 
 
 

@@ -59,7 +59,9 @@ namespace IGenFormsViewer
                             "1.1.6.23   SES     FB 16672 - Taborder not working properly in field calculations",
                             "1.1.6.24   SES     FB-16634 - Additional work on rounding in MO",
                             "1.1.6.25   SGS     FB-17002 - IF statement failing using IN clause",
-                            "1.1.6.26   SGS     FB 17075 - Subsetted SQL statements causing SQL errors"
+                            "1.1.6.26   SGS     FB 17075 - Subsetted SQL statements causing SQL errors",
+                            "1.1.6.27   SGS     FB 17190 - Referencing a pulled tax rate cell is not resolving - returned value is zero",
+                            "           SGS     FB 17191 - New pallet attribute 'Exempt from Sum' prevents like named cells from being summed - requisite IGenForms 1.3.54.27"
                         };
 
 

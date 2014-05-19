@@ -4736,7 +4736,8 @@ namespace IGenFormsViewer
             try
             {
                 // get the header
-                _sql = "Select * From IGenForms " +
+                _sql = "Select ID, Form_Group, Run_Date, Error_Flag, Filing_Id, Description, Status, Submission_Return_Id, Created_By, Created_Date, Modified_By, Modified_Date " + 
+                                "From IGenForms " +
                                 "Where Form_Group='" + formGroupName + "' " +
                                 "   and Filing_Id=" + filingId +
                                 "   and Submission_Return_Id=" + submissionReturnId + " " +
@@ -4751,7 +4752,7 @@ namespace IGenFormsViewer
 
                         int _igenFormsId = CommonRoutines.ConvertToInt(DatabaseRoutines.GetRowValue(_headerRows[0], _headerRows[1], "ID"));
                         // load the fields
-                        _sql = "Select * " +
+                        _sql = "Select ID, IGenForms_Id, Form_Name, Field_Sequence, Field_Name, Field_Value, Field_Expression, Field_Status, EDI_Flag, EDI_Name, Status, Created_By, Created_Date, Modified_By, Modified_Date " +
                                "From IGenForm_Fields " +
                                "Where IGenForms_Id=" + _igenFormsId + " " +
                                "    and Form_Name='" + _form.name + "' ";

@@ -694,7 +694,7 @@ namespace IGenFormsViewer
 
                             if (_rowsAffected < 1)
                             {
-                                if (configSettings[m].userId.ToUpper() == CSA.currentUser.ToUpper())
+                                if (configSettings[m].userId == null || configSettings[m].userId.ToUpper() == CSA.currentUser.ToUpper())
                                 {
                                     // not there, insert
                                     _sql = "Insert into Config " +

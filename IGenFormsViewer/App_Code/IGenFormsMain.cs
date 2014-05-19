@@ -1155,6 +1155,17 @@ namespace IGenFormsViewer
                                 }
                                 break;
 
+                            case "EXEMPTFROMSUM":
+                                if (_fieldFlag)
+                                {
+                                    _field.exemptFromSum = (_tagValue + "N").Substring(0, 1);
+                                }
+                                else
+                                {
+
+                                }
+                                break;
+
                             default:
                                 // all other tags
                                 if (_fieldFlag)
@@ -2370,7 +2381,7 @@ namespace IGenFormsViewer
                             _recs.Add("                    <FontItalic>" + _field.fontItalic + "</FontItalic> ");
                             _recs.Add("                </Font> ");
                             _recs.Add("                <Comments>" + _field.comments.Replace("'", "").Replace("\r", "").Replace("\n", "").Trim() + "</Comments> ");
-
+                            _recs.Add("                <exemptFromSum>" + _field.exemptFromSum + "</exemptFromSum> ");
                             _recs.Add("                <Properties> ");
                             //List<string[]> _properties = _field.GetProperties();
                             //for (int n = 0; n < _properties.Count; n++)
@@ -2387,6 +2398,7 @@ namespace IGenFormsViewer
                             _recs.Add("                    <Rule></Rule> ");
                             _recs.Add("                </Rules> ");
                             _recs.Add("            </Field>");
+                            
                         }
 
                     //}
@@ -4531,7 +4543,7 @@ namespace IGenFormsViewer
             string _fieldNames = "";
             string _prePattern = pattern.ToUpper();
             string _postPattern = "";
-            bool _found = false;
+            string _fldnm = "";
 
             try
             {
@@ -4556,10 +4568,12 @@ namespace IGenFormsViewer
                 for (int n = 0; n < _form.formFields.fields.Count; n++)
                 {
                     IGenField _field = _form.formFields.fields[n];
+                   
+                    _fldnm = fieldName.ToUpper();
                     string _checkFieldName = _field.name.ToUpper();
                     int _preLength = _prePattern.Length;
                     int _postLength = _postPattern.Length;
-                    if (_checkFieldName != fieldName.ToUpper())
+                    if (_checkFieldName != _fldnm)
                     {
                         // check to see if the form and field match...
                         if (_checkFieldName.IndexOf(_prePattern) == 0)
@@ -4568,12 +4582,18 @@ namespace IGenFormsViewer
                             {
                                 if (_checkFieldName.IndexOf(_postPattern) == (_checkFieldName.Length - _postLength))
                                 {
-                                    _fieldNames = _fieldNames + _field.name.ToUpper() + "~";
+                                    if (_field.exemptFromSum == "N" | _field.exemptFromSum == "")
+                                    {
+                                        _fieldNames = _fieldNames + _field.name.ToUpper() + "~";
+                                    }
                                 }
                             }
                             else
                             {
-                                _fieldNames = _fieldNames + _field.name.ToUpper() + "~";
+                                if (_field.exemptFromSum == "N" | _field.exemptFromSum == "")
+                                {
+                                    _fieldNames = _fieldNames + _field.name.ToUpper() + "~";
+                                }
                             }
                         }
                     }
@@ -4716,7 +4736,8 @@ namespace IGenFormsViewer
             try
             {
                 // get the header
-                _sql = "Select * From IGenForms " +
+                _sql = "Select ID, Form_Group, Run_Date, Error_Flag, Filing_Id, Description, Status, Submission_Return_Id, Created_By, Created_Date, Modified_By, Modified_Date " + 
+                                "From IGenForms " +
                                 "Where Form_Group='" + formGroupName + "' " +
                                 "   and Filing_Id=" + filingId +
                                 "   and Submission_Return_Id=" + submissionReturnId + " " +
@@ -4731,7 +4752,7 @@ namespace IGenFormsViewer
 
                         int _igenFormsId = CommonRoutines.ConvertToInt(DatabaseRoutines.GetRowValue(_headerRows[0], _headerRows[1], "ID"));
                         // load the fields
-                        _sql = "Select * " +
+                        _sql = "Select ID, IGenForms_Id, Form_Name, Field_Sequence, Field_Name, Field_Value, Field_Expression, Field_Status, EDI_Flag, EDI_Name, Status, Created_By, Created_Date, Modified_By, Modified_Date " +
                                "From IGenForm_Fields " +
                                "Where IGenForms_Id=" + _igenFormsId + " " +
                                "    and Form_Name='" + _form.name + "' ";
@@ -5893,6 +5914,7 @@ namespace IGenFormsViewer
         public string imageName = "";
         public string formatMask = "";
         public string sourceDesignation = "";
+        public string exemptFromSum = "";
 
         // spaced text value
         public int spacedTextBoxSize = 1;
@@ -6690,6 +6712,7 @@ namespace IGenFormsViewer
                 _attributes.Add(new string[] { "FontBold", fontBold.ToString() });
                 _attributes.Add(new string[] { "FontItalic", fontItalic.ToString() });
                 _attributes.Add(new string[] { "FontUnderline", fontUnderline.ToString() });
+                _attributes.Add(new string[] { "Exempt from SUM", exemptFromSum });
 
             }
             catch (Exception ex)
@@ -7151,27 +7174,27 @@ namespace IGenFormsViewer
                 int _fromOffset = sql.ToUpper().IndexOf(" FROM ");
                 if (_fromOffset > 0)
                 {
-                    string _sql = "Select count(*) " + sql.Substring(_fromOffset);
+               //     string _sql = "Select count(*) " + sql.Substring(_fromOffset);
 
                     // resolve symbolics 
-                    _sql = IGenFormCommonRoutines.ResolveSymbolics(_sql);
+              //      _sql = IGenFormCommonRoutines.ResolveSymbolics(_sql);
 
                     // check for an order by
-                    int _orderOffset = _sql.ToUpper().IndexOf(" ORDER BY ");
-                    if (_orderOffset > 0)
-                    {
-                        _sql = _sql.Substring(0, _orderOffset);
-                    }
+               //     int _orderOffset = _sql.ToUpper().IndexOf(" ORDER BY ");
+               //     if (_orderOffset > 0)
+               //     {
+               //         _sql = _sql.Substring(0, _orderOffset);
+               //     }
 
-                    List<string[]> _rows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
-                    if (_rows.Count > 0)
-                    {
+               //     List<string[]> _rows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _sql);
+               //     if (_rows.Count > 0)
+               //     {
                         // first row, first field should be the number of rows
-                        if (_rows[1][0] != "")
-                        {
-                            _numRows = CommonRoutines.ConvertToInt(_rows[1][0]);
-                        }
-                    }
+               //         if (_rows[1][0] != "")
+               //         {
+               //             _numRows = CommonRoutines.ConvertToInt(_rows[1][0]);
+               //         }
+               //     }
                 }
 
             }

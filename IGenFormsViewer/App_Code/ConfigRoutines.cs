@@ -286,7 +286,8 @@ namespace IGenFormsViewer
                 if (DatabaseRoutines.TestConnection())
                 {
                     // load the rest of the configuration
-                    string _sql = "Select * From Config Where User_Id='" + CSA.currentUser + "' and Status='A' Order by Key_Name ";
+                    string _sql = "Select ID, User_Id, Key_Name, Key_Value, Created_By, Created_Date, Modified_By, Modified_Date, Status " +
+                    " From Config Where User_Id='" + CSA.currentUser + "' and Status='A' Order by Key_Name ";
                     List<string[]> _rows = DatabaseRoutines.Select(_sql);
                     if (_rows.Count > 1)
                     {

@@ -143,13 +143,28 @@ namespace IGenFormsViewer
             //_interface.FormGroup = "Arkansas_Tax_Forms";
             //_interface.FormFileName = "AMFT-22(I).frm";
 
-            //_interface.FormFilesFolder = _interface.FormFilesFolder + "\\AR";   //  C:\IGenFuels_QA\Formfiles\AR  sgs was here
-            //_interface.FormGroup = "Arkansas_Tax_Forms";
-            //_interface.FormFileName = "AMFT_DD.frm";
+        //    _interface.FormFilesFolder = _interface.FormFilesFolder + "\\AR";   //  C:\IGenFuels_QA\Formfiles\AR  sgs was here
+  //          _interface.FormFilesFolder = "C:\\IGenFuels_QA\\Formfiles\\AR";
+  //          _interface.FormGroup = "Arkansas_Tax_Forms";
+   //         _interface.FormFileName = "AMFT_DD.frm";
 
-            _interface.FormFilesFolder = _interface.FormFilesFolder + "Aaron\\MO";
+       //         _interface.FormFilesFolder = _interface.FormFilesFolder + "\\AR";   //  C:\IGenFuels_QA\Formfiles\WA  sgs was here  (this works!)
+       //               _interface.FormFilesFolder = "C:\\IGenFuels_QA\\Formfiles\\WA";
+       //               _interface.FormGroup = "WA_MVF_Supplier";
+       //              _interface.FormFileName = "MVF.frm";
+
+
+            _interface.FormFilesFolder = "C:\\IGenFuels_QA\\Formfiles\\MO";
             _interface.FormGroup = "MO_572_Supplier";
-            _interface.FormFileName = "MO_572_Supplier.frm";
+            _interface.FormFileName = "MO_572_Supplier.FRM";
+
+
+
+
+
+           // _interface.FormFilesFolder = _interface.FormFilesFolder + "Aaron\\MO";
+           // _interface.FormGroup = "MO_572_Supplier";
+           // _interface.FormFileName = "MO_572_Supplier.frm";
 
             // now load the filing info..
             List<string[]> _filingInfo = new List<string[]>();

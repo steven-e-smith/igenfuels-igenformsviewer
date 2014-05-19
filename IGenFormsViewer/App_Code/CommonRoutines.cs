@@ -58,6 +58,7 @@ namespace IGenFormsViewer
         public static string currentFormGroupPath = currentFormsPath;
         public static string currentFormImagesPath = CommonRoutines.currentPath + "formimages";
         public static string tempPath = currentPath + "temp\\";
+        public static string currentImagesPath = currentPath + "Images\\";
 
         public static ListBox messages = new ListBox();
         public static ListBox compileErrors = new ListBox();
@@ -5229,6 +5230,182 @@ namespace IGenFormsViewer
             return _color;
 
         }
+
+
+
+
+
+        /// <summary>
+        /// void SetToolbar()
+        /// Set the toolbar and it's icons
+        /// </summary>
+        public static void SetToolbar(ToolStrip tbrToolbar, bool sizeToolbar)
+        {
+
+            try
+            {
+                bool _toolBarShowCaptions = (ConfigRoutines.GetSetting("ShowCaptionsOnToolbars").ToUpper().IndexOf('T') == 0) ? true : false;
+                string _toolBarCaptionPlacement = ConfigRoutines.GetSetting("CaptionPlacement").ToUpper();
+                bool _autosizeToolbar = (ConfigRoutines.GetSetting("AutosizeToolbar").ToUpper().IndexOf('T') == 0) ? true : false;
+                int _toolBarHeight = CommonRoutines.ConvertToInt(ConfigRoutines.GetSetting("ToolbarHeight"));
+                int _toolBarIconSize = CommonRoutines.ConvertToInt(ConfigRoutines.GetSetting("ToolbarIconSize"));
+                string _toolBarBackgroundImage = ConfigRoutines.GetSetting("ToolbarBackgroundImage");
+
+                if (_toolBarHeight == 0)
+                {
+                    _toolBarHeight = CSA.defaultToolbarHeight;
+                }
+
+                if (_toolBarIconSize == 0)
+                {
+                    _toolBarIconSize = CSA.defaultToolbarImageScaling.Height;
+                }
+
+                if (sizeToolbar)
+                {
+                    tbrToolbar.AutoSize = false;
+                    tbrToolbar.Height = _toolBarHeight;
+                }
+
+                // try a new color for the toolbar
+                Color _tbrColor = Color.Silver;
+                string _toolBarBackColor = ConfigRoutines.GetSetting("ToolbarBackColor");
+
+                if (_toolBarBackColor != "")
+                {
+                    _tbrColor = Color.FromName(_toolBarBackColor);
+                }
+
+                tbrToolbar.BackColor = _tbrColor;
+                tbrToolbar.ForeColor = Color.FromArgb(tbrToolbar.BackColor.ToArgb() ^ 0xffffff);
+
+                // change the background image of the test toolbar if one is specified
+                if (CommonRoutines.FileExists(_toolBarBackgroundImage))
+                {
+                    // show it
+                    tbrToolbar.BackgroundImage = Image.FromFile(_toolBarBackgroundImage);
+                    tbrToolbar.BackgroundImageLayout = ImageLayout.Tile;
+                }
+                else
+                {
+                    tbrToolbar.BackgroundImage = null;
+                }
+
+                tbrToolbar.Refresh();
+
+                for (int n = 0; n < tbrToolbar.Items.Count; n++)
+                {
+                    if (tbrToolbar.Items[n].GetType().Name.ToUpper().IndexOf("TOOLSTRIPSEPARATOR") < 0)
+                    {
+
+                        ToolStripItem _button = new ToolStripButton();
+
+                        switch (tbrToolbar.Items[n].GetType().Name.ToUpper())
+                        {
+                            case "TOOLSTRIPBUTTON":
+                                _button = (ToolStripButton)tbrToolbar.Items[n];
+                                break;
+
+                            case "TOOLSTRIPDROPDOWNBUTTON":
+                                _button = (ToolStripDropDownButton)tbrToolbar.Items[n];
+                                break;
+
+                        }
+
+                        if (sizeToolbar)
+                        {
+                            if (_autosizeToolbar)
+                            {
+                                tbrToolbar.ImageScalingSize = new Size(_toolBarIconSize, _toolBarIconSize);
+                                //                            tbrToolbar.ImageScalingSize = CSA.defaultToolbarImageScaling;
+                                //                            tbrToolbar.Height = CSA.defaultToolbarHeight;
+                                _button.AutoSize = true;
+                                _button.ImageScaling = ToolStripItemImageScaling.SizeToFit;
+                            }
+                            else
+                            {
+                                tbrToolbar.ImageScalingSize = new Size(_toolBarIconSize, _toolBarIconSize);
+                                //_button.AutoSize = true;
+                                _button.ImageScaling = ToolStripItemImageScaling.SizeToFit;
+                            }
+                        }
+
+                        _button.ImageTransparentColor = Color.Silver;
+
+                        // just show the image
+                        _button.DisplayStyle = ToolStripItemDisplayStyle.Image;
+
+                        if (_button.Text != "")
+                        {
+                            // set the icon button
+                            string _iconFileName = CommonRoutines.currentImagesPath + "\\icons\\toolbar\\" + _button.Text + ".png";
+
+                            if (CommonRoutines.FileExists(_iconFileName))
+                            {
+                                _button.Image = Image.FromFile(_iconFileName);
+                            }
+                        }
+
+                        if (_toolBarShowCaptions)
+                        {
+                            #region [Process showing caption]
+
+                            // see what is specified for the display state
+                            _button.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                            string _captionPlacement = "B";
+                            _captionPlacement = _toolBarCaptionPlacement.IndexOf("BOTTOM") >= 0 ? "B" : _captionPlacement;
+                            _captionPlacement = _toolBarCaptionPlacement.IndexOf("ABOVE") >= 0 ? "A" : _captionPlacement;
+                            _captionPlacement = _toolBarCaptionPlacement.IndexOf("LEFT") >= 0 ? "L" : _captionPlacement;
+                            _captionPlacement = _toolBarCaptionPlacement.IndexOf("RIGHT") >= 0 ? "R" : _captionPlacement;
+                            _captionPlacement = _toolBarCaptionPlacement.IndexOf("OVERLAY") >= 0 ? "O" : _captionPlacement;
+
+                            switch (_captionPlacement)
+                            {
+                                case "B":
+                                    _button.TextImageRelation = TextImageRelation.ImageAboveText;
+                                    break;
+
+                                case "A":
+                                    _button.TextImageRelation = TextImageRelation.TextAboveImage;
+                                    break;
+
+                                case "R":
+                                    _button.TextImageRelation = TextImageRelation.ImageBeforeText;
+                                    break;
+
+                                case "L":
+                                    _button.TextImageRelation = TextImageRelation.TextBeforeImage;
+                                    break;
+
+                                case "O":
+                                    _button.TextImageRelation = TextImageRelation.Overlay;
+                                    break;
+
+                            }
+                        }
+                        else
+                        {
+                            // just show the image
+                            _button.DisplayStyle = ToolStripItemDisplayStyle.Image;
+                        }
+
+                            #endregion
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".SetToolbar > " + ex.Message);
+            }
+
+            return;
+
+        }
+
+
+
+
 
 
 

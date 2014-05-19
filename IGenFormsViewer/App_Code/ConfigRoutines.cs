@@ -10,6 +10,7 @@ namespace IGenFormsViewer
 
         public struct udtConfigSettings
         {
+            public string userId;
             public string key;
             public string value;
             public string originalValue;
@@ -247,6 +248,7 @@ namespace IGenFormsViewer
                                 _setting = false;
                                 // add to the config list
                                 udtConfigSettings configSetting = new udtConfigSettings();
+                                configSetting.userId = "CONFIG";
                                 configSetting.key = _key;
                                 configSetting.value = _value;
                                 configSetting.originalValue = _value;
@@ -286,7 +288,7 @@ namespace IGenFormsViewer
                 if (DatabaseRoutines.TestConnection())
                 {
                     // load the rest of the configuration
-                    string _sql = "Select * From Config Where User_Id='" + CSA.currentUser + "' and Status='A' Order by Key_Name ";
+                    string _sql = "Select * From Config Where User_Id='" + CSA.currentUser + "' OR User_Id='$IGENFUELS$' and Status='A' Order by Key_Name ";
                     List<string[]> _rows = DatabaseRoutines.Select(_sql);
                     if (_rows.Count > 1)
                     {
@@ -295,6 +297,7 @@ namespace IGenFormsViewer
                         {
                             // add to the config list
                             udtConfigSettings _configSetting = new udtConfigSettings();
+                            _configSetting.userId = CSA.currentUser;
                             _configSetting.key = DatabaseRoutines.GetRowValue(_rows[0], _rows[n], "Key_Name");
                             _configSetting.value = DatabaseRoutines.GetRowValue(_rows[0], _rows[n], "Key_Value");
                             _configSetting.originalValue = _configSetting.value;
@@ -691,17 +694,20 @@ namespace IGenFormsViewer
 
                             if (_rowsAffected < 1)
                             {
-                                // not there, insert
-                                _sql = "Insert into Config " +
-                                        "(User_Id, Key_Name, Key_Value) " +
-                                        "Values('" + CSA.currentUser + "'," +
-                                        "'" + configSettings[m].key + "', " +
-                                        "'" + configSettings[m].value.Replace("'", "''") + "') ";
-                                _rowsAffected = DatabaseRoutines.Execute(_sql);
-                                if (_rowsAffected < 1)
+                                if (configSettings[m].userId.ToUpper() == CSA.currentUser.ToUpper())
                                 {
-                                    // hmmm... something not good here
-                                    CommonRoutines.Log("Error in insert/update of config setting " + configSettings[m].key);
+                                    // not there, insert
+                                    _sql = "Insert into Config " +
+                                            "(User_Id, Key_Name, Key_Value) " +
+                                            "Values('" + CSA.currentUser + "'," +
+                                            "'" + configSettings[m].key + "', " +
+                                            "'" + configSettings[m].value.Replace("'", "''") + "') ";
+                                    _rowsAffected = DatabaseRoutines.Execute(_sql);
+                                    if (_rowsAffected < 1)
+                                    {
+                                        // hmmm... something not good here
+                                        CommonRoutines.Log("Error in insert/update of config setting " + configSettings[m].key);
+                                    }
                                 }
                             }
 

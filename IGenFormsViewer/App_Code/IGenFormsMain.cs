@@ -1266,6 +1266,13 @@ namespace IGenFormsViewer
                         // resolve symbolics 
                         _ds.sql = IGenFormCommonRoutines.ResolveSymbolics(_ds.sql);
 
+                        CommonRoutines.Log("DS SQL=" + _ds.sql);
+
+                        // get the first couple of rows
+                        List<string[]> _testRows = DatabaseRoutines.Select(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS, _ds.sql);
+                       
+                        #region [ProcessDataset]
+
                         // is this a WSTF table reference or a vw_WSTF view reference?
                         string _overrideSchema = ConfigRoutines.GetSetting("OverrideSchema").ToUpper();
                         if (_overrideSchema.IndexOf('T') == 0)
@@ -1327,10 +1334,16 @@ namespace IGenFormsViewer
                                 _ds.sql = _sql;
                             }
                         }
+                        #endregion 
 
                         // get the fields from the sql
                         string[] _fieldNames = DatabaseRoutines.GetSQLFields(_ds.sql);
                         _ds.fieldNames = _fieldNames;
+
+                        for (int n = 0; n < _fieldNames.Length;n++)
+                        {
+                            CommonRoutines.Log("   Field " + n + " = " + _fieldNames[n]);
+                        }
 
                         // get a count of the rows this will find
                         _ds.numRows = _ds.GetRowCount();
@@ -7076,6 +7089,26 @@ namespace IGenFormsViewer
             }
 
             return _row;
+
+        }
+
+
+
+
+        public string[] GetFieldNames()
+        {
+            string[] _fieldNames = { };
+
+            try
+            {
+                _fieldNames = fieldNames;
+            }
+            catch (Exception ex)
+            {
+                CommonRoutines.DisplayErrorMessage("$E:" + moduleName + ".GetFieldNames > " + ex.Message);
+            }
+
+            return _fieldNames;
 
         }
 

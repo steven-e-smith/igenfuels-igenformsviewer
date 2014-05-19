@@ -191,6 +191,8 @@ namespace IGenFormsViewer
                 // reset the dirty flag
                 isDirty = false;
 
+                CommonRoutines.SetToolbar(tbrMain, false);
+
             }
             catch (Exception ex)
             {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
+
 
 namespace IGenFormsViewer
 {
@@ -75,6 +77,9 @@ namespace IGenFormsViewer
         public static bool loggedOnAsAdmin = false;
         // values are: None, UserIdPassword and Windows
         public static string securityModel = "UserIdPassword";
+
+        public static Size defaultToolbarImageScaling = new Size(16, 16);
+        public static int defaultToolbarHeight = 41;
 
         public static string currentPalletFileName = "";
 

@@ -205,6 +205,7 @@ namespace IGenFormsViewer
                 baseDBMSStatusLabel.Text = DatabaseRoutines.MainDBMS + "-" + DatabaseRoutines.GetConnectionServer(DatabaseRoutines.MainConnection, DatabaseRoutines.MainDBMS);
                 userLoggedOnStatusLabel.Text = CommonRoutines.GetCurrentUser();
 
+                CommonRoutines.SetToolbar(tbrMain, false);
 
             }
             catch (Exception ex)

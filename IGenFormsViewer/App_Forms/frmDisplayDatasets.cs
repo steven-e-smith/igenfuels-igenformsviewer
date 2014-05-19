@@ -39,6 +39,9 @@ namespace IGenFormsViewer
                 this.Load += frmDisplayDatasets_Load;
 
                 ResizeControls();
+            
+                CommonRoutines.SetToolbar(tbrMain, false);
+
             }
             catch (Exception ex)
             {

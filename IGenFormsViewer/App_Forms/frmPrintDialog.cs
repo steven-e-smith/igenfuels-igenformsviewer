@@ -62,6 +62,9 @@ namespace IGenFormsViewer
                 tbrMainStop.Enabled = false;
 
                 LoadFormsGrid();
+
+                CommonRoutines.SetToolbar(tbrMain, false);
+
             }
             catch (Exception ex)
             {

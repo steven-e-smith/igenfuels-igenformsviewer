@@ -65,6 +65,9 @@ namespace IGenFormsViewer
 
                 this.Load += new EventHandler(frmGrid_Load);
                 this.Resize += new EventHandler(frmGrid_Resize);
+
+                CommonRoutines.SetToolbar(tbrMain, false);
+
             }
             catch (Exception ex)
             {
